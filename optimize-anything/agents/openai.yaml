@@ -1,0 +1,4 @@
+interface:
+  display_name: "Optimize Anything"
+  short_description: "Measure, hill climb, and ratchet any target"
+  default_prompt: "Use $optimize-anything to make this faster (or smaller, cheaper, leaner, more reliable) by measuring first, climbing a deterministic proxy in the lab, and ratcheting the result in CI."
