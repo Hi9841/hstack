@@ -1,0 +1,4 @@
+interface:
+  display_name: "Abuse and Fraud Review"
+  short_description: "Find costly business-flow abuse paths"
+  default_prompt: "Use $abuse-fraud-review to threat-model abuse, fraud, and resource-exhaustion paths in this product."
