@@ -8,7 +8,6 @@ Use one of these commands. Each command needs Node.js 20 or later and GitHub acc
 
 ```bash
 npx github:Hi9841/hstack
-bunx github:Hi9841/hstack
 pnpm dlx github:Hi9841/hstack
 ```
 

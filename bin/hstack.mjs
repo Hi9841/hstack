@@ -37,13 +37,15 @@ if (args.includes("--list")) {
   process.exit(0);
 }
 
+// A git checkout on Windows can turn LF into CRLF, so compare and write with LF only.
+const readLf = (path) => readFileSync(path, "utf8").replaceAll("\r\n", "\n");
 // The source AGENTS.md links to C:/Users/hi/... Point those links at this machine's home.
-const agentsMd = readFileSync(join(root, "AGENTS.md"), "utf8").replaceAll(
+const agentsMd = readLf(join(root, "AGENTS.md")).replaceAll(
   "C:/Users/hi/",
   `${home.replaceAll("\\", "/")}/`,
 );
 const agentsMdDest = join(home, "AGENTS.md");
-if (existsSync(agentsMdDest) && readFileSync(agentsMdDest, "utf8") !== agentsMd) {
+if (existsSync(agentsMdDest) && readLf(agentsMdDest) !== agentsMd) {
   console.log(`backup  ${agentsMdDest}.bak`);
   if (!dryRun) cpSync(agentsMdDest, `${agentsMdDest}.bak`);
 }
