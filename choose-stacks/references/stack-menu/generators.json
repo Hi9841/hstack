@@ -1,0 +1,2594 @@
+{
+  "schema_version": "1.0",
+  "policy": {
+    "reviewed_on": "2026-10-18",
+    "scope": "Project creation and conditional follow-up generation for the curated profiles; documentation guidance, not an execution service or integration certification.",
+    "instructions": [
+      "Before writing a new project's application files, read its profile's starting points and use the official framework or language initializer appropriate to the component. Do not hand-recreate a generated skeleton. Where no full application generator exists, use the documented module/package initializer and assemble only the missing application pieces.",
+      "Choose one starting point per component. Check the installed generator's version and help, prerequisites, template, database, UI, test and runtime options. Commands are examples: replace names and paths, resolve compatible versions, and record the exact invocation and selected options. Do not blindly run every listed generator.",
+      "Generate in a new empty destination. For an existing repository, preserve its conventions and use relevant incremental generators. If a baseline comparison is needed, generate a separate disposable reference with matching versions/options and reconcile deliberately; never regenerate over existing work.",
+      "Keep applicable generated configuration, hidden files, formatter/linter settings, ignore rules, manifests, lockfiles, tests, wrappers and entry points. Extend them for the project instead of replacing them with abbreviated handwritten copies. A generator may initialize version control or offer a commit; respect the user's Git instructions.",
+      "Run the generated baseline's documented checks before feature changes, then relevant checks after configuration and implementation. Inspect what version control would include, including hidden files, build output, local secrets and operating-system metadata. Add needed ignore rules explicitly: no generator guarantees that .DS_Store or every local artifact is ignored.",
+      "Use follow-up generators only when their feature or tool is selected. Review generated changes and dependencies, apply required migrations in the intended environment, and exercise the generated behavior. Scaffolding does not establish authorization, safe retries, production readiness or every best practice.",
+      "If the required generator, template or IDE is unavailable, report the missing prerequisite and the documented route. Do not silently substitute a handwritten scaffold. Keep documentation review, generator execution, baseline checks and application qualification as separate evidence."
+    ],
+    "receipt": [
+      "Component and selected starting point, or the documented absence of a full application generator",
+      "Generator/toolchain versions, exact commands or IDE template/settings, working directory and generated destination",
+      "Generated files retained, deliberate deviations with reasons, and required supplemental ignore rules",
+      "Baseline checks and later checks actually run, results and remaining prerequisites or untested behavior"
+    ]
+  },
+  "profiles": {
+    "astro-content": {
+      "profile_id": "astro-content",
+      "reviewed_on": "2026-10-23",
+      "evidence_status": "documentation-reviewed; disposable create-astro basics scaffold, install, build and local dev HTTP smoke check executed",
+      "starting_points": [
+        {
+          "name": "Official create-astro basics template",
+          "when": "A new content-first site has repeatable pages, typed content or selective interactive components and can start with static output.",
+          "steps": [
+            "Use an unused source directory outside synchronized storage. Read project requirements and decide whether source content belongs in Git or an already-selected headless CMS.",
+            "Check current Astro Node requirements and inspect create-astro help before selecting flags. For the tested create-astro 5.3.1 CLI, the command below generated the basics template with no package installation, Git initialization or AI instruction files.",
+            "Install dependencies in the generated project with the selected package manager. Record resolved create-astro, Astro, Node and package-manager versions, commit the lockfile, and retain generated scripts and configuration.",
+            "Create explicit page routes for content. If a collection should produce one URL per entry, define a schema and a dynamic route using getStaticPaths; collection files alone do not create pages.",
+            "Review public routes, canonical site URL, trailing slashes, redirects, sitemap, 404 behavior and static asset paths before connecting the intended host."
+          ],
+          "commands": [
+            {
+              "run": "node --version",
+              "cwd": "An unused local source-workspace parent outside synchronized storage; my-site must not already exist",
+              "purpose": "Check Node against the current Astro installation requirement."
+            },
+            {
+              "run": "npm create astro@latest -- --help",
+              "cwd": "An unused local source-workspace parent outside synchronized storage; my-site must not already exist",
+              "purpose": "Inspect the currently resolved create-astro flags before scaffolding."
+            },
+            {
+              "run": "npm create astro@latest my-site -- --template basics --no-install --no-git --no-ai --yes --skip-houston",
+              "cwd": "An unused local source-workspace parent outside synchronized storage; my-site must not already exist",
+              "purpose": "Generate the official basics project without installing dependencies, initializing Git or creating AI instruction files."
+            },
+            {
+              "run": "npm install",
+              "cwd": "The generated my-site directory",
+              "purpose": "Install the dependencies generated by the CLI and create the package lockfile."
+            }
+          ],
+          "notes": [
+            "The tested CLI version was create-astro 5.3.1; it resolved Astro 7.4.2 from the template. The command-line `--no-ai` option came from the installed CLI help; confirm it remains supported before reusing this command.",
+            "Replace my-site with the intended unused directory. `@latest` is a scaffold-time lookup; pin the selected runtime through project policy and use the generated lockfile for later installs.",
+            "The disposable qualification used Node 24.21.0 and npm 11.19.0. It ran `npm ci`, `npm run build`, `npm run dev -- --host 127.0.0.1`, and fetched `/` with HTTP 200 and `text/html`. This only verifies the untouched basics starter, not an application, integration, CMS, adapter or production host.",
+            "The project README remains the owner of purpose, start commands and content/workflow navigation. Do not create or rely on project AGENTS.md files."
+          ]
+        }
+      ],
+      "follow_up_generators": [
+        {
+          "name": "Content Collections",
+          "when": "Markdown or structured content needs a validated schema and generated pages; do not add a collection layer for a handful of stable one-off pages.",
+          "steps": [
+            "Define the content shape and source owner before writing a schema. Use local files for Git-reviewed content or fetch from the selected CMS without changing that CMS's editorial ownership.",
+            "Create the collection schema and an explicit route template. Call getCollection and getStaticPaths to create static URLs for entries; verify the final route names and content output.",
+            "Test malformed content at build time and check empty, draft and missing-route behavior. Preview/editor access is a separate CMS integration and authorization concern."
+          ],
+          "commands": [],
+          "notes": [
+            "Astro validates collection entries against schemas and generates TypeScript support, but collection entries do not become pages automatically.",
+            "If editors need a visual workflow, select a headless CMS and define ownership for drafts, preview, approvals, publishing hooks and media. Astro itself is not that editorial interface."
+          ]
+        },
+        {
+          "name": "Server adapter",
+          "when": "A specific route needs request-time rendering, request cookies/headers or private personalization, and the selected host/runtime can operate the chosen adapter.",
+          "commands": [],
+          "notes": [
+            "Read the current adapter guide and the selected host's support limits before adding it. Astro's default output is static; on-demand rendering requires an adapter.",
+            "This profile does not add database, authentication, API, email or durable-job ownership. Keep those responsibilities in their existing backend unless they are separately designed, migrated and tested.",
+            "Qualify adapter behavior, secrets, cookies, headers, caching, redirects, cold starts and deployment independently. The static starter build does not establish any of these properties."
+          ]
+        },
+        {
+          "name": "Interactive island integration",
+          "when": "A content route has a defined widget whose stateful behavior justifies a component framework, and the team has selected that framework.",
+          "commands": [],
+          "notes": [
+            "Use semantic HTML and browser APIs first. Add only the chosen official Astro integration (for example, React, Svelte or Vue) and hydrate only the component that needs browser interaction.",
+            "Keep content output usable as HTML. A client island does not supply backend authorization, persistence or offline synchronization."
+          ]
+        }
+      ],
+      "preserve": [
+        "Generated package scripts, Astro configuration, TypeScript settings, project lockfile and ignore rules; record any intentional change in README.",
+        "Content collection schemas, route templates, public URL policy and CMS/API ownership as editable project sources.",
+        "Original media sources and attribution records; use src assets for processing or public assets for deliberate unprocessed direct URLs."
+      ],
+      "verification": [
+        "Run npm ci and npm run build with the committed lockfile; a successful untouched starter build does not qualify a site's content or integrations.",
+        "Run npm run dev and inspect generated pages and routes. Check route HTML, collection entry URLs, missing pages, assets and browser behavior.",
+        "Set the real site URL and verify canonical metadata and sitemap against production host configuration. Check redirect status and trailing-slash behavior at that host; static output may express redirects as HTML rather than an HTTP status.",
+        "Verify image transformations and direct public asset URLs. If video is used, test its chosen streaming service and do not attribute video handling to Astro.",
+        "If adding an adapter or CMS, test its actual preview, draft privacy, authorization, cookies, redirects, runtime APIs, cache behavior and production deployment separately. No application integration test or static regression suite was run for this record."
+      ],
+      "sources": [
+        {
+          "title": "Install Astro and create-astro CLI",
+          "url": "https://docs.astro.build/install-and-setup/"
+        },
+        {
+          "title": "Astro CLI commands",
+          "url": "https://docs.astro.build/en/reference/cli-reference/"
+        },
+        {
+          "title": "Content Collections",
+          "url": "https://docs.astro.build/en/guides/content-collections/"
+        },
+        {
+          "title": "On-demand rendering and adapters",
+          "url": "https://docs.astro.build/en/guides/on-demand-rendering/"
+        },
+        {
+          "title": "Routing and redirects",
+          "url": "https://docs.astro.build/en/guides/routing/"
+        },
+        {
+          "title": "Astro CMS integration",
+          "url": "https://docs.astro.build/en/guides/cms/"
+        },
+        {
+          "title": "Astro image handling",
+          "url": "https://docs.astro.build/en/guides/images/"
+        }
+      ],
+      "integration_steps": [
+        "From the generated project root, write README purpose, start commands, content source and editorial owner, public URL policy and navigation to installed Astro documentation. Preserve the user's existing repository instructions.",
+        "Create Content Collections only when structured Markdown/data needs schema validation; define the schema and explicit static page routes together. Keep static public content distinct from draft or account-specific content.",
+        "Document the content-route and URL map, canonical domain, trailing-slash rule, 404 behavior, redirects and the host setting that implements each. Confirm whether static redirect output provides the required response status; if not, configure a host redirect rule or select an adapter route and verify it.",
+        "Set the production site URL and generate a sitemap only when required. Review canonical URLs, duplicate routes, metadata, indexability and actual generated HTML; SEO metadata does not establish search indexing.",
+        "Assign media ownership explicitly. Use src image imports for supported processing, public files for unprocessed stable paths, and a selected external service for video streaming. Check license, alt text, dimensions, cache and delivery on the deployed host.",
+        "For a selected CMS, keep the CMS authoritative for editorial content, drafts and assets. Specify build/webhook ownership, preview and draft authorization before connecting it; do not leak preview tokens into client islands or static output.",
+        "Keep existing APIs, identity, database, migrations, jobs and external effects with their current owners. A static Astro client can consume public or authenticated API endpoints as designed, but static files cannot contain secrets or provide request-time permission checks. If a server-side page or new API is required, define a separate backend/adapter migration and its data ownership before implementation.",
+        "Run the project build and dev server; inspect generated route HTML, direct URLs, assets and not-found behavior. Against the intended host, verify redirect status, headers, cache, canonical URL and sitemap. This research did not run application tests, a CMS integration or an adapter deployment."
+      ]
+    },
+    "elixir-phoenix-liveview": {
+      "profile_id": "elixir-phoenix-liveview",
+      "reviewed_on": "2026-10-18",
+      "evidence_status": "documentation-reviewed; commands not executed",
+      "starting_points": [
+        {
+          "name": "Phoenix browser application with LiveView and PostgreSQL",
+          "when": "A new connected browser application uses this profile. Generate the skeleton before adding application code.",
+          "steps": [
+            "Read the repository README, runtime pins and existing mix.exs/mix.lock first. Existing applications keep their structure; do not regenerate over them.",
+            "Choose a local source workspace and a new destination. Replace my_app with the chosen snake_case application name throughout these examples.",
+            "Install a compatible Erlang/OTP and Elixir pair using official installation guidance; check the chosen Phoenix release requirements. Set up PostgreSQL access for development and tests.",
+            "Check installed tools. Install Hex only if missing, and install the Phoenix archive only if missing or deliberately changing its version. Check installed generator help before choosing switches.",
+            "Generate the project, respond to the dependency-install prompt, then enter my_app. Review the generated README, mix.exs aliases, configuration and any agent guidance.",
+            "Configure database credentials outside committed secrets. Inspect the generated mix setup alias before running it; it can fetch dependencies, create/migrate the database and build assets. Resolve failures in place and retain their output."
+          ],
+          "commands": [
+            {
+              "run": "elixir --version",
+              "cwd": "chosen local workspace",
+              "purpose": "Inspect the active Elixir and Erlang/OTP versions"
+            },
+            {
+              "run": "mix --version",
+              "cwd": "chosen local workspace",
+              "purpose": "Inspect the active Mix runtime"
+            },
+            {
+              "run": "mix local.hex --if-missing",
+              "cwd": "chosen local workspace",
+              "purpose": "Install Hex only when missing; review the installation prompt"
+            },
+            {
+              "run": "mix archive.install hex phx_new",
+              "cwd": "chosen local workspace; only if installer is missing or a deliberate update is needed",
+              "purpose": "Install the Phoenix generator; select/record a compatible version according to project policy"
+            },
+            {
+              "run": "mix phx.new --version",
+              "cwd": "chosen local workspace",
+              "purpose": "Record the installed Phoenix generator version"
+            },
+            {
+              "run": "mix help phx.new",
+              "cwd": "chosen local workspace",
+              "purpose": "Confirm installed options and defaults"
+            },
+            {
+              "run": "mix phx.new my_app --database postgres",
+              "cwd": "parent directory of the new my_app directory",
+              "purpose": "Generate the Phoenix application, including LiveView and asset defaults"
+            },
+            {
+              "run": "mix setup",
+              "cwd": "my_app project root, after inspecting the generated alias and configuring local database access",
+              "purpose": "Run the generated setup alias"
+            }
+          ],
+          "notes": [
+            "LiveView is included by the normal Phoenix generator. Keep HTML and assets for this browser path.",
+            "Dependency installation is interactive by default; installed help documents --install and --no-install. These examples do not request a Git commit.",
+            "Use --no-agents-md only for an explicit repository instruction policy; preserve the generated guidance in its maintained README-linked owner when that policy requires it."
+          ]
+        },
+        {
+          "name": "Phoenix JSON API application",
+          "when": "The deliverable is an HTTP API with a separate client and does not need generated browser UI.",
+          "steps": [
+            "Use the runtime, Hex, Phoenix archive and PostgreSQL prerequisite checks from the browser starting point.",
+            "Generate into a new destination; configure the database, inspect the generated setup alias and run it from the project root.",
+            "Select mailer, dashboard, Ecto and other omissions separately from actual requirements. Do not remove persistence simply because the interface is JSON."
+          ],
+          "commands": [
+            {
+              "run": "mix phx.new my_app --database postgres --no-html --no-assets",
+              "cwd": "parent directory of the new my_app directory",
+              "purpose": "Generate an API skeleton without HTML views or asset build tools"
+            }
+          ],
+          "notes": [
+            "--no-html disables the generated LiveView setup; this is an alternative to the browser starting point.",
+            "--no-ecto changes what resource generators can provide. Use it only when the application truly does not need Ecto; inspect --no-context handling for later generators.",
+            "Browser authentication scaffolding is not an API-token or external identity implementation. Choose API authentication explicitly."
+          ]
+        },
+        {
+          "name": "Plain Mix library or supervised OTP service",
+          "when": "The project needs Elixir without a Phoenix web application. Choose the variant from process-lifecycle requirements.",
+          "steps": [
+            "Verify compatible Elixir/Erlang and Mix; choose a new source destination. Replace my_library or my_service with the selected snake_case name.",
+            "For a library with no owned supervision tree, use mix new. For an application that owns long-lived processes, use mix new --sup.",
+            "Run only the selected creation command. Enter its generated directory, preserve its scaffold and implement application behavior after generation."
+          ],
+          "commands": [
+            {
+              "run": "mix help new",
+              "cwd": "chosen local workspace",
+              "purpose": "Inspect installed Mix generator options"
+            },
+            {
+              "run": "mix new my_library",
+              "cwd": "parent directory of the new my_library directory",
+              "purpose": "Generate a plain Elixir project without an application callback/supervisor"
+            },
+            {
+              "run": "mix new my_service --sup",
+              "cwd": "parent directory of the new my_service directory",
+              "purpose": "Alternative: generate an OTP application callback and supervision tree"
+            }
+          ],
+          "notes": [
+            "--sup is conditional, not a universal Elixir requirement. Do not hand-write mix.exs, formatter, test helper or supervision boilerplate when Mix supplies the appropriate base.",
+            "Use --umbrella only for a justified multi-application boundary; do not introduce it as a default."
+          ]
+        }
+      ],
+      "follow_up_generators": [
+        {
+          "name": "Phoenix authentication",
+          "when": "Application-owned browser accounts are required, after Phoenix setup.",
+          "commands": [
+            {
+              "run": "mix phx.gen.auth Accounts User users --live",
+              "cwd": "my_app project root (directory containing mix.exs)",
+              "purpose": "Phoenix authentication"
+            }
+          ],
+          "notes": [
+            "Run mix help phx.gen.auth first; substitute the context/schema/table deliberately. --live selects LiveView views; --no-live is the controller-view alternative.",
+            "Follow the generated routing/configuration instructions, fetch new dependencies with mix deps.get, inspect migrations and apply them to the intended local database with mix ecto.migrate.",
+            "Review delivery, scope and authorization requirements. Generated email authentication assumes email-account ownership; preserve its token-revocation and confirmation safeguards when customizing.",
+            "Do not run multiple auth generators blindly: scopes and browser-pipeline assignments can conflict. Use external identity integration when that is the actual requirement."
+          ]
+        },
+        {
+          "name": "LiveView resource",
+          "when": "A new browser CRUD resource should follow Phoenix conventions.",
+          "commands": [
+            {
+              "run": "mix phx.gen.live Catalog Product products name:string",
+              "cwd": "my_app project root (directory containing mix.exs)",
+              "purpose": "LiveView resource"
+            }
+          ],
+          "notes": [
+            "Example names/fields are substitutions, not a domain prescription. Run mix help phx.gen.live and decide context boundaries before generating.",
+            "This generates the context/schema/migration and LiveView files/tests. Apply the printed router changes and inspect/migrate the local database.",
+            "Preserve configured scope behavior and add permission/domain checks. --no-context implies --no-schema and leaves implementation work, including failing generated tests, to complete.",
+            "Use this or the other resource variants below; do not generate the same resource repeatedly with each variant."
+          ]
+        },
+        {
+          "name": "Controller HTML resource",
+          "when": "The resource uses conventional server-rendered controllers/templates rather than LiveView.",
+          "commands": [
+            {
+              "run": "mix phx.gen.html Catalog Product products name:string",
+              "cwd": "my_app project root (directory containing mix.exs)",
+              "purpose": "Controller HTML resource"
+            }
+          ],
+          "notes": [
+            "Alternative to phx.gen.live, requiring the HTML components omitted by --no-html. Run installed task help first.",
+            "Review generated context, schema, migration, controller/templates and tests; complete the printed routing instructions and migration steps."
+          ]
+        },
+        {
+          "name": "JSON API resource",
+          "when": "The resource is exposed as JSON.",
+          "commands": [
+            {
+              "run": "mix phx.gen.json Catalog Product products name:string",
+              "cwd": "my_app project root (directory containing mix.exs)",
+              "purpose": "JSON API resource"
+            }
+          ],
+          "notes": [
+            "Alternative to HTML/LiveView resource generation. Run installed task help; review generated controller/JSON rendering, context, schema, migration and tests.",
+            "Complete printed routing instructions and migrations. Add actual API authentication/authorization, validation and response-contract tests."
+          ]
+        },
+        {
+          "name": "Domain context without web UI",
+          "when": "The application needs a new domain resource/API boundary without generated HTTP or LiveView files.",
+          "commands": [
+            {
+              "run": "mix phx.gen.context Catalog Product products name:string",
+              "cwd": "my_app project root (directory containing mix.exs)",
+              "purpose": "Domain context without web UI"
+            }
+          ],
+          "notes": [
+            "Run installed task help and review context boundaries. The generator adds schema, migration and context tests.",
+            "An existing context can be extended; inspect the merge prompt instead of blindly accepting it. Choose --no-schema only when intentionally supplying that implementation."
+          ]
+        },
+        {
+          "name": "Ecto schema without context scaffolding",
+          "when": "A schema and migration are needed within a deliberately maintained domain boundary.",
+          "commands": [
+            {
+              "run": "mix phx.gen.schema Catalog.Product products name:string",
+              "cwd": "my_app project root (directory containing mix.exs)",
+              "purpose": "Ecto schema without context scaffolding"
+            }
+          ],
+          "notes": [
+            "Run installed task help; choose attribute types, references, ID strategy and table names explicitly.",
+            "Review changesets and migration constraints/indexes. This generator does not provide the enclosing context API or authorization."
+          ]
+        },
+        {
+          "name": "Ecto migration",
+          "when": "An existing persisted resource requires a schema change, without duplicating its resource generator.",
+          "commands": [
+            {
+              "run": "mix ecto.gen.migration add_product_status",
+              "cwd": "my_app project root (directory containing mix.exs)",
+              "purpose": "Ecto migration"
+            }
+          ],
+          "notes": [
+            "Requires an Ecto repository configured under :ecto_repos, or choose it with --repo. Run installed task help before use.",
+            "Edit the generated timestamped migration; review reversibility, data and locking effects. Apply it to the intended local database, then test the changed behavior. Do not rewrite migrations already deployed to shared databases."
+          ]
+        },
+        {
+          "name": "Phoenix release helpers",
+          "when": "Release-based deployment has been selected.",
+          "commands": [
+            {
+              "run": "mix phx.gen.release",
+              "cwd": "my_app project root (directory containing mix.exs)",
+              "purpose": "Phoenix release helpers"
+            }
+          ],
+          "notes": [
+            "Run installed task help first. Review migration/server scripts and runtime configuration before building the release.",
+            "Use --docker only when a container is required; inspect generated base-image/runtime versions and add any external asset package-manager steps.",
+            "Generation/build success does not prove deployment, migrations, backup/restore or runtime compatibility."
+          ]
+        }
+      ],
+      "integration_steps": [
+        "After completing the selected starting point, read its generated README, mix.exs, mix.lock and runtime pins. Preserve the chosen plain Mix or Phoenix architecture; the following Phoenix integrations apply only when Phoenix is present.",
+        "For a Phoenix application, inspect and complete the generated setup alias after configuring development/test database access. Keep credentials outside committed secrets; follow the generator output when a selected omission means an alias or integration is unavailable.",
+        "If dependency guidance synchronization is useful, add usage_rules as a development dependency, choose the relevant dependency rules in mix.exs and review mix usage_rules.sync output. Preserve maintained generated guidance; an explicit README-only policy may configure a README-linked alternate file such as docs/dependency-rules.md.",
+        "If Phoenix browser accounts are required, complete the authentication follow-up recipe, review its generated instructions and configure transactional email delivery. Keep local/test delivery adapters in their intended environments; verify scopes and permission checks for application operations.",
+        "If durable background jobs are required, follow the installed Oban version’s installation and migration instructions, supervise Oban and configure bounded queues. Use supported persistence and idempotent workers; test retry and duplicate-effect handling. A Task is suitable only for explicitly disposable work.",
+        "Add development and test checks selected for this project. Formatter, compiler warnings and ExUnit apply to plain Mix applications; Ecto SQL Sandbox, LiveViewTest, Sobelow and other Phoenix-specific checks require their corresponding dependencies and application architecture.",
+        "For Phoenix applications that need real-browser verification, install/configure PhoenixTest.Playwright or the selected browser suite with its matching JavaScript dependency and browser binaries. Configure the test endpoint and SQL sandbox as documented; server-side LiveView tests do not establish browser JavaScript or visual correctness.",
+        "Run the applicable verification commands and actual application flows, fixing failures in place and retaining evidence. Skip tools whose dependency was not selected rather than claiming their checks passed; do not regenerate over existing work to hide failures.",
+        "For deployment qualification, select the intended host and runtime configuration. In Phoenix applications follow the release-helper recipe; build production assets only when the selected application has assets. Build a release compatible with the target OS, architecture and native dependencies.",
+        "Before claiming production readiness, rehearse startup, migrations and any applicable reconnect/job-retry behavior on the selected host. Establish secrets, TLS, backups, restore and rollback ownership; a generated release or passing local tests do not establish those outcomes.",
+        "Completion: record exact runtime/dependency versions, the application lockfile, selected generation/integration steps, check results and observed flows in README-linked evidence. State any untested deployment or native-mobile paths explicitly."
+      ],
+      "preserve": [
+        "Keep generated mix.exs aliases, .formatter.exs, tests/helpers, configuration, runtime supervision and project documentation as the starting base; make deliberate, reviewable changes rather than recreating the scaffold by hand.",
+        "Preserve the complete generated .gitignore and add project/platform entries such as .DS_Store as supplements. Do not claim every generator version already ignores macOS metadata.",
+        "Retain dependency lockfiles for application reproducibility according to repository policy. Keep credentials, build outputs and dependency caches out of commits.",
+        "Existing project conventions and maintained README-linked guidance remain authoritative; generator commands are for new projects or deliberate scoped additions, not destructive replacement.",
+        "Record the generator command, versions, selected switches and reasons for deviations with the project setup evidence."
+      ],
+      "verification": [
+        "Before generation, inspect installed mix help for each selected task and check the chosen runtime/generator requirements against installed versions; unversioned documentation can describe a newer release.",
+        "Inspect the generated files and pending repository diff, including hidden files. Check that formatter configuration, tests/helpers, ignore rules and required application supervision are present for the selected variant.",
+        "Run mix format --check-formatted, mix compile --warnings-as-errors and mix test from the generated project root after dependency/database setup. Repair failures in place and record actual results.",
+        "For Phoenix browser applications, run mix phx.server and inspect the actual local page and generated flows; for APIs, exercise the intended requests. A server process starting is not a completed interaction check.",
+        "Use git status --short --untracked-files=all and git check-ignore -v .DS_Store _build deps to review the selected ignore rules. In a disposable copy or separate index, inspect what staging all files would include; never alter the user index merely to test hygiene.",
+        "Confirm generated authentication/scopes and application operations reject unauthorized access; generated CRUD does not settle domain permissions.",
+        "This record is documentation-reviewed only. No application generator, setup command, database operation, test suite or release build was executed for this research."
+      ],
+      "sources": [
+        {
+          "title": "Mix new project task",
+          "url": "https://hexdocs.pm/mix/Mix.Tasks.New.html"
+        },
+        {
+          "title": "Mix local Hex installer",
+          "url": "https://hexdocs.pm/mix/Mix.Tasks.Local.Hex.html"
+        },
+        {
+          "title": "Phoenix prerequisites and generator installation",
+          "url": "https://hexdocs.pm/phoenix/installation.html"
+        },
+        {
+          "title": "Phoenix first application and generated setup",
+          "url": "https://hexdocs.pm/phoenix/up_and_running.html"
+        },
+        {
+          "title": "Phoenix new project task and switches",
+          "url": "https://hexdocs.pm/phoenix/Mix.Tasks.Phx.New.html"
+        },
+        {
+          "title": "Phoenix authentication generator",
+          "url": "https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Auth.html"
+        },
+        {
+          "title": "Phoenix LiveView resource generator",
+          "url": "https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Live.html"
+        },
+        {
+          "title": "Phoenix HTML resource generator",
+          "url": "https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Html.html"
+        },
+        {
+          "title": "Phoenix JSON resource generator",
+          "url": "https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Json.html"
+        },
+        {
+          "title": "Phoenix context generator",
+          "url": "https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Context.html"
+        },
+        {
+          "title": "Phoenix schema generator",
+          "url": "https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Schema.html"
+        },
+        {
+          "title": "Ecto migration generator",
+          "url": "https://hexdocs.pm/ecto_sql/Mix.Tasks.Ecto.Gen.Migration.html"
+        },
+        {
+          "title": "Ecto migration behavior",
+          "url": "https://hexdocs.pm/ecto_sql/Ecto.Migration.html"
+        },
+        {
+          "title": "Phoenix release generator",
+          "url": "https://hexdocs.pm/phoenix/Mix.Tasks.Phx.Gen.Release.html"
+        },
+        {
+          "title": "usage_rules configuration and dependency guidance",
+          "url": "https://hexdocs.pm/usage_rules/readme.html"
+        },
+        {
+          "title": "usage_rules synchronization task",
+          "url": "https://hexdocs.pm/usage_rules/Mix.Tasks.UsageRules.Sync.html"
+        },
+        {
+          "title": "Oban persistence and installation overview",
+          "url": "https://hexdocs.pm/oban/Oban.html"
+        },
+        {
+          "title": "PhoenixTest.Playwright setup and scope",
+          "url": "https://hexdocs.pm/phoenix_test_playwright/readme.html"
+        },
+        {
+          "title": "Phoenix release deployment guide",
+          "url": "https://hexdocs.pm/phoenix/releases.html"
+        }
+      ]
+    },
+    "typescript-next-node": {
+      "profile_id": "typescript-next-node",
+      "reviewed_on": "2026-10-23",
+      "evidence_status": "documentation-reviewed; commands not executed",
+      "starting_points": [
+        {
+          "name": "create-next-app",
+          "when": "A new full-stack React/Next.js application; do not rerun over an existing application.",
+          "steps": [
+            "Select a supported Node LTS and the repository package manager. Inspect the current CLI help before generation; examples below use npm.",
+            "Run the official scaffolder in the parent directory. Review its current prompts for styling, Cache Components, agent instructions and optional feedback instead of accepting saved preferences blindly; use --reset-preferences if you need to clear saved choices.",
+            "Record resolved generator/runtime/framework versions and chosen options in the root README; retain the lockfile."
+          ],
+          "commands": [
+            {
+              "run": "node --version",
+              "cwd": "A local source-workspace parent outside synchronized storage; my-app must not already exist",
+              "purpose": "Check the selected runtime."
+            },
+            {
+              "run": "npx create-next-app@latest --help",
+              "cwd": "A local source-workspace parent outside synchronized storage; my-app must not already exist",
+              "purpose": "Inspect the currently resolved scaffolder options."
+            },
+            {
+              "run": "npx create-next-app@latest my-app --ts --eslint --app --src-dir --use-npm --disable-git",
+              "cwd": "A local source-workspace parent outside synchronized storage; my-app must not already exist",
+              "purpose": "Generate the TypeScript App Router baseline while leaving styling, cache, instruction and feedback preferences available for interactive selection."
+            }
+          ],
+          "notes": [
+            "Replace my-app with the intended unused project name. @latest is a scaffold-time lookup; record the resolved version and use locked dependencies afterward.",
+            "The CLI's recommended defaults currently include TypeScript, ESLint, Tailwind CSS, App Router, Cache Components, AGENTS.md and agent feedback; customize these for the actual project. Cache Components are a framework behavior choice, not a required scaffold feature. Tailwind is the default styling option, but choose it only if it fits the product's styling approach.",
+            "The agent-instructions option is project-local. If the repository owner requires README-only guidance, pass --no-agents-md and, for Next versions supporting it, set agentRules: false in next.config before next dev so Next does not create/update its managed AGENTS.md block. Do not impose this repository-specific choice on all users or projects.",
+            "Agent feedback is optional and separate from agentRules. It prepares anonymized Next.js issue-report drafts for owner review; opening the review form does not send or publish them. Keep it off unless the project owner wants this review flow and understands its telemetry requirement.",
+            "Do not handwrite package.json, tsconfig, framework config or ignore rules as a replacement for this scaffold."
+          ]
+        }
+      ],
+      "follow_up_generators": [
+        {
+          "name": "Drizzle migration generation",
+          "when": "Only after this application has selected PostgreSQL/Drizzle, installed compatible drizzle-orm/driver/drizzle-kit dependencies, and configured a schema and drizzle.config.ts.",
+          "commands": [
+            {
+              "run": "npx drizzle-kit generate",
+              "cwd": "The generated my-app directory",
+              "purpose": "Generate SQL migration files from the configured schema changes."
+            },
+            {
+              "run": "npx drizzle-kit migrate",
+              "cwd": "The generated my-app directory",
+              "purpose": "Apply reviewed migrations to the configured development database after checking its connection."
+            }
+          ],
+          "notes": [
+            "Inspect local drizzle-kit help first; do not install a second ORM merely to run these examples. Review SQL and migration metadata before applying; production application needs its own release procedure.",
+            "Next.js has no general built-in model/controller/component generator analogous to Rails. Follow its installed-version route/file conventions; do not invent a next generate command."
+          ]
+        }
+      ],
+      "preserve": [
+        "Generated ignore rules, package scripts, strict TypeScript configuration, Next configuration, application/layout conventions and lockfile; document intentional changes.",
+        "Generated README setup information, supplemented with project purpose/navigation; honor repository instruction ownership and record the chosen local agent-rule/feedback behavior."
+      ],
+      "verification": [
+        "Run generated development server and inspect a real route in a browser.",
+        "Run the generated build and lint scripts separately; Next build is not a lint check. Check generated script names rather than assuming next lint exists.",
+        "Verify intended generated files and documented deviations; a successful scaffold does not prove authentication, authorization or database integration."
+      ],
+      "sources": [
+        {
+          "title": "Next.js managed agent rules and disabling generated instruction blocks",
+          "url": "https://nextjs.org/docs/app/api-reference/config/next-config-js/agentRules"
+        },
+        {
+          "title": "Next.js agent feedback draft/review flow and telemetry behavior",
+          "url": "https://nextjs.org/docs/app/api-reference/config/next-config-js/agentFeedback"
+        },
+        {
+          "title": "create-next-app CLI",
+          "url": "https://nextjs.org/docs/app/api-reference/cli/create-next-app"
+        },
+        {
+          "title": "Next.js installation and runtime requirements",
+          "url": "https://nextjs.org/docs/app/getting-started/installation"
+        },
+        {
+          "title": "Drizzle Kit generate",
+          "url": "https://orm.drizzle.team/docs/drizzle-kit-generate"
+        },
+        {
+          "title": "Drizzle Kit migrate",
+          "url": "https://orm.drizzle.team/docs/drizzle-kit-migrate"
+        },
+        {
+          "title": "Next.js agentRules configuration and README-only opt-out",
+          "url": "https://nextjs.org/docs/app/api-reference/config/next-config-js/agentRules"
+        },
+        {
+          "title": "Better Auth installation and schema CLI",
+          "url": "https://better-auth.com/docs/installation"
+        },
+        {
+          "title": "Better Auth Drizzle adapter package and schema generation",
+          "url": "https://better-auth.com/docs/adapters/drizzle"
+        }
+      ],
+      "integration_steps": [
+        "From the generated project root, extend README with purpose, commands, environment variable names and links to the installed framework documentation. Confirm strict TypeScript and honor the selected instruction-file policy; README-only repositories need agentRules:false before next dev.",
+        "Install only selected integrations: Zod for runtime validation; drizzle-orm plus pg and development drizzle-kit/@types/pg when PostgreSQL/Drizzle is required; Better Auth and its installed-version Drizzle adapter only when application-owned identity is selected. The current adapter guide uses @better-auth/drizzle-adapter. Mark database/auth modules server-only; add dotenv only if the chosen config loader needs it.",
+        "When database/auth features are selected, configure the Drizzle schema/config and ignored development DATABASE_URL, then auth secret/base URL and Next route/client integration. For Better Auth with Drizzle, inspect the compatible auth CLI, run npx auth@latest generate, include generated schema in Drizzle paths, then follow the reviewed SQL generation/application procedure. Better Auth direct migrate is for its Kysely adapter, not the Drizzle path.",
+        "Configure tests appropriate to the application: Vitest and a DOM environment/React Testing Library for synchronous client components or domain logic, plus Playwright for critical browser flows and async Server Components. Install matching browser binaries with npx playwright install only after selecting Playwright. Add required aliases/plugins and a production-build webServer configuration.",
+        "Test invalid inputs, resource/tenant ownership and session boundaries where applicable. Add Inngest only for required durable workflows; configure its endpoint/worker and exercise retries and duplicate events.",
+        "For database-backed applications, rehearse migrations on a fresh test database. Run the generated build, separate lint/type checks and selected tests. Configure the chosen host, secrets and a single migration job; verify deployed browser/session behavior and rollback compatibility as part of an authorized release."
+      ]
+    },
+    "typescript-react-vite-browser": {
+      "profile_id": "typescript-react-vite-browser",
+      "reviewed_on": "2026-10-18",
+      "evidence_status": "documentation-reviewed; commands not executed",
+      "starting_points": [
+        {
+          "name": "create-vite React TypeScript template",
+          "when": "A new browser React application backed by an existing or separately owned API.",
+          "steps": [
+            "Choose a supported Node runtime and package manager; inspect create-vite help and template requirements.",
+            "Create in an unused local source directory with the official react-ts template, then install dependencies inside the generated project.",
+            "Record generator/runtime versions and template choice in README; use the generated lockfile for subsequent installs."
+          ],
+          "commands": [
+            {
+              "run": "node --version",
+              "cwd": "A local source-workspace parent outside synchronized storage; my-app must not already exist",
+              "purpose": "Check Node against the resolved Vite/template requirements."
+            },
+            {
+              "run": "npm create vite@latest -- --help",
+              "cwd": "A local source-workspace parent outside synchronized storage; my-app must not already exist",
+              "purpose": "Inspect current create-vite flags."
+            },
+            {
+              "run": "npm create vite@latest my-app -- --template react-ts",
+              "cwd": "A local source-workspace parent outside synchronized storage; my-app must not already exist",
+              "purpose": "Generate the React TypeScript template."
+            },
+            {
+              "run": "npm install",
+              "cwd": "The generated my-app directory",
+              "purpose": "Install generated dependencies and create the npm lockfile."
+            }
+          ],
+          "notes": [
+            "Replace my-app with the unused intended directory. Preserve an established package manager in existing work.",
+            "This template creates the client application, not an API server, database, authentication service or production hosting setup. Do not put secrets or database credentials in browser code."
+          ]
+        }
+      ],
+      "follow_up_generators": [
+        {
+          "name": "Feature generation boundary",
+          "when": "Adding client components/routes or integrating the selected API after scaffolding.",
+          "commands": [],
+          "notes": [
+            "Vite does not provide a general component/model/controller generator. Use installed router/UI tooling only if the project has selected it; ordinary React components follow the generated module and TypeScript conventions.",
+            "Database migration generators belong in the API/backend repository that owns the data. Do not add PostgreSQL/Drizzle tooling to a browser-only bundle."
+          ]
+        }
+      ],
+      "preserve": [
+        "Generated .gitignore, index.html entry, Vite/React plugin setup, ESLint configuration, TypeScript project configuration and package scripts.",
+        "Lockfile and runtime constraints; adapt sample components while retaining the working scaffold."
+      ],
+      "verification": [
+        "Run npm run build and the generated lint script; confirm build includes the template TypeScript check rather than relying on transpilation alone.",
+        "Run npm run dev and inspect the actual browser UI; test API origins/authentication at the browser boundary.",
+        "Review ignore behavior and generated-file deviations before adding project files."
+      ],
+      "sources": [
+        {
+          "title": "Vite Getting Started and templates",
+          "url": "https://vite.dev/guide/"
+        }
+      ],
+      "integration_steps": [
+        "Extend the generated README with API/session owners, API contract, run/check commands and environment variable names. Confirm strict TypeScript and add router/query tooling only when needed.",
+        "Add Zod when validating runtime input or external data is required, and configure the selected test tools. Implement error/loading/session-expiry states and verify authoritative authorization in the API that owns the data.",
+        "Build static assets, configure the chosen production host for deep links and API origins, and verify browser navigation plus authentication/session behavior against the deployed API during an authorized release."
+      ]
+    },
+    "rails-hotwire-postgresql": {
+      "profile_id": "rails-hotwire-postgresql",
+      "reviewed_on": "2026-10-23",
+      "evidence_status": "documentation-reviewed; commands not executed",
+      "starting_points": [
+        {
+          "name": "rails new PostgreSQL application",
+          "when": "A new server-rendered Rails application with the normal Hotwire stack.",
+          "steps": [
+            "Install/select a supported Ruby and Rails version, Bundler, PostgreSQL and the native prerequisites for the pg gem; record versions.",
+            "Inspect rails new help. Generate the full application with PostgreSQL; keep Hotwire and test/security defaults unless the actual brief requires an exception.",
+            "Configure development/test credentials through environment or ignored configuration, then prepare the intended development database."
+          ],
+          "commands": [
+            {
+              "run": "rails new --help",
+              "cwd": "A local source-workspace parent outside synchronized storage; my-app must not already exist",
+              "purpose": "Inspect the installed application generator."
+            },
+            {
+              "run": "rails new my_app --database=postgresql",
+              "cwd": "A local source-workspace parent outside synchronized storage; my-app must not already exist",
+              "purpose": "Create the conventional Rails application and PostgreSQL configuration."
+            },
+            {
+              "run": "bin/rails db:prepare",
+              "cwd": "The generated my_app directory, after database configuration",
+              "purpose": "Prepare the intended local database and schema."
+            }
+          ],
+          "notes": [
+            "Replace my_app with the intended unused Rails name. The normal generator initializes Git without committing; review any custom application templates for extra effects.",
+            "Do not add --skip-git just to avoid a commit: it also skips generated .gitignore/.gitattributes. Rails defaults already include Turbo/Stimulus; do not install a separate SPA or skip Hotwire without a product reason."
+          ]
+        },
+        {
+          "name": "Rails API-only application",
+          "when": "Choose for a new API-first backend whose clients consume JSON; this is a distinct application mode from the normal Rails/Hotwire web application above.",
+          "steps": [
+            "Select a supported Rails/Ruby release and inspect the installed `rails new --help`; the current Rails 8.1 guide documents the --api mode.",
+            "Generate into a new absent directory with PostgreSQL and API mode, then inspect generated middleware, controller base class, resource generators, database setup and tests.",
+            "Before implementing endpoints, decide whether clients are server-side, native, or browser-based and select the matching authentication/session contract. API mode omits browser middleware such as cookies by default; add only the browser/session pieces required by the chosen contract."
+          ],
+          "commands": [
+            {
+              "run": "rails new --help",
+              "cwd": "A local source-workspace parent outside synchronized storage; my_api must not already exist",
+              "purpose": "Confirm the installed generator supports the selected database and API flags."
+            },
+            {
+              "run": "rails new my_api --api --database=postgresql",
+              "cwd": "A local source-workspace parent outside synchronized storage; my_api must not already exist",
+              "purpose": "Generate a Rails API-only app with PostgreSQL configuration."
+            },
+            {
+              "run": "bin/rails db:prepare",
+              "cwd": "The generated my_api directory after configuring the intended development database",
+              "purpose": "Prepare the generated app's development database."
+            }
+          ],
+          "notes": [
+            "Rails 8.1 `--api` reduces middleware, makes ApplicationController inherit from ActionController::API, and configures resource generators to omit views/helpers/assets. This changes the web application shape; use the normal Hotwire app when server-rendered browser pages are primary.",
+            "Do not install authentication, cookie/session middleware or CORS support by reflex. Select an identity provider/token or cookie-session design from actual client needs; cookie-authenticated browser requests need a deliberate CSRF contract. Configure narrowly scoped CORS only for cross-origin browser clients, and test allowed and rejected origins.",
+            "If a follow-up resource scaffold is selected, its generated JSON CRUD is only a starting point, not a proven API contract. Define request/response schemas, status/error behavior, versioning and object-level authorization before exposing resources."
+          ]
+        }
+      ],
+      "follow_up_generators": [
+        {
+          "name": "Authentication",
+          "when": "A new application needs Rails built-in session authentication and has not already selected another identity solution.",
+          "commands": [
+            {
+              "run": "bin/rails generate authentication",
+              "cwd": "The generated my_app directory",
+              "purpose": "Generate session authentication support using the installed Rails version."
+            },
+            {
+              "run": "bin/rails db:migrate",
+              "cwd": "The generated my_app directory, after reviewing the new migrations and database target",
+              "purpose": "Apply the generated authentication migrations locally."
+            }
+          ],
+          "notes": [
+            "Inspect bin/rails generate authentication --help first. Implement signup, mail configuration and per-resource authorization deliberately; generated login is not a complete product identity policy."
+          ]
+        },
+        {
+          "name": "Model or scaffold",
+          "when": "A new domain resource is required; choose a model for custom workflows or scaffold when generated CRUD screens fit.",
+          "commands": [
+            {
+              "run": "bin/rails generate model Product name:string",
+              "cwd": "The generated my_app directory",
+              "purpose": "Generate an example model with migration and test/fixture support."
+            }
+          ],
+          "notes": [
+            "Product and name:string are examples; replace them with the actual domain design. Review constraints and indexes before migrating.",
+            "Alternative: bin/rails generate scaffold Product name:string generates CRUD layers as well; choose it instead of generating the same model twice. Inspect generator help or --pretend before writes."
+          ]
+        },
+        {
+          "name": "Additive migration",
+          "when": "An existing Product model/table needs the example description column.",
+          "commands": [
+            {
+              "run": "bin/rails generate migration AddDescriptionToProducts description:text",
+              "cwd": "The generated my_app directory with an existing Product table",
+              "purpose": "Generate a migration for an existing resource."
+            }
+          ],
+          "notes": [
+            "Review the generated migration before bin/rails db:migrate; do not edit a migration already shared/applied to disguise a later schema change. Names/attributes are examples."
+          ]
+        }
+      ],
+      "preserve": [
+        "Generated .gitignore/.gitattributes, binstubs, Gemfile.lock, database configuration, credential exclusions, test/fixture layout, Hotwire/import-map setup and generated security/CI checks.",
+        "Do not replace generated Rails defaults with a small handwritten skeleton; record brief-driven omissions and additions."
+      ],
+      "verification": [
+        "Inspect bin/rails generate and the relevant generator --help for the installed version.",
+        "Run database migration status, bin/rails zeitwerk:check, domain/system tests and generated security/style checks that are present. For browser UI flows, inspect a browser journey; API-only apps should verify HTTP contracts through request/integration tests instead.",
+        "For API mode, test documented JSON request/response and error contracts, authentication and object authorization; when browser clients are used, verify CSRF/session behavior and both permitted and rejected CORS origins.",
+        "Run the generated server and inspect a browser journey; authentication/authorization still require behavior tests."
+      ],
+      "sources": [
+        {
+          "title": "Rails 8.1 API-only applications",
+          "url": "https://guides.rubyonrails.org/v8.1/api_app.html"
+        },
+        {
+          "title": "Rails 8.1 command line and application generation",
+          "url": "https://guides.rubyonrails.org/v8.1/command_line.html"
+        },
+        {
+          "title": "Rails command line and generators",
+          "url": "https://guides.rubyonrails.org/command_line.html"
+        },
+        {
+          "title": "Rails getting started, authentication and Hotwire",
+          "url": "https://guides.rubyonrails.org/getting_started.html"
+        },
+        {
+          "title": "Rails migrations",
+          "url": "https://guides.rubyonrails.org/active_record_migrations.html"
+        },
+        {
+          "title": "Rails application generator source: Git and ignore-file behavior",
+          "url": "https://raw.githubusercontent.com/rails/rails/main/railties/lib/rails/generators/rails/app/app_generator.rb"
+        },
+        {
+          "title": "Pundit installation and policy generator",
+          "url": "https://github.com/varvet/pundit"
+        }
+      ],
+      "integration_steps": [
+        "Configure ignored development/test database credentials and prepare the intended databases using the generated configuration. Use the conditional authentication generator when login is required; implement signup and resource-level permissions deliberately.",
+        "If Pundit is the selected authorization library, add it through Bundler and run bin/rails generate pundit:install after reviewing installed help; implement and invoke policies rather than relying on authentication alone.",
+        "For an API-first product, use the separate Rails --api starting point. Choose a client-specific identity and session model; configure cookies/CSRF only when browser sessions require them, and configure restricted CORS only for cross-origin browser clients. Test JSON request/response contracts, authentication, per-resource authorization, error statuses, and permitted/rejected origins as applicable.",
+        "For the Hotwire web app, start bin/rails server and inspect a browser journey; for an API-only app, verify its HTTP request/response journeys instead. Configure Solid Queue using the installed-version guide and run its bin/jobs worker only when background work is required and enabled.",
+        "Preserve Gemfile.lock and the generated checks. Add bundler-audit in development only if it is required and absent. Define authorization, duplicate-job and migration tests for the features present.",
+        "Prepare the chosen deployment configuration, secret ownership, database persistence and backup/restore procedure. When Kamal is the selected host tooling and deployment is authorized, use bundle exec kamal setup for initial setup or bundle exec kamal deploy for a subsequent release."
+      ]
+    },
+    "laravel-livewire-postgresql": {
+      "profile_id": "laravel-livewire-postgresql",
+      "reviewed_on": "2026-10-23",
+      "evidence_status": "documentation-reviewed; commands not executed",
+      "starting_points": [
+        {
+          "name": "Laravel installer with Livewire starter kit",
+          "when": "A new Laravel application using the official Livewire authentication/UI starting point.",
+          "steps": [
+            "Select compatible PHP/Composer and Node/npm versions plus PostgreSQL and the PHP PostgreSQL PDO extension. Install the Laravel installer only if absent.",
+            "Inspect installed laravel new help; select Livewire and PostgreSQL explicitly. The example chooses Pest; use --phpunit instead if that is the project choice.",
+            "Configure ignored .env with the intended development database and secrets, review generated migrations, then migrate and build assets. Resume a failed installer database step from the generated project after correcting configuration; do not overwrite the project."
+          ],
+          "commands": [
+            {
+              "run": "composer global require laravel/installer",
+              "cwd": "A local source-workspace parent outside synchronized storage; my-app must not already exist",
+              "purpose": "Install the official installer only when it is not already available."
+            },
+            {
+              "run": "laravel new --help",
+              "cwd": "A local source-workspace parent outside synchronized storage; my-app must not already exist",
+              "purpose": "Confirm flags supported by the installed installer."
+            },
+            {
+              "run": "laravel new my-app --livewire --database=pgsql --pest --no-boost",
+              "cwd": "A local source-workspace parent outside synchronized storage; my-app must not already exist",
+              "purpose": "Generate the official Livewire starter with explicit PostgreSQL and test choices."
+            },
+            {
+              "run": "php artisan migrate",
+              "cwd": "The generated my-app directory after configuring its local .env and reviewing migrations",
+              "purpose": "Apply pending migrations to the intended development database."
+            },
+            {
+              "run": "npm install",
+              "cwd": "The generated my-app directory",
+              "purpose": "Install starter frontend dependencies if the installer has not already done so."
+            },
+            {
+              "run": "npm run build",
+              "cwd": "The generated my-app directory",
+              "purpose": "Build the generated frontend assets."
+            }
+          ],
+          "notes": [
+            "The installer may attempt database migration during creation; inspect its output and migrate:status before retrying. Database role/database provisioning and credential ownership must be established.",
+            "Omit --git/--github and decline repository-creation prompts: those optional modes commit files and GitHub mode can publish. --no-boost keeps optional agent integration separate; configure it afterward only if selected, honoring README/instruction-file policy.",
+            "Starter authentication is provided by Fortify. Resource policies, mail delivery and external identity choices remain application work; do not replace the starter auth by hand."
+          ]
+        }
+      ],
+      "follow_up_generators": [
+        {
+          "name": "Conditional API routes and client authentication",
+          "when": "Only when the application needs API endpoints for external, native or browser clients. Use this on the existing Laravel application after creation; the normal Livewire starter remains the web UI baseline.",
+          "commands": [
+            {
+              "run": "php artisan install:api",
+              "cwd": "The generated my-app directory",
+              "purpose": "Install Sanctum and create the stateless routes/api.php route file."
+            },
+            {
+              "run": "php artisan route:list --path=api -v",
+              "cwd": "The generated my-app directory",
+              "purpose": "Inspect API routes and middleware after the API setup."
+            }
+          ],
+          "notes": [
+            "Current Laravel 13 docs describe `install:api` as creating routes/api.php and installing Sanctum. The generated API route group is stateless; that does not mean every API endpoint must be stateless or authenticated. Keep intended public endpoints public, and apply auth:sanctum plus policy/ability checks only to protected routes. This setup is not necessary for a Livewire-only product.",
+            "Choose the client contract deliberately. Sanctum supports bearer API tokens for native/third-party clients and cookie-based session authentication with CSRF protection for first-party SPAs sharing the same top-level domain. For cookie clients, configure stateful domains, CORS credentials, cookie scope and XSRF headers together; for cross-origin browser clients, allow only the required origins. Do not use bearer tokens for a first-party SPA when Sanctum's documented cookie flow fits.",
+            "`php artisan install:api --passport` is a separate choice only when OAuth2 server capabilities are required. Do not install Passport and Sanctum indiscriminately."
+          ]
+        },
+        {
+          "name": "Eloquent model and migration",
+          "when": "Adding an example Product domain resource.",
+          "commands": [
+            {
+              "run": "php artisan make:model Product --migration",
+              "cwd": "The generated my-app directory",
+              "purpose": "Generate an Eloquent model and companion migration."
+            }
+          ],
+          "notes": [
+            "Replace Product with the actual domain; inspect php artisan help make:model. Add constraints, relationships, allowed assignments and tests before applying migrations."
+          ]
+        },
+        {
+          "name": "Additive migration",
+          "when": "The existing products table needs an example description field.",
+          "commands": [
+            {
+              "run": "php artisan make:migration add_description_to_products_table",
+              "cwd": "The generated my-app directory",
+              "purpose": "Generate the next migration for an existing table."
+            }
+          ],
+          "notes": [
+            "Edit the generated up/down methods deliberately and review SQL/data impact before php artisan migrate. Do not use migrate:fresh against retained data."
+          ]
+        },
+        {
+          "name": "Livewire component/page",
+          "when": "A new interactive server-driven page is required.",
+          "commands": [
+            {
+              "run": "php artisan make:livewire pages::product.create",
+              "cwd": "The generated my-app directory with Livewire 4 installed",
+              "purpose": "Generate an example Livewire page component."
+            }
+          ],
+          "notes": [
+            "Confirm installed Livewire version and php artisan help make:livewire. Current Livewire 4 defaults differ from v3 class-based paths; retain the starter convention or deliberately choose the supported --class option."
+          ]
+        },
+        {
+          "name": "Authorization policy",
+          "when": "The Product model needs explicit per-resource permissions.",
+          "commands": [
+            {
+              "run": "php artisan make:policy ProductPolicy --model=Product",
+              "cwd": "The generated my-app directory with Product model present",
+              "purpose": "Generate a conventional policy for application-specific authorization logic."
+            }
+          ],
+          "notes": [
+            "Implement and invoke the policy, then test rejected requests; the generated stub does not establish access control."
+          ]
+        }
+      ],
+      "preserve": [
+        "Starter .gitignore, .env.example and secret exclusions, composer/package lockfiles, Artisan layout, Fortify auth flows, selected Pest/PHPUnit suite and Livewire/Tailwind/Flux integration.",
+        "Free versus paid Flux components remain a product decision. Preserve the working starter before customizing its UI or adding optional Boost/browser tooling."
+      ],
+      "verification": [
+        "Run composer check-platform-reqs, php artisan about, php artisan migrate:status, php artisan test and npm run build.",
+        "When API routes are selected, add HTTP tests for public/protected route behavior, authentication, policy denials, validation and response contracts; test CSRF, cookies and allowed/rejected CORS origins for browser clients that need them.",
+        "Run the generated style/security checks available in the project; verify database tests use a dedicated test database.",
+        "Use composer run dev and verify registration/login and one authorized plus one rejected browser flow. Record resolved versions and generation choices."
+      ],
+      "sources": [
+        {
+          "title": "Laravel 13 API routing and install:api behavior",
+          "url": "https://laravel.com/framework/docs/13.x/routing"
+        },
+        {
+          "title": "Laravel 13 Sanctum tokens, SPA sessions and CSRF",
+          "url": "https://laravel.com/framework/docs/13.x/sanctum"
+        },
+        {
+          "title": "Laravel 13 Passport and OAuth2 selection",
+          "url": "https://laravel.com/framework/docs/13.x/passport"
+        },
+        {
+          "title": "Laravel starter kits",
+          "url": "https://laravel.com/framework/docs/13.x/starter-kits"
+        },
+        {
+          "title": "Laravel installation",
+          "url": "https://laravel.com/framework/docs/13.x/installation"
+        },
+        {
+          "title": "Laravel installer source: flags and optional commits",
+          "url": "https://raw.githubusercontent.com/laravel/installer/master/src/NewCommand.php"
+        },
+        {
+          "title": "Eloquent model generation",
+          "url": "https://laravel.com/framework/docs/13.x/eloquent"
+        },
+        {
+          "title": "Laravel migrations",
+          "url": "https://laravel.com/framework/docs/13.x/migrations"
+        },
+        {
+          "title": "Livewire 4 component generation",
+          "url": "https://livewire.laravel.com/docs/4.x/components"
+        },
+        {
+          "title": "Laravel policy generation",
+          "url": "https://laravel.com/framework/docs/13.x/authorization"
+        },
+        {
+          "title": "Laravel Boost",
+          "url": "https://laravel.com/framework/docs/13.x/boost"
+        },
+        {
+          "title": "Laravel Dusk",
+          "url": "https://laravel.com/framework/docs/13.x/dusk"
+        }
+      ],
+      "integration_steps": [
+        "Configure ignored .env database/mail/queue settings for the features selected and confirm application key generation. Review the target database and migration status before applying pending migrations; preserve the starter authentication and selected test framework.",
+        "When a stateless API is required, run the conditional install:api setup and classify each route as public or protected. Choose Sanctum bearer tokens, first-party cookie sessions with CSRF, or OAuth2 only from the actual clients; add explicit per-resource policies and test both allowed and denied requests. Configure CORS and credentials narrowly for cross-origin browser clients, not as a default for native/server clients.",
+        "Build frontend assets and start composer run dev for local verification. Configure a supervised queue worker and scheduler separately for production when the application uses them.",
+        "If Laravel Boost is selected, add composer require laravel/boost --dev only if absent, inspect php artisan help boost:install and configure the chosen integration. Honor repository instruction ownership; for README-only policies inspect installer opt-outs or configure supported MCP integration manually.",
+        "When static analysis is selected, install a compatible Larastan development dependency and configure phpstan.neon from its installed-version guide. For selected browser testing, install laravel/dusk as a development dependency and run php artisan dusk:install; keep database/browser tests isolated.",
+        "For an authorized release, install locked production dependencies, build assets, review migrations, run php artisan optimize and reload supervised services. Confirm backup/restore and rollback compatibility before production migrations."
+      ]
+    },
+    "python-django": {
+      "profile_id": "python-django",
+      "reviewed_on": "2026-10-23",
+      "evidence_status": "documentation-reviewed; commands not executed",
+      "starting_points": [
+        {
+          "name": "uv environment plus native Django project generator",
+          "when": "A new Django product application; preserve the established layout and packaging workflow when extending an existing app.",
+          "steps": [
+            "Install uv and inspect uv --version and uv init --help. Replace /path/to/local/source with an existing local source parent; use a new, absent target directory. Set PYTHON_VERSION to a supported Python minor compatible with the selected framework and dependencies. Record generator versions, selected flags and deliberate deviations.",
+            "Run commands in the stated directories in order. Use explicit --no-package for the conventional root manage.py layout; uv default application layouts vary by version.",
+            "After scaffolding, inspect the uv sample main.py and deliberately remove or repurpose that sample if Django manage.py is the only entry point. Configure secrets, database and installed apps before feature work."
+          ],
+          "commands": [
+            {
+              "run": "uv init --no-package --python \"$PYTHON_VERSION\" django-app",
+              "cwd": "/path/to/local/source",
+              "purpose": "Create the managed project metadata and selected Python environment."
+            },
+            {
+              "run": "uv add django",
+              "cwd": "/path/to/local/source/django-app",
+              "purpose": "Resolve Django into the project environment and lock."
+            },
+            {
+              "run": "uv run django-admin startproject config .",
+              "cwd": "/path/to/local/source/django-app",
+              "purpose": "Generate manage.py and the Django settings, URLs, WSGI and ASGI package."
+            }
+          ],
+          "notes": [
+            "This is a composed bootstrap: uv owns Python packaging; django-admin owns framework scaffolding. Do not hand-create a substitute Django skeleton.",
+            "Django scaffolding does not make production settings safe. Configure environment-owned secrets, DEBUG, ALLOWED_HOSTS and the selected production database/server.",
+            "Choose a source parent outside another uv workspace, or intentionally use --no-workspace when creating an independent project under a directory with parent pyproject.toml metadata."
+          ]
+        }
+      ],
+      "follow_up_generators": [
+        {
+          "name": "Conditional Django REST Framework API layer",
+          "when": "Only after completing the Django project bootstrap above, and only when the application needs JSON API endpoints. Django has no built-in API-only project mode.",
+          "commands": [
+            {
+              "run": "uv add djangorestframework",
+              "cwd": "/path/to/local/source/django-app",
+              "purpose": "Install and lock the optional REST API framework in this project."
+            },
+            {
+              "run": "uv run python manage.py startapp api",
+              "cwd": "/path/to/local/source/django-app",
+              "purpose": "Generate the app that will own API serializers, views and routes."
+            }
+          ],
+          "notes": [
+            "Django's own `startproject` remains the general project bootstrap; DRF is a separately installed library and API layer, not a native Django API-only generator. Add both `rest_framework` and `api.apps.ApiConfig` (or the chosen generated API AppConfig) to INSTALLED_APPS, then follow the upstream quickstart for serializers, views, routers and API tests.",
+            "DRF's default permission policy is AllowAny. Set an intentional global or per-view permission policy and add object/tenant checks where needed; authentication alone does not authorize access. Select authentication based on client type, and treat session-authenticated browser requests' CSRF requirements deliberately.",
+            "Add CORS middleware/package and narrowly allow required origins only if a browser client actually calls the API cross-origin. Same-origin, server-to-server and native clients need different handling; do not install CORS or token-auth packages by default."
+          ]
+        },
+        {
+          "name": "Django application module",
+          "when": "A new domain app is needed inside the existing project; substitute a domain name for core.",
+          "commands": [
+            {
+              "run": "uv run python manage.py startapp core",
+              "cwd": "/path/to/local/source/django-app",
+              "purpose": "Generate the app configuration, models, admin, tests and migrations package."
+            }
+          ],
+          "notes": [
+            "Register core.apps.CoreConfig in INSTALLED_APPS and implement the domain. The generator does not wire URLs, permissions or product behavior."
+          ]
+        },
+        {
+          "name": "Django schema and data migrations",
+          "when": "Registered application models change; use the configured disposable development database first.",
+          "commands": [
+            {
+              "run": "uv run python manage.py makemigrations core",
+              "cwd": "/path/to/local/source/django-app",
+              "purpose": "Generate a migration from implemented model changes."
+            },
+            {
+              "run": "uv run python manage.py makemigrations --empty core --name populate_reference_data",
+              "cwd": "/path/to/local/source/django-app",
+              "purpose": "Alternative for an intentional data migration: generate its empty revision."
+            },
+            {
+              "run": "uv run python manage.py migrate --plan",
+              "cwd": "/path/to/local/source/django-app",
+              "purpose": "Inspect the configured database migration plan."
+            },
+            {
+              "run": "uv run python manage.py migrate",
+              "cwd": "/path/to/local/source/django-app",
+              "purpose": "Apply reviewed migrations to the development database."
+            }
+          ],
+          "notes": [
+            "The empty data migration is conditional, not a mandatory extra step. Implement it using historical models and review reversibility. Review generated operations before applying; commit migration sources with model changes.",
+            "Use Django ORM/migrations for this profile; do not add a second default migration system. PostgreSQL requires its driver and settings before database commands."
+          ]
+        }
+      ],
+      "preserve": [
+        "Keep generator-created project metadata, Python requirements, version selection and ignore rules; extend them rather than replacing them with a handwritten approximation.",
+        "Commit the resolved uv.lock for projects; exclude .venv, caches, secrets and platform debris such as .DS_Store. Do not hand-edit lockfiles.",
+        "Keep source repositories, virtual environments and caches in a local development workspace outside cloud-synced document folders.",
+        "Retain the generated manage.py, app configuration, middleware/security defaults, URL setup and WSGI/ASGI interfaces unless a documented application need changes them.",
+        "Retain and review migration history; never regenerate an existing project over maintained code."
+      ],
+      "verification": [
+        "From /path/to/local/source/django-app: uv sync --locked; uv run python manage.py check; uv run python manage.py makemigrations --check --dry-run.",
+        "For a DRF API, test explicit public/protected permissions, object/tenant denials, input validation and response contracts with DRF APIClient/APIRequestFactory; test session CSRF and narrowly allowed/rejected CORS origins when browser clients require them.",
+        "After reviewed migrations on the configured development database: uv run python manage.py migrate --check. Run application tests using its configured runner and a production-relevant isolated database.",
+        "Run uv run python manage.py check --deploy against the actual production settings module once it exists; runserver is a development server.",
+        "Compare a disposable scaffold made with the same uv/Django versions and flags; review the generated baseline and document deviations. Inspect tracked/staged files and verify ignore rules against local debris, caches and secrets."
+      ],
+      "sources": [
+        {
+          "title": "Django 6.0 project bootstrap and supported Python version",
+          "url": "https://docs.djangoproject.com/en/6.0/intro/tutorial01/"
+        },
+        {
+          "title": "Django REST framework quickstart and project setup",
+          "url": "https://www.django-rest-framework.org/tutorial/quickstart/"
+        },
+        {
+          "title": "Django REST framework authentication schemes",
+          "url": "https://www.django-rest-framework.org/api-guide/authentication/"
+        },
+        {
+          "title": "Django REST framework permissions and AllowAny default",
+          "url": "https://www.django-rest-framework.org/api-guide/permissions/"
+        },
+        {
+          "title": "Django REST framework API request testing",
+          "url": "https://www.django-rest-framework.org/api-guide/testing/"
+        },
+        {
+          "title": "uv project creation and layout choices",
+          "url": "https://docs.astral.sh/uv/concepts/projects/init/"
+        },
+        {
+          "title": "uv project dependency and environment workflow",
+          "url": "https://docs.astral.sh/uv/guides/projects/"
+        },
+        {
+          "title": "uv locking and syncing",
+          "url": "https://docs.astral.sh/uv/concepts/projects/sync/"
+        },
+        {
+          "title": "Django tutorial: startproject and startapp",
+          "url": "https://docs.djangoproject.com/en/6.0/intro/tutorial01/"
+        },
+        {
+          "title": "Django tutorial: app registration and migrations",
+          "url": "https://docs.djangoproject.com/en/6.0/intro/tutorial02/"
+        },
+        {
+          "title": "Django management command reference",
+          "url": "https://docs.djangoproject.com/en/6.0/ref/django-admin/"
+        },
+        {
+          "title": "Django production deployment checklist",
+          "url": "https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/"
+        },
+        {
+          "title": "uv command reference: explicit package and workspace options",
+          "url": "https://docs.astral.sh/uv/reference/cli/"
+        }
+      ],
+      "integration_steps": [
+        "After completing the selected generated baseline, resolve compatible dependencies through uv. For the default PostgreSQL choice, run uv add \"psycopg[binary]\"; configure the selected development database before migrations. Preserve an existing maintained database choice.",
+        "From the project root, run uv add --dev ruff mypy django-stubs pytest pytest-django after checking the django-stubs compatibility table for the selected Django/Python/mypy combination.",
+        "Use the follow-up startapp generator when a domain app is needed; register its AppConfig and configure environment-owned PostgreSQL credentials, auth/session settings, pytest DJANGO_SETTINGS_MODULE and the django-stubs mypy plugin/settings module.",
+        "Implement one authorized vertical slice. Use the follow-up migration generator, inspect the resulting operations and apply reviewed migrations to the disposable development database.",
+        "Add Celery only for actual queued work; configure its broker, worker and after-commit enqueueing. Add Temporal only when durable multi-step recovery is required.",
+        "Document application server, static asset collection, migration release ordering, worker start/restart and rollback. Complete baseline and application verification before deployment."
+      ]
+    },
+    "go-service": {
+      "profile_id": "go-service",
+      "reviewed_on": "2026-10-18",
+      "evidence_status": "documentation-reviewed; commands not executed",
+      "starting_points": [
+        {
+          "name": "Initialize the Go module",
+          "when": "A new Go service has no go.mod; preserve an existing module rather than reinitializing it.",
+          "steps": [
+            "Install the project-selected Go toolchain; choose an empty local source directory outside synced storage.",
+            "Replace /path/to/workspace and example.com/project with the real local path and module import path; create project once, then enter it.",
+            "Initialize metadata, then implement the net/http service and its tests; the standard library does not provide an application scaffold generator."
+          ],
+          "commands": [
+            {
+              "run": "mkdir project",
+              "cwd": "/path/to/workspace (existing local source parent)",
+              "purpose": "Create an empty project directory."
+            },
+            {
+              "run": "go mod init example.com/project",
+              "cwd": "/path/to/workspace/project",
+              "purpose": "Create go.mod using the real module path."
+            }
+          ],
+          "notes": [
+            "There is no universal Go net/http service generator in this profile. Routing, configuration validation, graceful shutdown and tests remain application work."
+          ]
+        }
+      ],
+      "follow_up_generators": [
+        {
+          "name": "sqlc query code",
+          "when": "Only when sqlc is selected and schema, annotated queries and sqlc.yaml/sqlc.json have been written.",
+          "commands": [
+            {
+              "run": "sqlc generate",
+              "cwd": "/path/to/workspace/project (sqlc configuration directory; selected sqlc installed)",
+              "purpose": "Generate typed query access from owned SQL inputs."
+            }
+          ],
+          "notes": [
+            "Install and record a selected sqlc release first. Configure pgx/v5 output for this profile. Regenerate after schema/query changes; this command does not create migrations or the HTTP application."
+          ]
+        },
+        {
+          "name": "goose SQL migration",
+          "when": "Only when goose owns migrations for this database.",
+          "commands": [
+            {
+              "run": "goose -dir migrations create initial sql",
+              "cwd": "/path/to/workspace/project (selected goose installed)",
+              "purpose": "Create a timestamped migration to edit and review."
+            }
+          ],
+          "notes": [
+            "Install and record a selected goose release first. Keep one migration owner. Write and test migration SQL using a disposable PostgreSQL database before deployment."
+          ]
+        },
+        {
+          "name": "templ component code",
+          "when": "Only when the optional templ UI has been selected and .templ source exists.",
+          "commands": [
+            {
+              "run": "templ generate",
+              "cwd": "/path/to/workspace/project (selected templ CLI installed)",
+              "purpose": "Generate Go component code from .templ sources."
+            }
+          ],
+          "notes": [
+            "Match the selected CLI and module versions; preserve editable .templ inputs and the chosen generated-code policy."
+          ]
+        },
+        {
+          "name": "GoReleaser configuration",
+          "when": "Only when GoReleaser is selected for this application and no release configuration exists.",
+          "commands": [
+            {
+              "run": "goreleaser init",
+              "cwd": "/path/to/workspace/project (module root; selected GoReleaser installed)",
+              "purpose": "Generate .goreleaser.yaml."
+            },
+            {
+              "run": "goreleaser check",
+              "cwd": "/path/to/workspace/project",
+              "purpose": "Validate the reviewed release configuration."
+            }
+          ],
+          "notes": [
+            "Install and record the project-selected GoReleaser release first. Review build entry points, targets, hooks and publishing settings; generation does not authorize a release."
+          ]
+        }
+      ],
+      "preserve": [
+        "Preserve go.mod and go.sum when generated by dependency resolution; record the Go version and resolved generator versions.",
+        "go mod init creates module metadata, not source files, tests, a service structure or .gitignore. Add project-specific ignores, including OS metadata, without claiming they came from Go.",
+        "Keep generator-created files as the baseline; document deliberate changes and do not replace standard defaults with a handwritten approximation.",
+        "Preserve SQL migrations, sqlc configuration, query sources and the agreed generated-code policy."
+      ],
+      "verification": [
+        "In the actual project, record generator versions and commands, then compare its initial files with a fresh output from the same versions and options.",
+        "After source exists, run gofmt -l ., go test ./..., go vet ./... and go build ./... from the module root; a bare go.mod is not a runnable application.",
+        "In a disposable copy, check candidate staging includes source and required manifests but excludes binaries, caches, local credentials and .DS_Store; inspect git add --dry-run -A before changing a real index.",
+        "For selected tools, regenerate sqlc/templ and inspect changes; validate migrations against a disposable database."
+      ],
+      "sources": [
+        {
+          "title": "Go module creation tutorial",
+          "url": "https://go.dev/doc/tutorial/create-module"
+        },
+        {
+          "title": "Go modules reference: go mod init",
+          "url": "https://go.dev/ref/mod#go-mod-init"
+        },
+        {
+          "title": "sqlc PostgreSQL getting started",
+          "url": "https://docs.sqlc.dev/en/latest/tutorials/getting-started-postgresql.html"
+        },
+        {
+          "title": "goose CLI commands",
+          "url": "https://pressly.github.io/goose/documentation/cli-commands/"
+        },
+        {
+          "title": "templ CLI",
+          "url": "https://templ.guide/commands-and-tools/cli"
+        },
+        {
+          "title": "GoReleaser quick start",
+          "url": "https://goreleaser.com/getting-started/quick-start/"
+        }
+      ],
+      "integration_steps": [
+        "Resolve and record the selected Go/tool versions and dependencies; add pgx/v5 for PostgreSQL and River only when durable jobs are required.",
+        "After module initialization, implement the service entry point and application packages with typed settings, explicit http.Server limits, health/readiness and graceful shutdown.",
+        "When sqlc and goose are selected, use the follow-up generator instructions; write migrations, annotated queries and sqlc configuration, then generate typed query access. Keep database credentials in environment/secrets.",
+        "With GOOSE_DRIVER=postgres and GOOSE_DBSTRING pointing only to a disposable database, run goose -dir migrations up. Add HTTP, real-database, business transaction and selected River enqueue tests.",
+        "Add and review the chosen release configuration, pin tools and preserve go.mod/go.sum; document build, deployment and rollback. Qualify target runtime/cgo requirements. These application steps have not been executed."
+      ]
+    },
+    "rust-service": {
+      "profile_id": "rust-service",
+      "reviewed_on": "2026-10-18",
+      "evidence_status": "documentation-reviewed; commands not executed",
+      "starting_points": [
+        {
+          "name": "Cargo binary package",
+          "when": "A new Rust service needs a new directory.",
+          "steps": [
+            "Install the chosen Rust toolchain. Replace /path/to/workspace with the actual local source parent; choose the real package name.",
+            "Generate a binary package; use --lib only for a reusable library rather than an executable."
+          ],
+          "commands": [
+            {
+              "run": "cargo new project --bin",
+              "cwd": "/path/to/workspace (existing local source parent)",
+              "purpose": "Generate the executable package baseline."
+            }
+          ],
+          "notes": [
+            "A Cargo package is not a full framework application. Preserve generated defaults and add only selected dependencies."
+          ]
+        },
+        {
+          "name": "Cargo in an existing directory",
+          "when": "An existing source directory has no Cargo.toml and must become a package; choose this instead of cargo new.",
+          "steps": [
+            "Inspect existing files and parent VCS before initialization; preserve existing code."
+          ],
+          "commands": [
+            {
+              "run": "cargo init --bin",
+              "cwd": "/path/to/workspace/project (existing directory without Cargo.toml)",
+              "purpose": "Initialize a binary package in place."
+            }
+          ],
+          "notes": [
+            "Use --lib for a library target. Do not run cargo init over an already initialized package."
+          ]
+        }
+      ],
+      "follow_up_generators": [
+        {
+          "name": "SQLx migrations and checked-query metadata",
+          "when": "Only when SQLx is selected and owns schema migrations; metadata applies when checked query macros are used.",
+          "commands": [
+            {
+              "run": "sqlx migrate add initial",
+              "cwd": "/path/to/workspace/project (matching sqlx-cli installed)",
+              "purpose": "Create an editable migration file."
+            },
+            {
+              "run": "sqlx migrate run",
+              "cwd": "/path/to/workspace/project (DATABASE_URL targets a disposable database; migration SQL reviewed)",
+              "purpose": "Apply migrations to the disposable database."
+            },
+            {
+              "run": "cargo sqlx prepare",
+              "cwd": "/path/to/workspace/project (checked query macros and matching disposable schema available)",
+              "purpose": "Generate offline query metadata."
+            }
+          ],
+          "notes": [
+            "Install a selected sqlx-cli release compatible with the application and selected database/TLS features. Set DATABASE_URL through the environment or an untracked local file.",
+            "Preserve migrations and commit .sqlx metadata for offline builds. Run cargo sqlx prepare --check after changes; pass workspace/feature/target options matching the project."
+          ]
+        }
+      ],
+      "preserve": [
+        "Preserve Cargo.toml, generated source structure and Cargo.lock after dependency resolution for shipped applications. Record the chosen Rust toolchain and generator versions.",
+        "Retain the VCS ignore baseline when generated, including build-output exclusions, and add project-specific OS metadata/secret rules. Cargo VCS behavior depends on parent repository and configuration; inspect actual output.",
+        "Record and justify changes from the same-version generator baseline instead of recreating its files from memory.",
+        "Preserve SQLx migrations and offline query metadata when selected; keep database credentials out of version control."
+      ],
+      "verification": [
+        "In the actual application, compare a fresh output from the recorded toolchain/options with the initial project and explain intentional differences.",
+        "After initial dependency resolution, run cargo fmt --all -- --check, cargo test --locked and cargo build --locked from the package root; run the project-selected Clippy checks.",
+        "In a disposable copy, inspect git add --dry-run -A and confirm source/manifests/lockfile are included while target/, credentials and .DS_Store are excluded.",
+        "Cargo creates the package; Axum routing, Tokio runtime, configuration and shutdown remain explicit implementation. No full Axum application generator is asserted here.",
+        "For SQLx, test migrations in the disposable database and run cargo sqlx prepare --check with the same relevant features and targets."
+      ],
+      "sources": [
+        {
+          "title": "Cargo new",
+          "url": "https://doc.rust-lang.org/cargo/commands/cargo-new.html"
+        },
+        {
+          "title": "Cargo init",
+          "url": "https://doc.rust-lang.org/cargo/commands/cargo-init.html"
+        },
+        {
+          "title": "Cargo package and first build",
+          "url": "https://doc.rust-lang.org/cargo/guide/creating-a-new-project.html"
+        },
+        {
+          "title": "Axum documentation",
+          "url": "https://docs.rs/axum/latest/axum/"
+        },
+        {
+          "title": "SQLx CLI migrations and prepare",
+          "url": "https://github.com/transact-rs/sqlx/blob/main/sqlx-cli/README.md"
+        }
+      ],
+      "integration_steps": [
+        "After the selected Cargo baseline, add compatible Axum and Tokio dependencies; the documented examples are cargo add axum and cargo add tokio --features macros,rt-multi-thread. Select required tower-http middleware explicitly.",
+        "Add SQLx with PostgreSQL, Tokio and the selected release's supported TLS configuration; install a compatible sqlx-cli release. Implement settings validation and a tracing subscriber.",
+        "Follow the selected SQLx migration instructions with DATABASE_URL pointing only to a disposable database. Write and review migration SQL before applying it; keep credentials outside tracked files.",
+        "For checked query macros, regenerate and commit .sqlx offline metadata after schema/query changes. Implement HTTP, real-database and cancellation tests, then run the profile verification checks with relevant features and targets.",
+        "Introduce Restate only after a separate restart/retry/idempotency proof. Pin the toolchain and release targets, preserve the application Cargo.lock after dependency resolution and qualify target/runtime/TLS dependencies. These application instructions were not executed."
+      ]
+    },
+    "python-fastapi": {
+      "profile_id": "python-fastapi",
+      "reviewed_on": "2026-10-23",
+      "evidence_status": "documentation-reviewed; commands not executed",
+      "starting_points": [
+        {
+          "name": "Official fastapi-new project scaffold",
+          "when": "A new FastAPI API where the official basic uv-configured scaffold is a suitable starting point; use the minimal assembly path below when you need a smaller/custom layout, or the full-stack template only when its additional choices fit.",
+          "steps": [
+            "Install uv using its official platform instructions, inspect uvx --help and the fastapi-new project README/release notes, and choose a new absent target directory. The package requires Python 3.10 or newer.",
+            "Run the official scaffold in the source parent, then inspect generated files, dependencies, README, ignore rules and lockfile before adapting it. Record the resolved fastapi-new, uv and Python versions.",
+            "Follow the generated README to start the app and check its initial endpoint; adapt the generated application deliberately to the requested API rather than assuming the scaffold covers production requirements."
+          ],
+          "commands": [
+            {
+              "run": "uvx fastapi-new --help",
+              "cwd": "A local source-workspace parent; target must not already exist",
+              "purpose": "Inspect the selected installed release's options before generating."
+            },
+            {
+              "run": "uvx fastapi-new api-service",
+              "cwd": "A local source-workspace parent; api-service must not already exist",
+              "purpose": "Generate the official basic FastAPI project configured with uv."
+            },
+            {
+              "run": "uv run fastapi dev",
+              "cwd": "The generated api-service directory",
+              "purpose": "Run the generated development application after reviewing its README and files."
+            }
+          ],
+          "notes": [
+            "This is an official FastAPI organization project, but PyPI classifies it as Development Status 4 - Beta, has one maintainer, and its 0.0.7 release was uploaded 19 June 2026. Treat it as an optional scaffold and review the generated output; the documentation was reviewed but the command was not executed here.",
+            "The official repository README documents `uvx fastapi-new <project-name>` and bare `uvx fastapi-new` for an existing directory. Do not use the latter on a populated project without first inspecting what it will add or change.",
+            "This scaffold is distinct from FastAPI CLI's `fastapi dev`/`fastapi run` commands, which serve an existing application, and from the larger Full Stack FastAPI Template."
+          ]
+        },
+        {
+          "name": "uv project initialization with explicit minimal FastAPI assembly",
+          "when": "A new API/service requiring FastAPI without an entire full-stack template.",
+          "steps": [
+            "Install uv and inspect uv --version and uv init --help. Replace /path/to/local/source with an existing local source parent; use a new, absent target directory. Set PYTHON_VERSION to a supported Python minor compatible with the selected framework and dependencies. Record generator versions, selected flags and deliberate deviations.",
+            "Run uv initialization and dependency installation, then implement the minimal FastAPI application in app/main.py with app/__init__.py. This is deliberate assembly for the custom minimal uv path; use the official fastapi-new scaffold above when its generated baseline fits.",
+            "Use the official first-steps example as the initial app, add the required endpoint and test, then start the development server. Configure [tool.fastapi] entrypoint when the project uses a different import path."
+          ],
+          "commands": [
+            {
+              "run": "uv init --no-package --python \"$PYTHON_VERSION\" api-service",
+              "cwd": "/path/to/local/source",
+              "purpose": "Generate managed project metadata for the conventional flat app/ layout."
+            },
+            {
+              "run": "uv add \"fastapi[standard]\"",
+              "cwd": "/path/to/local/source/api-service",
+              "purpose": "Resolve FastAPI and its CLI/server dependencies."
+            },
+            {
+              "run": "uv run fastapi dev app/main.py",
+              "cwd": "/path/to/local/source/api-service",
+              "purpose": "After the app file exists, run the development server; this command does not scaffold an application."
+            }
+          ],
+          "notes": [
+            "FastAPI documents a small application assembled from Python modules. The official fastapi dev and fastapi run commands serve existing apps; `fastapi-new` is the separate optional official project scaffold documented above.",
+            "Inspect the generated uv sample main.py; adapt/remove it explicitly if app/main.py replaces it. Document any chosen package layout instead of letting two entry points drift.",
+            "Choose a source parent outside another uv workspace, or intentionally use --no-workspace when creating an independent project under a directory with parent pyproject.toml metadata."
+          ]
+        },
+        {
+          "name": "Official Full Stack FastAPI Template",
+          "when": "The requested product explicitly needs the template’s React frontend, SQLModel/PostgreSQL, accounts and deployment structure.",
+          "steps": [
+            "Review the official repository README and its current development documentation. Record the selected revision and verify its actual dependency/layout choices.",
+            "Use GitHub Use this template to create the requested repository, then clone it into a local source workspace and follow its own initialization instructions.",
+            "Configure project identity and environment-owned secrets; replace example credentials and inspect generated workflows before enabling external effects."
+          ],
+          "commands": [],
+          "notes": [
+            "This is an official optional template, not the default for every API. Its extra frontend, ORM and infrastructure choices must match the application.",
+            "The reviewed official README uses GitHub template creation; no unsupported Copier command is prescribed. Do not run another uv init over the template or replace its maintained lock/environment workflow."
+          ]
+        }
+      ],
+      "follow_up_generators": [
+        {
+          "name": "Conditional Alembic migration environment and revisions",
+          "when": "SQLAlchemy-backed persistent state is required; skip for stateless APIs/workers and preserve an existing migration owner.",
+          "commands": [
+            {
+              "run": "uv add sqlalchemy alembic \"psycopg[binary]\"",
+              "cwd": "/path/to/local/source/api-service",
+              "purpose": "Install the selected PostgreSQL data dependencies; use a compatible driver for another chosen database."
+            },
+            {
+              "run": "uv run alembic init migrations",
+              "cwd": "/path/to/local/source/api-service",
+              "purpose": "Generate the standard migration environment and config."
+            },
+            {
+              "run": "uv run alembic revision --autogenerate -m \"initial schema\"",
+              "cwd": "/path/to/local/source/api-service",
+              "purpose": "After configuring env.py metadata and database access, generate a candidate schema revision."
+            },
+            {
+              "run": "uv run alembic upgrade head",
+              "cwd": "/path/to/local/source/api-service",
+              "purpose": "After manual review, apply the candidate migration to a disposable development database."
+            }
+          ],
+          "notes": [
+            "Between init and revision, configure the database URL from environment-owned secrets and target_metadata from the application models. The default generic template is synchronous; use alembic list_templates and choose the async template only for an actual async DBAPI.",
+            "Autogeneration cannot reliably infer every rename, constraint or data transformation. Review upgrade/downgrade operations and write data migrations intentionally; do not blindly apply its output.",
+            "Commit migrations, env.py and the non-secret configuration, while keeping database credentials out of source. Verify upgrades and required rollback behavior before release."
+          ]
+        }
+      ],
+      "preserve": [
+        "Keep generator-created project metadata, Python requirements, version selection and ignore rules; extend them rather than replacing them with a handwritten approximation.",
+        "Commit the resolved uv.lock for projects; exclude .venv, caches, secrets and platform debris such as .DS_Store. Do not hand-edit lockfiles.",
+        "Keep source repositories, virtual environments and caches in a local development workspace outside cloud-synced document folders.",
+        "Preserve the selected application layout, explicit FastAPI entrypoint and any chosen template tests/configuration; record template revision and changes.",
+        "Do not add an ORM, database, frontend or queue solely to imitate a full-stack template."
+      ],
+      "verification": [
+        "From /path/to/local/source/api-service: uv sync --locked. Import the implemented app and exercise its API tests after installing/configuring the selected test tooling.",
+        "With uv run fastapi dev app/main.py running locally, verify a real endpoint and /openapi.json. Choose and document production startup separately; development reload is not a deployment check.",
+        "When Alembic is configured, run uv run alembic check and uv run alembic current against the disposable development database; verify migration behavior.",
+        "Compare project metadata with a disposable scaffold from the same uv version and flags, or the selected official template revision. Review tracked/staged files and ensure local environments, secrets and .DS_Store are excluded."
+      ],
+      "sources": [
+        {
+          "title": "Official fastapi-new project scaffold and command",
+          "url": "https://github.com/fastapi/fastapi-new"
+        },
+        {
+          "title": "fastapi-new package metadata, release and maturity classification",
+          "url": "https://pypi.org/project/fastapi-new/"
+        },
+        {
+          "title": "uv project creation and layout choices",
+          "url": "https://docs.astral.sh/uv/concepts/projects/init/"
+        },
+        {
+          "title": "uv project dependency and environment workflow",
+          "url": "https://docs.astral.sh/uv/guides/projects/"
+        },
+        {
+          "title": "uv locking and syncing",
+          "url": "https://docs.astral.sh/uv/concepts/projects/sync/"
+        },
+        {
+          "title": "uv FastAPI integration with explicit unpackaged layout",
+          "url": "https://docs.astral.sh/uv/guides/integration/fastapi/"
+        },
+        {
+          "title": "FastAPI first application",
+          "url": "https://fastapi.tiangolo.com/tutorial/first-steps/"
+        },
+        {
+          "title": "FastAPI CLI: development and production serving",
+          "url": "https://fastapi.tiangolo.com/fastapi-cli/"
+        },
+        {
+          "title": "Official Full Stack FastAPI Template overview",
+          "url": "https://fastapi.tiangolo.com/project-generation/"
+        },
+        {
+          "title": "Official Full Stack FastAPI Template repository and creation instructions",
+          "url": "https://github.com/fastapi/full-stack-fastapi-template"
+        },
+        {
+          "title": "Alembic environment generation and templates",
+          "url": "https://alembic.sqlalchemy.org/en/latest/tutorial.html"
+        },
+        {
+          "title": "Alembic candidate revision generation and limitations",
+          "url": "https://alembic.sqlalchemy.org/en/latest/autogenerate.html"
+        },
+        {
+          "title": "uv command reference: explicit package and workspace options",
+          "url": "https://docs.astral.sh/uv/reference/cli/"
+        }
+      ],
+      "integration_steps": [
+        "After completing the selected generated baseline, use uv add pydantic-settings when environment-backed typed settings are required, and uv add --dev ruff mypy pytest httpx for the configured checks/tests. Resolve compatible versions and commit uv.lock; for the optional full-stack template preserve its own declared dependency workflow.",
+        "Extend the generated or explicitly assembled FastAPI entry point with request/response models, one authorized API slice and a health endpoint. Use the actual application path chosen by the baseline.",
+        "Only when persistent SQL state is required, use the follow-up Alembic environment and revision generators. Configure an environment-owned connection URL and target_metadata, then implement per-request/task sessions and domain transaction boundaries; manually review migrations before applying to a disposable development database.",
+        "Configure the selected identity provider and token verification; implement tenant/object authorization before exposing protected endpoints.",
+        "Use uv run fastapi dev app/main.py only for the minimal baseline development server, adapting the path for another layout. Prepare the release with uv sync --locked --no-dev and an explicit production start command for the chosen host; add workers separately when needed."
+      ]
+    },
+    "go-cli": {
+      "profile_id": "go-cli",
+      "reviewed_on": "2026-10-23",
+      "evidence_status": "documentation-reviewed; commands not executed",
+      "starting_points": [
+        {
+          "name": "Go module plus Cobra generator",
+          "when": "A new command application selects Cobra; use the standard-library flag package for a deliberately smaller CLI without a Cobra scaffold.",
+          "steps": [
+            "Install the project-selected Go toolchain and create an empty project directory. Replace paths and module name with real values.",
+            "Initialize the module before Cobra. Set COBRA_CLI_VERSION to a selected published version (including v prefix); ensure the Go install bin directory is on PATH.",
+            "Generate the command skeleton, review author/license defaults and add application logic and tests."
+          ],
+          "commands": [
+            {
+              "run": "mkdir project",
+              "cwd": "/path/to/workspace (existing local source parent)",
+              "purpose": "Create a new CLI source directory."
+            },
+            {
+              "run": "go mod init example.com/project",
+              "cwd": "/path/to/workspace/project",
+              "purpose": "Initialize module metadata."
+            },
+            {
+              "run": "go install github.com/spf13/cobra-cli@\"${COBRA_CLI_VERSION:?Set the selected Cobra CLI version}\"",
+              "cwd": "/path/to/workspace/project",
+              "purpose": "Install the selected generator version."
+            },
+            {
+              "run": "cobra-cli init",
+              "cwd": "/path/to/workspace/project",
+              "purpose": "Generate main.go and cmd/root.go using Cobra."
+            }
+          ],
+          "notes": [
+            "Choose the actual project license and author; inspect ~/.cobra.yaml because it can alter output. Add --viper only if Viper is explicitly selected.",
+            "If Cobra is not selected, go mod init remains required module initialization; flag and Bubble Tea do not require this Cobra scaffold."
+          ]
+        }
+      ],
+      "follow_up_generators": [
+        {
+          "name": "Cobra subcommand",
+          "when": "When adding commands to the generated Cobra application.",
+          "commands": [
+            {
+              "run": "cobra-cli add serve",
+              "cwd": "/path/to/workspace/project (existing Cobra root)",
+              "purpose": "Generate an example serve command for subsequent implementation."
+            }
+          ],
+          "notes": [
+            "Replace serve with the intended command name; review generated command registration, help and error/exit behavior."
+          ]
+        },
+        {
+          "name": "Optional Bubble Tea v2 terminal interface",
+          "when": "Only when the CLI needs an interactive terminal user interface; a conventional command interface can stay with Cobra or the standard library.",
+          "commands": [
+            {
+              "run": "go get charm.land/bubbletea/v2@latest",
+              "cwd": "/path/to/workspace/project (module root)",
+              "purpose": "Add Bubble Tea v2 using its current vanity module path."
+            }
+          ],
+          "notes": [
+            "Use the v2 import `tea \"charm.land/bubbletea/v2\"` and follow the v2 Model/View API: `View() tea.View`, not the v1 `View() string`. The v2 module path and API differ from `github.com/charmbracelet/bubbletea` v1; do not mix their examples or imports.",
+            "Bubble Tea is a framework integration, not an application generator. Build it only when interactive screens are required; add related Charm v2 modules such as Bubbles or Lip Gloss only if selected and use their matching `/v2` module paths."
+          ]
+        },
+        {
+          "name": "GoReleaser configuration",
+          "when": "Only when GoReleaser is selected for this application and no release configuration exists.",
+          "commands": [
+            {
+              "run": "goreleaser init",
+              "cwd": "/path/to/workspace/project (module root; selected GoReleaser installed)",
+              "purpose": "Generate .goreleaser.yaml."
+            },
+            {
+              "run": "goreleaser check",
+              "cwd": "/path/to/workspace/project",
+              "purpose": "Validate the reviewed release configuration."
+            }
+          ],
+          "notes": [
+            "Install and record the project-selected GoReleaser release first. Review build entry points, targets, hooks and publishing settings; generation does not authorize a release."
+          ]
+        }
+      ],
+      "preserve": [
+        "Preserve go.mod and go.sum when generated by dependency resolution; record the Go version and resolved generator versions.",
+        "go mod init creates module metadata, not source files, tests, a service structure or .gitignore. Add project-specific ignores, including OS metadata, without claiming they came from Go.",
+        "Keep generator-created files as the baseline; document deliberate changes and do not replace standard defaults with a handwritten approximation.",
+        "Preserve Cobra command wiring and help/completion behavior; review generator license output before adopting it."
+      ],
+      "verification": [
+        "In the actual project, record generator versions and commands, then compare its initial files with a fresh output from the same versions and options.",
+        "After source exists, run gofmt -l ., go test ./..., go vet ./... and go build ./... from the module root; a bare go.mod is not a runnable application.",
+        "In a disposable copy, check candidate staging includes source and required manifests but excludes binaries, caches, local credentials and .DS_Store; inspect git add --dry-run -A before changing a real index.",
+        "For Cobra, exercise go run . --help and generated command help, then test actual exit codes, stdout/stderr and noninteractive operation."
+      ],
+      "sources": [
+        {
+          "title": "Go module creation tutorial",
+          "url": "https://go.dev/doc/tutorial/create-module"
+        },
+        {
+          "title": "Bubble Tea v2 official README and tutorial",
+          "url": "https://github.com/charmbracelet/bubbletea"
+        },
+        {
+          "title": "Bubble Tea v2 upgrade guide and module/API changes",
+          "url": "https://github.com/charmbracelet/bubbletea/blob/main/UPGRADE_GUIDE_V2.md"
+        },
+        {
+          "title": "Go modules reference: go mod init",
+          "url": "https://go.dev/ref/mod#go-mod-init"
+        },
+        {
+          "title": "Cobra generator documentation",
+          "url": "https://github.com/spf13/cobra-cli/blob/main/README.md"
+        },
+        {
+          "title": "GoReleaser quick start",
+          "url": "https://goreleaser.com/getting-started/quick-start/"
+        }
+      ],
+      "integration_steps": [
+        "After the selected module/Cobra baseline, resolve dependencies and record tool versions; preserve the Cobra-generated main.go and cmd/root.go command wiring. Add Bubble Tea v2 (`charm.land/bubbletea/v2`) only when interactive screens are required, and use its v2 Model/View API rather than copying v1 examples.",
+        "Implement commands through the chosen command structure with injectable I/O, configuration validation, stable exit codes, cancellation and explicit noninteractive behavior. Keep application logic separate from terminal rendering.",
+        "Write command tests covering malformed input, stdin, stdout/stderr, cancellation and safe retries; use isolated temporary paths and test terminal restoration when a TUI is present.",
+        "When GoReleaser is selected, follow its configuration generator instructions and review/pin the generated configuration and target matrix. Preserve go.mod/go.sum; document installation, supported targets and rollback. No application setup or publishing has been executed."
+      ]
+    },
+    "rust-cli": {
+      "profile_id": "rust-cli",
+      "reviewed_on": "2026-10-18",
+      "evidence_status": "documentation-reviewed; commands not executed",
+      "starting_points": [
+        {
+          "name": "Cargo binary package",
+          "when": "A new Rust CLI needs a new directory.",
+          "steps": [
+            "Install the chosen Rust toolchain. Replace /path/to/workspace with the actual local source parent; choose the real package name.",
+            "Generate a binary package; use --lib only for a reusable library rather than an executable."
+          ],
+          "commands": [
+            {
+              "run": "cargo new project --bin",
+              "cwd": "/path/to/workspace (existing local source parent)",
+              "purpose": "Generate the executable package baseline."
+            }
+          ],
+          "notes": [
+            "A Cargo package is not a full framework application. Preserve generated defaults and add only selected dependencies."
+          ]
+        },
+        {
+          "name": "Cargo in an existing directory",
+          "when": "An existing source directory has no Cargo.toml and must become a package; choose this instead of cargo new.",
+          "steps": [
+            "Inspect existing files and parent VCS before initialization; preserve existing code."
+          ],
+          "commands": [
+            {
+              "run": "cargo init --bin",
+              "cwd": "/path/to/workspace/project (existing directory without Cargo.toml)",
+              "purpose": "Initialize a binary package in place."
+            }
+          ],
+          "notes": [
+            "Use --lib for a library target. Do not run cargo init over an already initialized package."
+          ]
+        },
+        {
+          "name": "Ratatui maintained templates",
+          "when": "Interactive terminal UI is selected at project creation; use this alternative to the plain Cargo starter, rather than overlaying a template onto an existing app.",
+          "steps": [
+            "Install the selected Rust toolchain; set CARGO_GENERATE_VERSION to a chosen published version and ensure Cargo binaries are on PATH.",
+            "Run the maintained template selector from the intended parent. Choose the simplest suitable template and real app name; record template choice, resolved repository revision and answers.",
+            "Review generated dependencies, license and terminal setup before extending the application."
+          ],
+          "commands": [
+            {
+              "run": "cargo install cargo-generate --version \"${CARGO_GENERATE_VERSION:?Set the selected cargo-generate version}\" --locked",
+              "cwd": "/path/to/workspace (existing local source parent)",
+              "purpose": "Install the chosen template generator."
+            },
+            {
+              "run": "cargo generate ratatui/templates",
+              "cwd": "/path/to/workspace (parent of the new app; Git available)",
+              "purpose": "Choose and generate a maintained Ratatui template interactively."
+            }
+          ],
+          "notes": [
+            "These are Ratatui-maintained templates, not a universal Rust CLI scaffold. Their shape depends on the selected template; resolve and retain its revision for repeatability.",
+            "Preserve terminal restoration and error/panic handling; add clap only when the generated template does not already satisfy argument parsing."
+          ]
+        }
+      ],
+      "follow_up_generators": [
+        {
+          "name": "dist release setup",
+          "when": "Only when dist is selected for shipping binaries and no equivalent release owner exists.",
+          "commands": [
+            {
+              "run": "cargo install cargo-dist --version \"${DIST_VERSION:?Set the selected dist package version}\" --locked",
+              "cwd": "/path/to/workspace/project (Rust toolchain installed)",
+              "purpose": "Install the selected dist release from its cargo-dist package."
+            },
+            {
+              "run": "dist init",
+              "cwd": "/path/to/workspace/project (application package/workspace root)",
+              "purpose": "Generate release settings and selected CI."
+            }
+          ],
+          "notes": [
+            "Set DIST_VERSION to a chosen published version; ensure Cargo binaries are on PATH. Review target list, metadata, installers, hooks and generated CI before adopting it.",
+            "Release configuration generation does not publish. Test each supported target and installer separately."
+          ]
+        },
+        {
+          "name": "SQLx migrations and checked-query metadata",
+          "when": "Only when SQLx is selected and owns schema migrations; metadata applies when checked query macros are used.",
+          "commands": [
+            {
+              "run": "sqlx migrate add initial",
+              "cwd": "/path/to/workspace/project (matching sqlx-cli installed)",
+              "purpose": "Create an editable migration file."
+            },
+            {
+              "run": "sqlx migrate run",
+              "cwd": "/path/to/workspace/project (DATABASE_URL targets a disposable database; migration SQL reviewed)",
+              "purpose": "Apply migrations to the disposable database."
+            },
+            {
+              "run": "cargo sqlx prepare",
+              "cwd": "/path/to/workspace/project (checked query macros and matching disposable schema available)",
+              "purpose": "Generate offline query metadata."
+            }
+          ],
+          "notes": [
+            "Install a selected sqlx-cli release compatible with the application and selected database/TLS features. Set DATABASE_URL through the environment or an untracked local file.",
+            "Preserve migrations and commit .sqlx metadata for offline builds. Run cargo sqlx prepare --check after changes; pass workspace/feature/target options matching the project."
+          ]
+        }
+      ],
+      "preserve": [
+        "Preserve Cargo.toml, generated source structure and Cargo.lock after dependency resolution for shipped applications. Record the chosen Rust toolchain and generator versions.",
+        "Retain the VCS ignore baseline when generated, including build-output exclusions, and add project-specific OS metadata/secret rules. Cargo VCS behavior depends on parent repository and configuration; inspect actual output.",
+        "Record and justify changes from the same-version generator baseline instead of recreating its files from memory.",
+        "Preserve selected Ratatui template structure, terminal cleanup and license notices; keep generated dist configuration and reviewed CI synchronized."
+      ],
+      "verification": [
+        "In the actual application, compare a fresh output from the recorded toolchain/options with the initial project and explain intentional differences.",
+        "After initial dependency resolution, run cargo fmt --all -- --check, cargo test --locked and cargo build --locked from the package root; run the project-selected Clippy checks.",
+        "In a disposable copy, inspect git add --dry-run -A and confirm source/manifests/lockfile are included while target/, credentials and .DS_Store are excluded.",
+        "Test command help, exit codes, piped input/output, interruption and terminal restoration; a successful build is not proof of terminal behavior."
+      ],
+      "sources": [
+        {
+          "title": "Cargo new",
+          "url": "https://doc.rust-lang.org/cargo/commands/cargo-new.html"
+        },
+        {
+          "title": "Cargo init",
+          "url": "https://doc.rust-lang.org/cargo/commands/cargo-init.html"
+        },
+        {
+          "title": "Cargo package and first build",
+          "url": "https://doc.rust-lang.org/cargo/guide/creating-a-new-project.html"
+        },
+        {
+          "title": "Ratatui templates documentation",
+          "url": "https://ratatui.rs/templates/"
+        },
+        {
+          "title": "Ratatui maintained template repository",
+          "url": "https://github.com/ratatui/templates"
+        },
+        {
+          "title": "dist installation",
+          "url": "https://axodotdev.github.io/cargo-dist/book/install.html"
+        },
+        {
+          "title": "dist release setup and generated CI",
+          "url": "https://github.com/axodotdev/cargo-dist"
+        },
+        {
+          "title": "SQLx CLI migrations and prepare",
+          "url": "https://github.com/transact-rs/sqlx/blob/main/sqlx-cli/README.md"
+        }
+      ],
+      "integration_steps": [
+        "After the selected Cargo or Ratatui template baseline, add typed clap arguments when needed with cargo add clap --features derive; preserve equivalent argument parsing already supplied by the chosen template.",
+        "Resolve Ratatui and its supported terminal backend only when interactive rendering is required; preserve the selected template's compatible setup. Add reqwest only when network access is needed, deliberately selecting blocking or async behavior.",
+        "Implement typed commands, validated settings, stable output/exit codes and domain logic independent of terminal rendering; propagate cancellation and support non-TTY consumers.",
+        "Add executable behavior tests with cargo add --dev assert_cmd; cover missing files, invalid input, stdin, cancellation, stdout/stderr and terminal cleanup. Run the profile verification checks.",
+        "When dist is selected, follow its release generator instructions and review target list and generated CI. Lock dependencies/toolchain, qualify native dependencies and installers, and preserve Cargo.lock. No application setup, release tags or publication were executed."
+      ]
+    },
+    "python-scripts-workers": {
+      "profile_id": "python-scripts-workers",
+      "reviewed_on": "2026-10-18",
+      "evidence_status": "documentation-reviewed; commands not executed",
+      "starting_points": [
+        {
+          "name": "Packaged uv application for maintained automation or a worker",
+          "when": "Reusable modules, a CLI entry point, tests or a long-lived worker warrant a maintained project.",
+          "steps": [
+            "Install uv and inspect uv --version and uv init --help. Replace /path/to/local/source with an existing local source parent; use a new, absent target directory. Set PYTHON_VERSION to a supported Python minor compatible with the selected framework and dependencies. Record generator versions, selected flags and deliberate deviations.",
+            "Generate the packaged application, retain its importable src/worker_app package and generated console entry point, and replace the sample behavior with the bounded task or worker.",
+            "Install only required SDKs and configure tests, explicit inputs, credentials, timeouts and restart/checkpoint behavior. A Python project generator does not provision a queue, scheduler or orchestration service."
+          ],
+          "commands": [
+            {
+              "run": "uv init --app --package --python \"$PYTHON_VERSION\" worker-app",
+              "cwd": "/path/to/local/source",
+              "purpose": "Generate a packaged application and console entry point, explicitly selecting packaging across uv versions."
+            },
+            {
+              "run": "uv sync",
+              "cwd": "/path/to/local/source/worker-app",
+              "purpose": "Resolve the project lock/environment and install the generated package."
+            },
+            {
+              "run": "uv run worker-app",
+              "cwd": "/path/to/local/source/worker-app",
+              "purpose": "Smoke-test the generated console entry point before adapting it to application behavior."
+            }
+          ],
+          "notes": [
+            "Use --lib instead when the actual deliverable is a distributable library consumed by other projects. Do not choose library semantics solely because the code contains reusable functions.",
+            "The generic package generator supplies structure, not Celery tasks, Temporal workflows or safe retry semantics. Add the chosen worker integration only when required.",
+            "Choose a source parent outside another uv workspace, or intentionally use --no-workspace for an independent project under parent project metadata."
+          ]
+        },
+        {
+          "name": "Standalone script with inline dependency metadata",
+          "when": "A small, independently executable file is the actual deliverable; promote shared logic to a package when it grows.",
+          "steps": [
+            "Install uv, choose a supported Python minor, and set PYTHON_VERSION accordingly. Use an existing local script folder and a new task.py; replace /path/to/local/scripts with that folder.",
+            "Generate the script, add only its required dependencies, implement the task, and create its adjacent lockfile for reproducible execution."
+          ],
+          "commands": [
+            {
+              "run": "uv init --script task.py --python \"$PYTHON_VERSION\"",
+              "cwd": "/path/to/local/scripts",
+              "purpose": "Generate a standalone Python script with inline metadata."
+            },
+            {
+              "run": "uv add --script task.py httpx",
+              "cwd": "/path/to/local/scripts",
+              "purpose": "Example only when HTTPX is required: declare a script dependency in its metadata."
+            },
+            {
+              "run": "uv lock --script task.py",
+              "cwd": "/path/to/local/scripts",
+              "purpose": "Generate task.py.lock; standalone scripts do not use a project uv.lock."
+            },
+            {
+              "run": "uv run --locked task.py",
+              "cwd": "/path/to/local/scripts",
+              "purpose": "Execute the script with its declared and locked dependencies after fixture-safe implementation."
+            }
+          ],
+          "notes": [
+            "The HTTPX dependency is conditional. A standard-library-only script needs no extra package. Inline script metadata owns script dependencies; do not add a redundant pyproject.toml merely to run one file.",
+            "Keep task.py.lock with the script when reproducibility is required. For execution within a surrounding uv project, inspect project discovery and choose --no-project when the script should be independent."
+          ]
+        }
+      ],
+      "follow_up_generators": [
+        {
+          "name": "Conditional Alembic migration environment and revisions",
+          "when": "SQLAlchemy-backed persistent state is required; skip for stateless APIs/workers and preserve an existing migration owner.",
+          "commands": [
+            {
+              "run": "uv add sqlalchemy alembic \"psycopg[binary]\"",
+              "cwd": "/path/to/local/source/worker-app",
+              "purpose": "Install the selected PostgreSQL data dependencies; use a compatible driver for another chosen database."
+            },
+            {
+              "run": "uv run alembic init migrations",
+              "cwd": "/path/to/local/source/worker-app",
+              "purpose": "Generate the standard migration environment and config."
+            },
+            {
+              "run": "uv run alembic revision --autogenerate -m \"initial schema\"",
+              "cwd": "/path/to/local/source/worker-app",
+              "purpose": "After configuring env.py metadata and database access, generate a candidate schema revision."
+            },
+            {
+              "run": "uv run alembic upgrade head",
+              "cwd": "/path/to/local/source/worker-app",
+              "purpose": "After manual review, apply the candidate migration to a disposable development database."
+            }
+          ],
+          "notes": [
+            "Between init and revision, configure the database URL from environment-owned secrets and target_metadata from the application models. The default generic template is synchronous; use alembic list_templates and choose the async template only for an actual async DBAPI.",
+            "Autogeneration cannot reliably infer every rename, constraint or data transformation. Review upgrade/downgrade operations and write data migrations intentionally; do not blindly apply its output.",
+            "Commit migrations, env.py and the non-secret configuration, while keeping database credentials out of source. Verify upgrades and required rollback behavior before release."
+          ]
+        }
+      ],
+      "preserve": [
+        "Keep generator-created project metadata, Python requirements, version selection and ignore rules; extend them rather than replacing them with a handwritten approximation.",
+        "Commit the resolved uv.lock for projects; exclude .venv, caches, secrets and platform debris such as .DS_Store. Do not hand-edit lockfiles.",
+        "Keep source repositories, virtual environments and caches in a local development workspace outside cloud-synced document folders.",
+        "For the packaged application, retain its generated build backend, src layout and console-script mapping; resolve dependency changes through uv.",
+        "For standalone scripts, preserve inline metadata and the adjacent task.py.lock rather than substituting a project uv.lock.",
+        "Keep fixtures and dry-run modes separate from live side effects; document scheduling, non-overlap and failure-resume behavior before operational use."
+      ],
+      "verification": [
+        "For the packaged branch, from /path/to/local/source/worker-app run uv sync --locked and uv run worker-app using fixtures or an implemented dry-run mode; verify the packaged import and entry point after build/install when distributing.",
+        "For the script branch, from /path/to/local/scripts run uv run --locked task.py in a fixture-safe mode; verify its adjacent lockfile and Python requirement.",
+        "Run configured lint/type/test checks, then test explicit exit codes, malformed inputs, cancellation, bounded retries and partial failures at real effect boundaries.",
+        "Compare the same uv-version/flag scaffold in a disposable folder; inspect tracked/staged files for environments, caches, secrets and .DS_Store. Conditional Alembic checks require a configured disposable database."
+      ],
+      "sources": [
+        {
+          "title": "uv project creation and layout choices",
+          "url": "https://docs.astral.sh/uv/concepts/projects/init/"
+        },
+        {
+          "title": "uv project dependency and environment workflow",
+          "url": "https://docs.astral.sh/uv/guides/projects/"
+        },
+        {
+          "title": "uv locking and syncing",
+          "url": "https://docs.astral.sh/uv/concepts/projects/sync/"
+        },
+        {
+          "title": "uv script generation, inline metadata and adjacent lockfiles",
+          "url": "https://docs.astral.sh/uv/guides/scripts/"
+        },
+        {
+          "title": "Alembic environment generation and templates",
+          "url": "https://alembic.sqlalchemy.org/en/latest/tutorial.html"
+        },
+        {
+          "title": "Alembic candidate revision generation and limitations",
+          "url": "https://alembic.sqlalchemy.org/en/latest/autogenerate.html"
+        },
+        {
+          "title": "uv command reference: explicit package and workspace options",
+          "url": "https://docs.astral.sh/uv/reference/cli/"
+        }
+      ],
+      "integration_steps": [
+        "After completing the selected generated baseline, keep its package layout and console entry point for maintained workers. From that project root, run uv add httpx pydantic pydantic-settings only for required HTTP/validation/settings capabilities, and uv add --dev ruff mypy pytest for the configured checks.",
+        "For the standalone-file baseline, declare required dependencies with uv add --script task.py httpx pydantic rather than project uv add, then refresh task.py.lock using uv lock --script task.py. Skip unused dependencies and promote shared logic into a package when reuse warrants it.",
+        "Implement explicit inputs, a dry-run or fixture mode, bounded external calls, structured result/error output and credentials injected by the environment.",
+        "Only when shared persistent state is required, use the conditional SQLAlchemy/Alembic follow-up generators and reviewed migrations. For durable orchestration, add temporalio to the maintained project and implement workflows/activities plus a worker connected to a separately provisioned Temporal service.",
+        "Package the locked environment for the chosen scheduler or worker platform. Record startup, non-overlap, cancellation, retry, checkpoint and failure-resume behavior; verify fixture execution before live access."
+      ]
+    },
+    "swift-swiftui-ios": {
+      "profile_id": "swift-swiftui-ios",
+      "reviewed_on": "2026-10-18",
+      "evidence_status": "documentation-reviewed; commands not executed",
+      "starting_points": [
+        {
+          "name": "Xcode iOS App template",
+          "when": "Creating a new native iOS/iPadOS SwiftUI application in a new destination; requires macOS, compatible Xcode, iOS platform support and access to its project wizard.",
+          "steps": [
+            "Record product name, organization/bundle identity, minimum OS, supported devices and signing owner; use a source workspace outside synchronized storage.",
+            "In Xcode choose File > New > Project, use Choose Template if offered, select iOS and the App template. Select SwiftUI and Swift where the template offers these options.",
+            "Set the product and organization identifier. Choose storage deliberately: enable SwiftData only when required and compatible with the deployment target; record the choice. Select a signing team only when the relevant account is available.",
+            "Choose the testing option that provides Swift Testing unit tests and XCTest UI tests; retain established XCTest choices when required. If this template/version omits testing options, add the targets using the follow-up template workflow.",
+            "Create/save into a new destination, inspect the generated project, sources and assets, and share the app scheme for CI. Record the actual Xcode version, template, options and generated baseline before editing application code."
+          ],
+          "commands": [],
+          "notes": [
+            "This is an official IDE template workflow; xcodebuild builds and tests existing projects and is not an iOS app initializer. swift package init creates a Swift package, not the Xcode iOS App project required here.",
+            "If the agent cannot access Xcode's wizard, report that prerequisite and request the template-generated project or an operator handoff. Do not silently substitute hand-written project files or an unreviewed third-party generator.",
+            "For an existing app, open and inspect its project/workspace, targets and schemes; do not rerun new-project creation over it. Compare against a separate disposable template project only when investigating missing defaults."
+          ]
+        }
+      ],
+      "follow_up_generators": [
+        {
+          "name": "Xcode test target and test file templates",
+          "when": "The app needs an additional test bundle or test file; inspect existing targets first.",
+          "commands": [],
+          "notes": [
+            "Use File > New > Target, filter for Test, and choose Unit Testing Bundle or UI Testing Bundle; configure the intended app target and finish. Add the resulting targets to the relevant scheme/test plan.",
+            "For a test file, use File > New > New File From Template and select Swift Testing Unit Test or XCTest Unit Test, assigning it to the intended test target.",
+            "Swift Testing and XCTest tests can coexist in a target; use XCTest/XCUIAutomation for UI tests. Do not recreate existing test bundles merely to add Swift Testing."
+          ]
+        },
+        {
+          "name": "Project and destination discovery before command-line verification",
+          "when": "After the generated project exists and full Xcode with an appropriate simulator runtime is selected; substitute discovered values for every placeholder.",
+          "commands": [
+            {
+              "run": "xcodebuild -version",
+              "cwd": "<generated-project-root>",
+              "purpose": "Record selected Xcode/toolchain version."
+            },
+            {
+              "run": "xcode-select -p",
+              "cwd": "<generated-project-root>",
+              "purpose": "Verify that the selected developer directory belongs to the required Xcode installation."
+            },
+            {
+              "run": "xcodebuild -list -project '<actual-project>.xcodeproj'",
+              "cwd": "<generated-project-root>",
+              "purpose": "Discover the generated targets and schemes; use -workspace for a workspace-owned app."
+            },
+            {
+              "run": "xcodebuild -showdestinations -project '<actual-project>.xcodeproj' -scheme '<actual-shared-scheme>'",
+              "cwd": "<generated-project-root>",
+              "purpose": "Discover a supported installed simulator destination after choosing the actual scheme."
+            },
+            {
+              "run": "xcodebuild test -project '<actual-project>.xcodeproj' -scheme '<actual-shared-scheme>' -destination 'platform=iOS Simulator,id=<installed-simulator-UUID>' -resultBundlePath '<new-result-path>.xcresult'",
+              "cwd": "<generated-project-root>",
+              "purpose": "Build and run the app's selected unit/UI tests and retain results; requires discovered targets and a simulator."
+            }
+          ],
+          "notes": [
+            "These commands inspect/build/test the generated app; they do not generate an app. Replace -project with -workspace consistently if that is the actual build owner.",
+            "Apple's command-line FAQ is archived: check the selected Xcode's local help for supported flags. Device signing, archives and App Store publication require their separate project release workflow."
+          ]
+        }
+      ],
+      "preserve": [
+        "Keep the generated Xcode project configuration, app entry point, asset catalog and selected test targets; document deliberate changes from the recorded template baseline.",
+        "Preserve shared schemes, test plans, required build settings, deployment targets and the app's dependency resolution policy; do not replace them with a minimal handwritten project skeleton.",
+        "Inspect repository ignore coverage separately: an IDE template is not evidence that .DS_Store, DerivedData, build outputs or personal xcuserdata cannot be staged. Preserve distributable source/assets and shared configuration."
+      ],
+      "verification": [
+        "Record template provenance and Xcode version; inspect the actual generated target membership, bundle ID, storage choice and signing configuration.",
+        "Confirm the shared app scheme includes the intended test targets, discover a simulator destination and run tests with retained results before claiming the baseline works.",
+        "Review Git's candidate file set and ignore behavior without modifying an existing user's index; ensure local caches and personal IDE state are excluded while project configuration and assets remain included.",
+        "A simulator pass does not prove device capabilities, signing, accessibility or release readiness. Those require the profile's device and distribution checks."
+      ],
+      "sources": [
+        {
+          "title": "Apple: Creating an Xcode project for an app",
+          "url": "https://developer.apple.com/documentation/xcode/creating-an-xcode-project-for-an-app"
+        },
+        {
+          "title": "Apple: Adding tests to your Xcode project",
+          "url": "https://developer.apple.com/documentation/xcode/adding-tests-to-your-xcode-project"
+        },
+        {
+          "title": "Apple: Building from the Command Line with Xcode FAQ (archived)",
+          "url": "https://developer.apple.com/library/archive/technotes/tn2339/_index.html"
+        },
+        {
+          "title": "Swift.org: Build a Command-line Tool (SwiftPM package initialization scope)",
+          "url": "https://www.swift.org/getting-started/cli-swiftpm/"
+        }
+      ],
+      "integration_steps": [
+        "Record minimum iOS/iPadOS versions, supported devices, capabilities, API schema and signing owner in the project documentation; confirm these choices against the generated baseline.",
+        "Pin package resolution and use only dependencies justified by a requirement. Separate SwiftUI views, observable presentation state, repositories and API DTOs; add migration fixtures, versioned network fixtures and a fake API for tests.",
+        "Run simulator checks and CI with the discovered shared scheme and actual destination. Verify representative physical devices, offline/reconnect, permissions, VoiceOver and large text.",
+        "Have the account owner establish team, bundle ID, capabilities and signing access. Follow the authorized release workflow to produce a signed archive and verify a TestFlight install; retain result bundles and release evidence. An archive is not publication."
+      ]
+    },
+    "kotlin-compose-android": {
+      "profile_id": "kotlin-compose-android",
+      "reviewed_on": "2026-10-18",
+      "evidence_status": "documentation-reviewed; commands not executed",
+      "starting_points": [
+        {
+          "name": "Android Studio Empty Activity template",
+          "when": "Creating a new Kotlin/Jetpack Compose Android app with Android Studio, an installed compatible SDK/JDK and a new destination.",
+          "steps": [
+            "Record application ID/namespace, minimum SDK, target devices and release ownership. Choose a source workspace outside synchronized storage.",
+            "In Android Studio use New Project from the welcome screen or File > New > New Project. Select the phone/tablet Empty Activity template for Compose.",
+            "Set the app name, package, save location and required minimum SDK; use Kotlin. Finish the wizard and allow dependency resolution/Gradle sync to complete.",
+            "Record Android Studio/template version and generated options. Inspect the generated wrapper, Gradle scripts, version catalog if supplied, manifest, activity, resources and test source sets before adding app behavior."
+          ],
+          "commands": [],
+          "notes": [
+            "Preserve the generated compatible toolchain/dependency combination initially; verify the selected SDK and JDK. A fixed minimum SDK copied from a tutorial does not replace the product's support requirements.",
+            "For existing projects, open/import the current project and inspect its modules and variants; do not run a new-project generator over it. gradle init --type kotlin-application creates a Kotlin/JVM command-line app, not an Android/Compose application."
+          ]
+        },
+        {
+          "name": "Official Android CLI project templates",
+          "when": "Creating a new Compose app without IDE interaction, when the current official Android CLI is installed and its create help/template listing confirms support.",
+          "steps": [
+            "Obtain the Android CLI from the official Android developer tools page, complete its documented SDK/JDK prerequisites and record its installed version.",
+            "Inspect create help and available templates. The reviewed reference documents an empty Compose activity default when no template is supplied; verify this in the installed release before creation.",
+            "Run creation into a new or empty destination using the agreed identity and minimum SDK. Inspect generated files and run the baseline checks before customizing."
+          ],
+          "commands": [
+            {
+              "run": "android --version",
+              "cwd": "<new-project-parent>",
+              "purpose": "Record the installed official Android CLI version after installation."
+            },
+            {
+              "run": "android create --help",
+              "cwd": "<new-project-parent>",
+              "purpose": "Verify current creation flags and default template behavior."
+            },
+            {
+              "run": "android create --list",
+              "cwd": "<new-project-parent>",
+              "purpose": "List the installed official templates without creating a project."
+            },
+            {
+              "run": "android create --name='<App Name>' --application-id='<owned.application.id>' --namespace='<agreed.kotlin.namespace>' --min-sdk='<required-api-level>' --output='<new-project-directory>'",
+              "cwd": "<new-project-parent>",
+              "purpose": "Create the documented default Compose template after confirming the installed CLI's default and replacing all placeholders."
+            }
+          ],
+          "notes": [
+            "The current official documentation offers this CLI route; it is distinct from obsolete Android SDK android commands. Never use --force to scaffold into an existing app.",
+            "Reviewed pages differ in example template spelling, so this recipe uses the documented default and requires installed help/list verification instead of guessing a template identifier.",
+            "If neither the official CLI nor Android Studio project wizard is accessible, report the missing prerequisite and request a generated baseline/operator handoff. Do not silently hand-scaffold Gradle and Android configuration."
+          ]
+        }
+      ],
+      "follow_up_generators": [
+        {
+          "name": "Android Studio component and module templates",
+          "when": "An existing project needs another compatible activity, Compose component, resource or module.",
+          "commands": [],
+          "notes": [
+            "Right-click the intended package/folder in the Project window and select New, or use File > New. Select an applicable template, configure it and inspect all generated changes after Gradle sync.",
+            "Use New Module for a new app/library module only when the architecture requires it; do not create another activity for every Compose screen. Review manifest registrations, resource names and target module dependencies."
+          ]
+        },
+        {
+          "name": "Generated wrapper verification",
+          "when": "After project generation/sync, with a compatible JDK/SDK; discover the actual module and variant before substituting placeholders.",
+          "commands": [
+            {
+              "run": "./gradlew --version",
+              "cwd": "<generated-project-root>",
+              "purpose": "Verify the generated Gradle wrapper and active JVM; use gradlew.bat on Windows."
+            },
+            {
+              "run": "./gradlew projects",
+              "cwd": "<generated-project-root>",
+              "purpose": "Discover actual modules before choosing the application module."
+            },
+            {
+              "run": "./gradlew tasks --all",
+              "cwd": "<generated-project-root>",
+              "purpose": "Discover tasks and variants before selecting build/test commands."
+            },
+            {
+              "run": "./gradlew :<actual-app-module>:lintDebug :<actual-app-module>:testDebugUnitTest :<actual-app-module>:assembleDebug",
+              "cwd": "<generated-project-root>",
+              "purpose": "Lint, unit-test and build the discovered debug application variant; adapt task suffixes for actual variants."
+            },
+            {
+              "run": "./gradlew :<actual-app-module>:connectedDebugAndroidTest",
+              "cwd": "<generated-project-root>",
+              "purpose": "Run instrumentation/Compose tests after starting a compatible emulator or connecting an authorized device; adapt the variant."
+            }
+          ],
+          "notes": [
+            "These commands consume the generated project; they are not app generators. Review task availability before running, especially with product flavors or nonstandard module names.",
+            "Use the generated version catalog when present; when adding dependencies, centralize compatible versions and sync/build. A wrapper or catalog alone does not prove AGP/JDK/Kotlin/Compose compatibility."
+          ]
+        }
+      ],
+      "preserve": [
+        "Keep generated gradlew/gradlew.bat and gradle/wrapper files, settings and module build scripts, gradle.properties, version catalog when present, and repository configuration; record intentional deviations.",
+        "Keep the app manifest, Kotlin activity/Compose theme, resources and generated unit/instrumentation test setup until deliberate product changes replace them.",
+        "Retain generated ignore rules and extend them for workspace needs; exclude local.properties, SDK paths, caches/build outputs, private signing keys and .DS_Store without ignoring the wrapper JAR or source/resources."
+      ],
+      "verification": [
+        "Record which official template and tool version created the project, its identity/minimum SDK choices, and the generated dependency/toolchain baseline.",
+        "Confirm wrapper files and application source sets are included in version control; review Git's candidate file set and ignore behavior without changing an existing user's index.",
+        "Run the discovered lint/unit/build tasks, then instrumentation tests with an emulator/device; inspect reports and distinguish missing environment prerequisites from failing app checks.",
+        "Template generation and a debug build do not establish signed release readiness, production architecture or complete accessibility; complete the profile's product/device/release checks."
+      ],
+      "sources": [
+        {
+          "title": "Android: Create a project",
+          "url": "https://developer.android.com/studio/projects/create-project"
+        },
+        {
+          "title": "Android: Compose quick start",
+          "url": "https://developer.android.com/develop/ui/compose/setup"
+        },
+        {
+          "title": "Android: Official CLI create command",
+          "url": "https://developer.android.com/tools/agents/android-cli/commands/create"
+        },
+        {
+          "title": "Android: Agent tools and resources",
+          "url": "https://developer.android.com/tools/agents"
+        },
+        {
+          "title": "Android: Add code from a template",
+          "url": "https://developer.android.com/studio/projects/templates"
+        },
+        {
+          "title": "Android: Build your app from the command line",
+          "url": "https://developer.android.com/build/building-cmdline"
+        },
+        {
+          "title": "Android: Migrate your build to version catalogs",
+          "url": "https://developer.android.com/build/migrate-to-catalogs"
+        },
+        {
+          "title": "Gradle: Build Init Plugin (Kotlin/JVM scope)",
+          "url": "https://docs.gradle.org/current/userguide/build_init_plugin.html"
+        }
+      ],
+      "integration_steps": [
+        "Record package/application identity, minimum and target SDKs, supported form factors, API contract, permissions and release owner; verify the generated toolchain matches these requirements.",
+        "Use the generated Gradle wrapper and record compatible JDK, SDK, Gradle, AGP, Kotlin and Compose versions. Maintain dependency/plugin versions in the project version catalog when present; introduce catalog changes deliberately in existing builds.",
+        "Implement screen state and ViewModels behind repositories. Add Room migrations, a typed HTTP client and deterministic fake data. Keep secrets out of version control and app resources.",
+        "Run discovered JVM test, lint and debug build tasks. Start a documented emulator or connect an authorized device, then run instrumentation and Compose checks.",
+        "Exercise process death, offline/reconnect, rotation, permission denial, TalkBack, large fonts and every supported form factor on appropriate devices.",
+        "Have the account owner establish package ownership, upload-key custody and Play App Signing. Follow the authorized release workflow to build a signed bundle and verify internal-track install/update; retain reports and distribution receipts. Build success is not store publication."
+      ]
+    },
+    "expo-react-native": {
+      "profile_id": "expo-react-native",
+      "reviewed_on": "2026-10-23",
+      "evidence_status": "Documentation reviewed; create-expo-app 5.1.5 `default@sdk-58` scaffold generated. npm install succeeded; Expo Doctor passed 20/20; `expo export --platform ios` produced a JS bundle. Generated `npm run lint` and direct TypeScript/lint checks exposed template errors; no native build or device/store qualification.",
+      "starting_points": [
+        {
+          "name": "Official create-expo-app default template",
+          "when": "A new Expo/React Native application targeting iOS and Android; use a new, absent project directory and review the current default template before accepting it.",
+          "steps": [
+            "Install a supported Node.js LTS and inspect the current create-expo-app help. During the SDK 58 transition, pin `--template default@sdk-58` when SDK 58 is intended: the current Expo docs say unqualified `@latest` creates SDK 57. Record the resolved CLI and generated Expo SDK/React Native versions; `@latest` is still a scaffold-time lookup, not a project dependency pin.",
+            "Run the initializer from a source-workspace parent into a destination that does not exist. The current CLI has --no-agents-md but no --no-git flag; the reviewed default created its own .git repository and initial commit. Decide repository ownership before placing it inside another checkout.",
+            "Pass --no-agents-md to avoid generating AGENTS.md and Claude settings. Inspect the generated README, app configuration, package scripts, route structure, app identifiers and Git state before adding product code.",
+            "Review whether the default universal template's web target is wanted. This profile covers the iOS and Android clients; a web surface needs its own rendering, hosting and browser requirements.",
+            "Install dependencies from the generated project root and keep the generated lockfile. Use the generator's SDK-compatible versions as the starting baseline; do not independently upgrade React Native or native modules without checking the Expo SDK matrix."
+          ],
+          "commands": [
+            {
+              "run": "npx create-expo-app@latest --help",
+              "cwd": "A local source-workspace parent; no application files are changed",
+              "purpose": "Inspect installed-version template choices and flags before creating a project. The 23 October 2026 CLI 5.1.5 help includes --no-agents-md and no --no-git option."
+            },
+            {
+              "run": "npx create-expo-app@latest mobile-app --template default@sdk-58 --yes --no-agents-md --no-install",
+              "cwd": "A local source-workspace parent; mobile-app must not already exist",
+              "purpose": "Generate the SDK 58 default Expo project while suppressing generated AGENTS.md and Claude settings. During the documented SDK 58 transition, explicitly pin `default@sdk-58`; inspect generated files and repository state. Defer dependency installation so the next step installs packages once from the generated project root."
+            },
+            {
+              "run": "npm install",
+              "cwd": "The generated mobile-app directory",
+              "purpose": "Install the generated package manifest and create the project's lockfile. Keep the resolved versions in that lockfile."
+            },
+            {
+              "run": "npx expo install --check",
+              "cwd": "The generated mobile-app directory",
+              "purpose": "Check that installed Expo/React Native packages match the selected SDK; inspect installed-version help if the command differs."
+            }
+          ],
+          "notes": [
+            "Observed 23 October 2026 with the explicit `default@sdk-58` template: create-expo-app 5.1.5 generated Expo SDK 58.0.17, React Native 0.88.0, React 19.3.0 and Expo Router 58.0.25 in package.json. npm install completed; Expo Doctor passed 20/20; `npx expo export --platform ios` emitted a JS bundle. Generated `npm run lint` failed with a version-check error despite ESLint 9.39.5 being installed; direct ESLint found a generated React Hooks rule violation, and `tsc --noEmit` found generated CSS/type compatibility errors. These checks do not establish native build/device compatibility.",
+            "The reviewed `default@sdk-58` command with --no-install and --no-agents-md created .git/ with an initial commit. Current help exposed no --no-git option. For a monorepo, decide the intended Git root before generation and resolve nested Git ownership explicitly; never run the initializer over an existing application.",
+            "Expo docs state that during the SDK 58 transition `create-expo-app@latest` without `--template` creates SDK 57; pin `--template default@sdk-58` when SDK 58 is the intended baseline. The pinned template was successfully generated in a disposable directory on 23 October 2026.",
+            "The default template includes Expo Router, TypeScript and a web target. The existence of generated web files does not qualify a browser product or make this profile a web-stack recommendation.",
+            "Expo Go is a limited playground with a fixed set of native libraries. Production development should use a development build; custom native code and native dependencies absent from Expo Go require one.",
+            "Default CNG projects generate native iOS/Android directories from app config and plugins. Prefer config plugins for repeatable project configuration; direct edits to generated native directories can be overwritten by prebuild.",
+            "`--no-install` can defer npm and native package installation when inspecting a disposable scaffold; install and verify the actual project's dependencies before developing."
+          ]
+        }
+      ],
+      "follow_up_generators": [
+        {
+          "name": "Expo development build and native projects",
+          "when": "The app needs a native module not bundled in Expo Go, custom native code, native configuration, app identity changes to verify, or representative production-like testing.",
+          "steps": [
+            "Check the selected library's iOS and Android support, config plugin, Expo SDK compatibility, minimum OS/SDK and required permissions.",
+            "Choose a local native toolchain or an explicitly selected EAS cloud build. Local iOS building requires macOS/Xcode; local Android building requires Android Studio, Android SDK and a compatible Java toolchain. Cloud builds move compilation to EAS but do not eliminate device tests, app-account ownership or store credentials.",
+            "Generate native directories/build a development client using the project's current Expo CLI and documented workflow. Review generated diffs; use config plugins for repeatable native configuration.",
+            "Install and exercise the development build on both platforms. Rebuild after changes to native dependencies, plugins or app configuration."
+          ],
+          "commands": [
+            {
+              "run": "npx expo prebuild",
+              "cwd": "The generated mobile-app directory",
+              "purpose": "Generate native iOS and Android projects from the Expo app configuration when the project needs native project inspection or customization. Review the diff and use config plugins for repeatable changes."
+            },
+            {
+              "run": "npx expo run:ios",
+              "cwd": "The generated mobile-app directory on macOS with compatible Xcode and iOS platform support installed",
+              "purpose": "Build and launch the iOS app locally for a simulator or configured device. This is not an App Store-signed release."
+            },
+            {
+              "run": "npx expo run:android",
+              "cwd": "The generated mobile-app directory with a compatible Android SDK/JDK and emulator or device configured",
+              "purpose": "Build and launch the Android app locally. Discover the actual variant/toolchain and inspect the generated Gradle project."
+            },
+            {
+              "run": "npx expo-doctor",
+              "cwd": "The generated mobile-app directory",
+              "purpose": "Diagnose app config, dependency compatibility and common project health issues; it does not replace native builds or device checks."
+            }
+          ],
+          "notes": [
+            "Expo Go cannot load arbitrary native code. Rebuild the development client when the native dependency set or native configuration changes.",
+            "When using Continuous Native Generation, generated android/ios directories are normally regenerated from app config and plugins. Keep intentional platform customization reproducible and review source-control ownership before committing generated native projects.",
+            "EAS Build is optional. Account linking, build credentials, signing, push credentials and store submission are separate project decisions; this guidance does not create accounts or establish release readiness."
+          ]
+        },
+        {
+          "name": "App-local Expo native module",
+          "when": "A requirement genuinely needs custom Swift or Kotlin native functionality and no maintained compatible module meets it; use a local module when only this application needs it.",
+          "commands": [
+            {
+              "run": "npx create-expo-module@latest --local",
+              "cwd": "The generated mobile-app directory",
+              "purpose": "Use Expo's documented local-module generator to create an app-local native module; inspect current CLI help and generated iOS/Android code before adopting it."
+            }
+          ],
+          "notes": [
+            "A local module introduces native code and needs development builds plus testing on each supported platform. It is not needed for ordinary JavaScript/TypeScript application logic.",
+            "The Expo Modules API creates Swift and Kotlin module code. Follow current official documentation and generated examples; do not hand-invent project integration or assume one platform implementation covers the other."
+          ]
+        }
+      ],
+      "preserve": [
+        "Keep the generated package manifest, lockfile, Expo app configuration, route structure, TypeScript configuration, assets, scripts and SDK-compatible dependency set; record intentional changes.",
+        "Preserve the selected Git repository boundary. The current create-expo-app CLI has no documented --no-git option and the reviewed scaffold created an initial Git repository and commit; inspect this before adding it to a monorepo or existing source tree.",
+        "Keep platform identifiers, entitlements, permission descriptions, config plugins, native modules and app-version/build-number policy explicit and compatible with both targets.",
+        "Do not commit signing keys, local credentials, generated caches or machine-specific SDK paths. Preserve the project lockfile, build configuration and any native project sources the team has chosen to maintain."
+      ],
+      "verification": [
+        "Record create-expo-app version, selected template, resolved Expo SDK/React Native/React versions, package manager and installed runtime; inspect the actual generated baseline before editing.",
+        "Run the selected Expo compatibility check and Expo Doctor; retain output and resolve version/configuration warnings before native work.",
+        "Build/install a development build for iOS and Android. Exercise the same core journeys with both platform navigation, permissions, lifecycle, offline/reconnect and accessibility behavior; a JavaScript bundle or Expo Go pass does not qualify these native targets.",
+        "Test the oldest supported iOS/Android versions and current representative devices. Verify app links, push/permission flows and native SDK integrations only when included in the product scope.",
+        "Before a release, verify bundle/application identifiers, signing ownership, version/build numbers, privacy declarations, store listing ownership and install/update behavior on both platforms. A local build or cloud build is not store publication."
+      ],
+      "sources": [
+        {
+          "title": "Expo: create-expo-app and SDK 58 template selection",
+          "url": "https://docs.expo.dev/more/create-expo/"
+        },
+        {
+          "title": "Expo: Create a project",
+          "url": "https://docs.expo.dev/get-started/create-a-project/"
+        },
+        {
+          "title": "Expo CLI",
+          "url": "https://docs.expo.dev/more/expo-cli/"
+        },
+        {
+          "title": "Expo: Develop an app with Expo",
+          "url": "https://docs.expo.dev/workflow/overview/"
+        },
+        {
+          "title": "Expo: Add custom native code",
+          "url": "https://docs.expo.dev/workflow/customizing/"
+        },
+        {
+          "title": "Expo: Development builds",
+          "url": "https://docs.expo.dev/develop/development-builds/introduction/"
+        },
+        {
+          "title": "Expo: SDK and dependency troubleshooting",
+          "url": "https://docs.expo.dev/build-reference/troubleshooting/"
+        },
+        {
+          "title": "Expo: Tools and Expo Doctor",
+          "url": "https://docs.expo.dev/develop/tools/"
+        },
+        {
+          "title": "Expo: Local and cloud builds",
+          "url": "https://docs.expo.dev/build/introduction/"
+        },
+        {
+          "title": "Expo: App submission",
+          "url": "https://docs.expo.dev/submit/introduction/"
+        },
+        {
+          "title": "Expo: Unit testing",
+          "url": "https://docs.expo.dev/develop/unit-testing/"
+        },
+        {
+          "title": "Expo Router",
+          "url": "https://docs.expo.dev/router/introduction/"
+        },
+        {
+          "title": "React Native: Platform-specific code",
+          "url": "https://reactnative.dev/docs/platform-specific-code"
+        },
+        {
+          "title": "React Native: Security",
+          "url": "https://reactnative.dev/docs/security"
+        },
+        {
+          "title": "React Native: Accessibility",
+          "url": "https://reactnative.dev/docs/accessibility"
+        }
+      ],
+      "integration_steps": [
+        "From the generated project root, record app identifiers, supported platforms/OS versions, runtime, Expo SDK, API contract, permissions and build owner in the project's README. Keep the actual generated lockfile.",
+        "Select the backend independently. Keep database writes, user/resource authorization, AI/provider secrets, email and durable work server-side. Define versioned API responses and controlled client error handling; a mobile app binary is inspectable.",
+        "Implement route/screen state and API access behind testable modules. Keep device UI and domain rules separated enough to test shared logic, but do not abstract away meaningful iOS/Android interaction differences.",
+        "Add a native dependency only for a stated capability. Check both-platform support, config plugin, SDK compatibility and minimum OS/API before adding it. Build a development client instead of expecting Expo Go to contain it.",
+        "If offline behavior is required, specify local sources, accepted stale data, queued operations, conflict resolution, account switching and data deletion before choosing storage libraries. Server remains the authority for protected/shared data.",
+        "Run shared unit/API tests and build/install both native targets. Test navigation/back, permission denial, app restart, expired/revoked sessions, network loss/recovery and accessibility with representative emulators/simulators and physical devices.",
+        "Separate development, preview and production application identifiers as needed. Establish account/credential ownership, app store policy and update compatibility before preparing signed builds. No integration, signing or release is implied by generation."
+      ]
+    }
+  }
+}

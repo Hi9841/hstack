@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stack.menu/context.schema.json",
+  "title": "Stack Menu context routing",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "goal": {
+      "type": "string",
+      "enum": [
+        "auto",
+        "choose",
+        "build",
+        "migrate"
+      ]
+    },
+    "component": {
+      "type": "string",
+      "enum": [
+        "web",
+        "api",
+        "cli",
+        "automation",
+        "ios",
+        "android"
+      ]
+    },
+    "use_case": {
+      "type": "string",
+      "enum": [
+        "content-site",
+        "web-product",
+        "live-web",
+        "admin-web",
+        "browser-client",
+        "api-service",
+        "cli",
+        "automation",
+        "cross-platform-mobile",
+        "python-api",
+        "react-fullstack",
+        "ios",
+        "android"
+      ]
+    },
+    "ecosystem": {
+      "type": "string",
+      "enum": [
+        "any",
+        "python",
+        "php",
+        "ruby",
+        "elixir",
+        "react",
+        "rust"
+      ]
+    },
+    "mobile_platform": {
+      "type": "string",
+      "enum": [
+        "shared",
+        "ios",
+        "android"
+      ]
+    },
+    "ui": {
+      "type": "string",
+      "enum": [
+        "any",
+        "server",
+        "full",
+        "client",
+        "native",
+        "none",
+        "terminal"
+      ]
+    },
+    "static_only": {
+      "type": "boolean"
+    },
+    "offline_edits": {
+      "type": "boolean"
+    },
+    "realtime": {
+      "type": "boolean"
+    },
+    "existing_stack": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120,
+      "description": "Existing profile or rewrite-source ID, or an unlisted system. Unknown sources return an inventory/research path; target eligibility is separate."
+    },
+    "source_label": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 240,
+      "description": "Optional unlisted-source label. Do not send private application details."
+    },
+    "target_stack": {
+      "type": "string",
+      "enum": [
+        "astro-content",
+        "elixir-phoenix-liveview",
+        "typescript-next-node",
+        "typescript-react-vite-browser",
+        "rails-hotwire-postgresql",
+        "laravel-livewire-postgresql",
+        "python-django",
+        "go-service",
+        "rust-service",
+        "python-fastapi",
+        "go-cli",
+        "rust-cli",
+        "python-scripts-workers",
+        "swift-swiftui-ios",
+        "kotlin-compose-android",
+        "expo-react-native"
+      ]
+    }
+  }
+}

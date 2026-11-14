@@ -1,0 +1,4 @@
+interface:
+  display_name: "OpLoop"
+  short_description: "Run measured keep-or-revert optimization iterations"
+  default_prompt: "Use $oploop to set up a baseline and work checkout, then run one-hypothesis optimization iterations that keep only tested, measured wins."

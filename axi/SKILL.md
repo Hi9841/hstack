@@ -15,8 +15,8 @@ Read the [TOON specification](https://toonformat.dev/reference/spec.html) before
 
 ## 1. Token-efficient output
 
-For a new agent-facing output contract, prefer [TOON](https://toonformat.dev/) on stdout. Preserve an existing CLI's public output contract; add an explicit TOON format option when useful.
-Measure token savings on representative payloads before choosing a format.
+Use [TOON](https://toonformat.dev/) (Token-Oriented Object Notation) as the output format on stdout.
+TOON provides ~40% token savings over equivalent JSON while remaining readable by agents.
 Convert to TOON at the output boundary — keep internal logic on JSON.
 
 ```
@@ -139,7 +139,7 @@ help: valid flags for `list`: --state, --assignee, --limit (--help always allowe
 ### Output channels
 
 - **stdout**: all structured output the agent consumes — data, errors, suggestions
-- **stderr**: debug logging, progress indicators, diagnostics (capture depends on the runner; stderr may be visible to agents)
+- **stderr**: debug logging, progress indicators, diagnostics (agents don't read this)
 - **Exit codes**: 0 = success (including no-ops), 1 = error, 2 = usage error
 
 Never mix progress messages into stdout. An agent that reads "Fetching data..." will try to interpret it as data.
@@ -256,18 +256,16 @@ Answer the version before the graph loads: keep the version in a leaf module tha
 
 ```js
 #!/usr/bin/env node
+import { tryFastPath } from "axi-sdk-js/fast-path";
 import { VERSION } from "../src/version.js"; // leaf module - node builtins only
 
-const args = process.argv.slice(2);
-if (args.length === 1 && ["--version", "-v"].includes(args[0])) {
-  console.log(VERSION);
-} else {
+if (!tryFastPath(process.argv.slice(2), { version: VERSION })) {
   const { main } = await import("../src/cli.js"); // heavy graph loads only here
   await main();
 }
 ```
 
-Match the CLI's existing version flags and output. If axi-sdk-js is already installed, its fast-path helper can replace this branch; a version probe alone does not justify adding the SDK.
+`axi-sdk-js/fast-path` is a dedicated subpath export that imports nothing at all, so pulling it in never drags in `runAxiCli` or its dependencies. `tryFastPath` handles only a bare, single-argument version flag and returns `false` for everything else, so all other argv - including version flags in trailing positions - falls through to `runAxiCli`, which stays the single owner of the general case. Its accepted flags and output are identical to the SDK's own version handling, so adopting it changes nothing an agent can observe except the latency.
 
 Two things keep this honest:
 

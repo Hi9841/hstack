@@ -72,7 +72,7 @@ RETIRED = (
 
 ELEMENT_IDS = [
     "app", "progress", "checkBtn", "skipBtn", "sheet", "sheetTitle",
-    "sheetBody", "nextBtn", "restartBtn", "soundBtn", "h1", "h2", "h3",
+    "sheetBody", "nextBtn", "missBtn", "restartBtn", "soundBtn", "h1", "h2", "h3",
     "xp", "footer",
 ]
 
@@ -243,7 +243,7 @@ class PackageTests(unittest.TestCase):
     def test_template_marker_is_only_the_pack(self):
         template = (ROOT / "assets" / "lesson.html").read_text(encoding="utf-8")
         self.assertEqual(set(re.findall(r"\{\{([A-Z_]+)\}\}", template)), {"LESSON_PACK"})
-        self.assertIn("--green: #58cc02", template.lower())
+        self.assertIn("--primary: oklch(0.585 0.18 139)", template.lower())
         self.assertIn("global.DuoSound", template)
         self.assertIn('data-icon="heart"', template)
 
@@ -310,7 +310,7 @@ console.log(JSON.stringify({html: codeBlock(lesson[1].code, lesson[1].hl)}));
         output = Path(self.directory.name) / "sheet.html"
         self.lesson.reference_file(fragment, output, "Memory")
         page = output.read_text(encoding="utf-8")
-        self.assertIn("--green: #58cc02", page.lower())
+        self.assertIn("--primary: oklch(0.585 0.18 139)", page.lower())
         self.assertIn("<h2>Stack</h2>", page)
         self.assertNotIn("<script", page.lower())
 
@@ -386,11 +386,8 @@ var guard = lesson.length + 5;
 while (i < lesson.length && guard-- > 0) {
   var cur = lesson[i];
   if (cur.type === "intro") { checkBtn.onclick(); continue; }
-  if (cur.type === "build") { built = cur.answer.slice(); checkBtn.disabled = false; }
-  else {
-    selected = cur.choices.findIndex(function (c) { return c.ok; });
-    checkBtn.disabled = false;
-  }
+  selected = cur.choices.findIndex(function (c) { return c.ok; });
+  checkBtn.disabled = false;
   check();
   nextBtn.onclick();
 }
@@ -409,34 +406,34 @@ console.log(JSON.stringify({
         self.assertTrue(out["finalHtml"])
         self.assertFalse(out["reviewed"])
 
-    def test_wrong_answers_drain_hearts(self):
+    def test_a_miss_repeats_only_that_question(self):
         driver = r"""
-var guard = lesson.length + 5;
-var outOfHearts = false;
-while (i < lesson.length && guard-- > 0) {
-  var cur = lesson[i];
-  if (cur.type === "intro") { checkBtn.onclick(); continue; }
-  if (cur.type === "build") { built = ["nope"]; checkBtn.disabled = false; }
-  else {
-    selected = cur.choices.findIndex(function (c) { return !c.ok; });
-    checkBtn.disabled = false;
-  }
+render();
+checkBtn.onclick();
+var at = i;
+for (var miss = 0; miss < 4; miss++) {
+  selected = lesson[i].choices.findIndex(function (c) { return !c.ok; });
+  checkBtn.disabled = false;
   check();
-  if (__el("nextBtn").textContent === "Retry") { outOfHearts = true; break; }
   nextBtn.onclick();
 }
+var stayed = i === at;
+selected = lesson[i].choices.findIndex(function (c) { return c.ok; });
+checkBtn.disabled = false;
+check();
+nextBtn.onclick();
 console.log(JSON.stringify({
+  stayed: stayed,
+  movedOn: i === at + 1,
   xp: String(__el("xp").textContent),
   heartsLost: ["h1","h2","h3"].filter(function (h) { return __el(h).classList.contains("lost"); }).length,
-  outOfHearts: outOfHearts,
-  explanation: __el("sheetBody").textContent.indexOf("Out of hearts") !== -1,
 }));
 """
         out = run_with_bun(self.script, driver)
+        self.assertTrue(out["stayed"])
+        self.assertTrue(out["movedOn"])
         self.assertEqual(out["xp"], "0")
         self.assertEqual(out["heartsLost"], 3)
-        self.assertTrue(out["outOfHearts"])
-        self.assertTrue(out["explanation"])
 
     def test_retry_resets_the_run(self):
         driver = r"""
@@ -492,12 +489,10 @@ console.log(JSON.stringify({ whileMuted: whileMuted, whileUnmuted: whileUnmuted 
 
 
 class NextLessonTests(unittest.TestCase):
-    def test_next_lesson_opens_only_after_a_perfect_run(self):
+    def test_next_lesson_opens_once_every_question_is_right(self):
         lesson = load_lesson()
         pack = {
             "title": "One check",
-            "next": "0002-next.html",
-            "nextLabel": "Next: the second lesson",
             "screens": [
                 {
                     "type": "intro",
@@ -523,25 +518,34 @@ class NextLessonTests(unittest.TestCase):
             lesson.build_file(data, page, False)
             script = "\n".join(scripts_of(page.read_text(encoding="utf-8")))
         driver = r"""
-function finish(correct) {
+function finish(mode) {
   restart();
   checkBtn.onclick();
-  var cur = lesson[i];
-  selected = cur.choices.findIndex(function (c) { return correct ? c.ok : !c.ok; });
+  if (mode === "skip") { skipBtn.onclick(); return __el("app").innerHTML; }
+  if (mode === "miss") {
+    selected = lesson[i].choices.findIndex(function (c) { return !c.ok; });
+    checkBtn.disabled = false;
+    check();
+    nextBtn.onclick();
+  }
+  selected = lesson[i].choices.findIndex(function (c) { return c.ok; });
   checkBtn.disabled = false;
   check();
   nextBtn.onclick();
   return __el("app").innerHTML;
 }
 console.log(JSON.stringify({
-  missed: finish(false),
-  perfect: finish(true),
+  skipped: finish("skip"),
+  missed: finish("miss"),
+  perfect: finish("perfect"),
 }));
 """
         out = run_with_bun(script, driver)
-        self.assertIn("Answer every question correctly", out["missed"])
-        self.assertNotIn('href="0002-next.html"', out["missed"])
-        self.assertIn('href="0002-next.html"', out["perfect"])
+        self.assertIn("Answer every question correctly", out["skipped"])
+        self.assertNotIn("askForNext()", out["skipped"])
+        self.assertIn("askForNext()", out["missed"])
+        self.assertIn("Review:", out["missed"])
+        self.assertIn("askForNext()", out["perfect"])
         self.assertNotIn("Answer every question correctly", out["perfect"])
 
 
@@ -569,7 +573,7 @@ class SoundTests(unittest.TestCase):
 
     def test_cues_exist(self):
         out = self._run("", "console.log(JSON.stringify({names: DuoSound.available}));\n")
-        for name in ("select", "correct", "wrong", "heartLost", "xp", "complete", "fail"):
+        for name in ("select", "correct", "wrong", "heartLost", "xp", "complete"):
             self.assertIn(name, out["names"])
 
 

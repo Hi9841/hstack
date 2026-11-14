@@ -1,0 +1,228 @@
+{
+  "schema_version": "1.0",
+  "checked_on": "2026-10-13",
+  "original_tool_research_date": "2026-10-10",
+  "original_architecture_research_date": "2026-10-11",
+  "scope": "Core framework roles, current setup/agent documentation and cited-source availability rechecked; not a reimplementation or exhaustive semantic audit of every third-party dependency.",
+  "source_link_check": {
+    "referenced_urls": 394,
+    "successful_after_retry": 394,
+    "corrected_broken_url": {
+      "from": "https://playwright.dev/docs/intro/",
+      "to": "https://playwright.dev/docs/intro"
+    },
+    "interrupted_fetches_recovered": 13
+  },
+  "changes": [
+    "Corrected Playwright installation source URL.",
+    "Added explicit Next.js development MCP/browser inspection guidance.",
+    "Added current Ecto transact/2 version/semantics note."
+  ],
+  "integration_status": "not-qualified; setup, capacity and migration checks remain unexecuted",
+  "profiles": {
+    "elixir-phoenix-liveview": {
+      "core_guidance_checked_on": "2026-10-13",
+      "sources": [
+        "https://phoenix.hexdocs.pm/overview.html",
+        "https://phoenix.hexdocs.pm/installation.html",
+        "https://hexdocs.pm/ecto/Ecto.Repo.html#c:transact/2"
+      ]
+    },
+    "typescript-next-node": {
+      "core_guidance_checked_on": "2026-10-13",
+      "sources": [
+        "https://nextjs.org/docs/app/getting-started/installation",
+        "https://nextjs.org/docs/app/guides/mcp",
+        "https://nextjs.org/docs/app/guides/ai-agents"
+      ]
+    },
+    "typescript-react-vite-browser": {
+      "core_guidance_checked_on": "2026-10-13",
+      "sources": [
+        "https://vite.dev/guide/",
+        "https://react.dev/learn/typescript"
+      ]
+    },
+    "rails-hotwire-postgresql": {
+      "core_guidance_checked_on": "2026-10-13",
+      "sources": [
+        "https://guides.rubyonrails.org/getting_started.html",
+        "https://guides.rubyonrails.org/active_job_basics.html"
+      ]
+    },
+    "laravel-livewire-postgresql": {
+      "core_guidance_checked_on": "2026-10-13",
+      "sources": [
+        "https://laravel.com/framework/docs/13.x/installation",
+        "https://laravel.com/framework/docs/13.x/ai"
+      ]
+    },
+    "python-django": {
+      "core_guidance_checked_on": "2026-10-13",
+      "sources": [
+        "https://docs.djangoproject.com/en/stable/intro/install/"
+      ]
+    },
+    "python-fastapi": {
+      "core_guidance_checked_on": "2026-10-13",
+      "sources": [
+        "https://fastapi.tiangolo.com/tutorial/"
+      ]
+    },
+    "python-scripts-workers": {
+      "core_guidance_checked_on": "2026-10-13",
+      "sources": [
+        "https://docs.astral.sh/uv/guides/projects/",
+        "https://docs.astral.sh/uv/guides/scripts/"
+      ]
+    },
+    "go-service": {
+      "core_guidance_checked_on": "2026-10-13",
+      "sources": [
+        "https://go.dev/doc/tutorial/create-module",
+        "https://pkg.go.dev/net/http"
+      ]
+    },
+    "go-cli": {
+      "core_guidance_checked_on": "2026-10-13",
+      "sources": [
+        "https://go.dev/doc/tutorial/create-module",
+        "https://github.com/spf13/cobra"
+      ]
+    },
+    "rust-service": {
+      "core_guidance_checked_on": "2026-10-13",
+      "sources": [
+        "https://docs.rs/axum/latest/axum/"
+      ]
+    },
+    "rust-cli": {
+      "core_guidance_checked_on": "2026-10-13",
+      "sources": [
+        "https://docs.rs/clap/latest/clap/",
+        "https://ratatui.rs/"
+      ]
+    },
+    "swift-swiftui-ios": {
+      "core_guidance_checked_on": "2026-10-13",
+      "sources": [
+        "https://developer.apple.com/documentation/swiftui",
+        "https://developer.apple.com/tutorials/data/documentation/swiftui.json"
+      ]
+    },
+    "kotlin-compose-android": {
+      "core_guidance_checked_on": "2026-10-13",
+      "sources": [
+        "https://developer.android.com/compose",
+        "https://developer.android.com/topic/architecture"
+      ]
+    }
+  },
+  "source_access_notes": [
+    "Apple documentation HTML is a JavaScript shell; official DocC JSON was read for SwiftUI.",
+    "The optional Laravel /for/agents route was advertised in official installation docs but direct retrieval returned 403; the existing installation and AI/Boost sources were available."
+  ],
+  "first_party_profiles": {
+    "astro-content": {
+      "reviewed_on": "2026-10-23",
+      "source_file": "curated/astro-content.json",
+      "evidence_status": "documentation-reviewed; disposable create-astro basics scaffold, install, build and local dev HTTP smoke check executed; no application integration tests run"
+    },
+    "expo-react-native": {
+      "reviewed_on": "2026-10-23",
+      "source_file": "curated/expo-react-native.json",
+      "evidence_status": "Documentation reviewed 23 October 2026. The explicit `default@sdk-58` template was generated with create-expo-app 5.1.5; npm install succeeded, Expo Doctor passed 20/20, and `expo export --platform ios` produced a JavaScript bundle. Generated lint and TypeScript checks failed; no native build, device/simulator behavior, application integration, signing or store release was qualified."
+    }
+  },
+  "generator_reviews": {
+    "astro-content": {
+      "reviewed_on": "2026-10-23",
+      "evidence_status": "documentation-reviewed; disposable create-astro basics scaffold, install, build and local dev HTTP smoke check executed"
+    },
+    "elixir-phoenix-liveview": {
+      "reviewed_on": "2026-10-18",
+      "evidence_status": "documentation-reviewed; commands not executed"
+    },
+    "typescript-next-node": {
+      "reviewed_on": "2026-10-23",
+      "evidence_status": "documentation-reviewed; commands not executed"
+    },
+    "typescript-react-vite-browser": {
+      "reviewed_on": "2026-10-18",
+      "evidence_status": "documentation-reviewed; commands not executed"
+    },
+    "rails-hotwire-postgresql": {
+      "reviewed_on": "2026-10-23",
+      "evidence_status": "documentation-reviewed; commands not executed"
+    },
+    "laravel-livewire-postgresql": {
+      "reviewed_on": "2026-10-23",
+      "evidence_status": "documentation-reviewed; commands not executed"
+    },
+    "python-django": {
+      "reviewed_on": "2026-10-23",
+      "evidence_status": "documentation-reviewed; commands not executed"
+    },
+    "go-service": {
+      "reviewed_on": "2026-10-18",
+      "evidence_status": "documentation-reviewed; commands not executed"
+    },
+    "rust-service": {
+      "reviewed_on": "2026-10-18",
+      "evidence_status": "documentation-reviewed; commands not executed"
+    },
+    "python-fastapi": {
+      "reviewed_on": "2026-10-23",
+      "evidence_status": "documentation-reviewed; commands not executed"
+    },
+    "go-cli": {
+      "reviewed_on": "2026-10-23",
+      "evidence_status": "documentation-reviewed; commands not executed"
+    },
+    "rust-cli": {
+      "reviewed_on": "2026-10-18",
+      "evidence_status": "documentation-reviewed; commands not executed"
+    },
+    "python-scripts-workers": {
+      "reviewed_on": "2026-10-18",
+      "evidence_status": "documentation-reviewed; commands not executed"
+    },
+    "swift-swiftui-ios": {
+      "reviewed_on": "2026-10-18",
+      "evidence_status": "documentation-reviewed; commands not executed"
+    },
+    "kotlin-compose-android": {
+      "reviewed_on": "2026-10-18",
+      "evidence_status": "documentation-reviewed; commands not executed"
+    },
+    "expo-react-native": {
+      "reviewed_on": "2026-10-23",
+      "evidence_status": "Documentation reviewed; create-expo-app 5.1.5 `default@sdk-58` scaffold generated. npm install succeeded; Expo Doctor passed 20/20; `expo export --platform ios` produced a JS bundle. Generated `npm run lint` and direct TypeScript/lint checks exposed template errors; no native build or device/store qualification."
+    }
+  },
+  "current_corrections": {
+    "scope": "Specific current corrections over dated imported research. Original review dates and source snapshots remain unchanged.",
+    "updates": [
+      {
+        "profile_id": "typescript-next-node",
+        "tool_job": "application framework",
+        "reviewed_on": "2026-10-23",
+        "evidence_status": "documentation-reviewed; no TanStack Start application integration executed",
+        "previous_limits": "TanStack Start official homepage labelled RC at review; web UI is not native UI; framework does not supply business correctness",
+        "limits": "TanStack Start 1.0 became stable on 13 October 2026; the imported 10 October RC observation is historical. Consider Start when its typed routing and server-function model fit the project, after checking the selected adapter and integrations. Web UI is not native UI; no framework supplies business correctness.",
+        "sources": [
+          {
+            "title": "TanStack Start 1.0 is stable",
+            "url": "https://tanstack.com/blog/tanstack-start-1-0",
+            "claim": "The official release announcement dates the stable 1.0 release to 13 October 2026."
+          },
+          {
+            "title": "TanStack Start overview",
+            "url": "https://tanstack.com/start/latest/docs/framework/react/overview",
+            "claim": "Start provides typed routing, rendering and server functions; project-specific hosting and integration choices remain explicit."
+          }
+        ]
+      }
+    ]
+  }
+}

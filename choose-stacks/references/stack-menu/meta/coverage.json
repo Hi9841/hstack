@@ -1,0 +1,346 @@
+{
+  "schema_version": "1.0",
+  "profile_count": 16,
+  "review_scope": "Read each profile review date; imported framework/source availability checks retain their separately dated receipt at /research-freshness.json",
+  "scope": "Curated application component profiles, not exhaustive language coverage or integration-qualified distributions.",
+  "coverage_gaps": [
+    "Desktop stack preparation",
+    "C# and .NET stack preparation",
+    "Embedded and game development preparation",
+    "Exact dependency compatibility qualification",
+    "Executable starter projects",
+    "Representative cross-stack agent delivery comparisons"
+  ],
+  "profiles": [
+    {
+      "id": "astro-content",
+      "title": "Astro content site",
+      "language": "TypeScript",
+      "kind": [
+        "web"
+      ],
+      "ui": "server",
+      "host": "static",
+      "use_cases": [
+        "Documentation, guides, blogs, catalogs and marketing sites with repeatable authored content",
+        "Content-first websites that need a few independent interactive widgets",
+        "Public pages that can be generated at build time and served as static files"
+      ],
+      "reviewed": "2026-10-23",
+      "evidence_status": "documentation-reviewed; disposable create-astro basics scaffold, install, build and local dev HTTP smoke check executed; no application integration tests run",
+      "guide_url": "/stacks/astro-content/",
+      "markdown_url": "/stacks/astro-content/guide.md",
+      "json_url": "/stacks/astro-content/record.json"
+    },
+    {
+      "id": "elixir-phoenix-liveview",
+      "title": "Phoenix + LiveView",
+      "language": "Elixir",
+      "kind": [
+        "web",
+        "api"
+      ],
+      "ui": "server",
+      "host": "server",
+      "use_cases": [
+        "Connected browser products and portals",
+        "Real-time collaboration interfaces",
+        "JSON APIs for native clients",
+        "Durable application background work"
+      ],
+      "reviewed": "2026-10-10",
+      "evidence_status": "documentation-reviewed research input",
+      "guide_url": "/stacks/elixir-phoenix-liveview/",
+      "markdown_url": "/stacks/elixir-phoenix-liveview/guide.md",
+      "json_url": "/stacks/elixir-phoenix-liveview/record.json"
+    },
+    {
+      "id": "typescript-next-node",
+      "title": "Next.js",
+      "language": "TypeScript",
+      "kind": [
+        "web",
+        "api"
+      ],
+      "ui": "full",
+      "host": "node",
+      "use_cases": [
+        "Authenticated web products",
+        "Server-rendered React interfaces",
+        "Browser applications with owned APIs and relational data"
+      ],
+      "reviewed": "2026-10-10",
+      "evidence_status": "documentation-reviewed research input",
+      "guide_url": "/stacks/typescript-next-node/",
+      "markdown_url": "/stacks/typescript-next-node/guide.md",
+      "json_url": "/stacks/typescript-next-node/record.json"
+    },
+    {
+      "id": "typescript-react-vite-browser",
+      "title": "React + Vite",
+      "language": "TypeScript",
+      "kind": [
+        "web"
+      ],
+      "ui": "client",
+      "host": "static",
+      "use_cases": [
+        "Interactive dashboards",
+        "API-backed browser tools",
+        "Client-rendered applications"
+      ],
+      "reviewed": "2026-10-10",
+      "evidence_status": "documentation-reviewed research input",
+      "guide_url": "/stacks/typescript-react-vite-browser/",
+      "markdown_url": "/stacks/typescript-react-vite-browser/guide.md",
+      "json_url": "/stacks/typescript-react-vite-browser/record.json"
+    },
+    {
+      "id": "rails-hotwire-postgresql",
+      "title": "Rails + Hotwire",
+      "language": "Ruby",
+      "kind": [
+        "web",
+        "api"
+      ],
+      "ui": "server",
+      "host": "server",
+      "use_cases": [
+        "SaaS",
+        "Business CRUD",
+        "Collaboration and workflow products"
+      ],
+      "reviewed": "2026-10-10",
+      "evidence_status": "documentation-reviewed research input",
+      "guide_url": "/stacks/rails-hotwire-postgresql/",
+      "markdown_url": "/stacks/rails-hotwire-postgresql/guide.md",
+      "json_url": "/stacks/rails-hotwire-postgresql/record.json"
+    },
+    {
+      "id": "laravel-livewire-postgresql",
+      "title": "Laravel + Livewire",
+      "language": "PHP",
+      "kind": [
+        "web",
+        "api"
+      ],
+      "ui": "server",
+      "host": "server",
+      "use_cases": [
+        "SaaS",
+        "Administrative and business applications",
+        "Server-driven interactive products"
+      ],
+      "reviewed": "2026-10-10",
+      "evidence_status": "documentation-reviewed research input",
+      "guide_url": "/stacks/laravel-livewire-postgresql/",
+      "markdown_url": "/stacks/laravel-livewire-postgresql/guide.md",
+      "json_url": "/stacks/laravel-livewire-postgresql/record.json"
+    },
+    {
+      "id": "python-django",
+      "title": "Django",
+      "language": "Python",
+      "kind": [
+        "web",
+        "api"
+      ],
+      "ui": "server",
+      "host": "server",
+      "use_cases": [
+        "CRUD-heavy SaaS",
+        "Internal products and admin tools",
+        "Server-rendered business applications"
+      ],
+      "reviewed": "2026-10-10",
+      "evidence_status": "documentation-reviewed research input",
+      "guide_url": "/stacks/python-django/",
+      "markdown_url": "/stacks/python-django/guide.md",
+      "json_url": "/stacks/python-django/record.json"
+    },
+    {
+      "id": "go-service",
+      "title": "Go service",
+      "language": "Go",
+      "kind": [
+        "api"
+      ],
+      "ui": "none",
+      "host": "binary",
+      "use_cases": [
+        "APIs",
+        "control planes",
+        "concurrent network services",
+        "background workers"
+      ],
+      "reviewed": "2026-10-10",
+      "evidence_status": "documentation-reviewed research input",
+      "guide_url": "/stacks/go-service/",
+      "markdown_url": "/stacks/go-service/guide.md",
+      "json_url": "/stacks/go-service/record.json"
+    },
+    {
+      "id": "rust-service",
+      "title": "Rust service",
+      "language": "Rust",
+      "kind": [
+        "api"
+      ],
+      "ui": "none",
+      "host": "binary",
+      "use_cases": [
+        "Native network services",
+        "resource-sensitive APIs",
+        "services sharing a Rust core"
+      ],
+      "reviewed": "2026-10-10",
+      "evidence_status": "documentation-reviewed research input",
+      "guide_url": "/stacks/rust-service/",
+      "markdown_url": "/stacks/rust-service/guide.md",
+      "json_url": "/stacks/rust-service/record.json"
+    },
+    {
+      "id": "python-fastapi",
+      "title": "FastAPI",
+      "language": "Python",
+      "kind": [
+        "api"
+      ],
+      "ui": "none",
+      "host": "server",
+      "use_cases": [
+        "Typed JSON APIs",
+        "Integration services",
+        "HTTP endpoints for model or worker products"
+      ],
+      "reviewed": "2026-10-10",
+      "evidence_status": "documentation-reviewed research input",
+      "guide_url": "/stacks/python-fastapi/",
+      "markdown_url": "/stacks/python-fastapi/guide.md",
+      "json_url": "/stacks/python-fastapi/record.json"
+    },
+    {
+      "id": "go-cli",
+      "title": "Go CLI + TUI",
+      "language": "Go",
+      "kind": [
+        "cli"
+      ],
+      "ui": "terminal",
+      "host": "binary",
+      "use_cases": [
+        "Shipped command-line products",
+        "infrastructure administration tools",
+        "terminal dashboards"
+      ],
+      "reviewed": "2026-10-10",
+      "evidence_status": "documentation-reviewed research input",
+      "guide_url": "/stacks/go-cli/",
+      "markdown_url": "/stacks/go-cli/guide.md",
+      "json_url": "/stacks/go-cli/record.json"
+    },
+    {
+      "id": "rust-cli",
+      "title": "Rust CLI + TUI",
+      "language": "Rust",
+      "kind": [
+        "cli"
+      ],
+      "ui": "terminal",
+      "host": "binary",
+      "use_cases": [
+        "Fast native developer tools",
+        "parsers and analyzers",
+        "shipped terminal applications"
+      ],
+      "reviewed": "2026-10-10",
+      "evidence_status": "documentation-reviewed research input",
+      "guide_url": "/stacks/rust-cli/",
+      "markdown_url": "/stacks/rust-cli/guide.md",
+      "json_url": "/stacks/rust-cli/record.json"
+    },
+    {
+      "id": "python-scripts-workers",
+      "title": "Python automation + AI",
+      "language": "Python",
+      "kind": [
+        "automation"
+      ],
+      "ui": "none",
+      "host": "server",
+      "use_cases": [
+        "Reusable automation scripts",
+        "Scheduled imports and transformations",
+        "Model/tool orchestration workers"
+      ],
+      "reviewed": "2026-10-10",
+      "evidence_status": "documentation-reviewed research input",
+      "guide_url": "/stacks/python-scripts-workers/",
+      "markdown_url": "/stacks/python-scripts-workers/guide.md",
+      "json_url": "/stacks/python-scripts-workers/record.json"
+    },
+    {
+      "id": "swift-swiftui-ios",
+      "title": "Swift + SwiftUI",
+      "language": "Swift",
+      "kind": [
+        "ios"
+      ],
+      "ui": "native",
+      "host": "native",
+      "use_cases": [
+        "iPhone and iPad products",
+        "Native Apple integrations",
+        "Accessible mobile clients for a shared service"
+      ],
+      "reviewed": "2026-10-10",
+      "evidence_status": "documentation-reviewed research input",
+      "guide_url": "/stacks/swift-swiftui-ios/",
+      "markdown_url": "/stacks/swift-swiftui-ios/guide.md",
+      "json_url": "/stacks/swift-swiftui-ios/record.json"
+    },
+    {
+      "id": "kotlin-compose-android",
+      "title": "Kotlin + Compose",
+      "language": "Kotlin",
+      "kind": [
+        "android"
+      ],
+      "ui": "native",
+      "host": "native",
+      "use_cases": [
+        "Android phones, tablets and foldables",
+        "Native Android integrations",
+        "Accessible mobile clients for a shared service"
+      ],
+      "reviewed": "2026-10-10",
+      "evidence_status": "documentation-reviewed research input",
+      "guide_url": "/stacks/kotlin-compose-android/",
+      "markdown_url": "/stacks/kotlin-compose-android/guide.md",
+      "json_url": "/stacks/kotlin-compose-android/record.json"
+    },
+    {
+      "id": "expo-react-native",
+      "title": "Expo + React Native",
+      "language": "TypeScript",
+      "kind": [
+        "ios",
+        "android"
+      ],
+      "ui": "native",
+      "host": "native",
+      "use_cases": [
+        "A single product team ships an iOS and Android client against a separately owned API",
+        "The team can share most screens and application logic while retaining platform-specific behavior where needed",
+        "The product needs native device features available through Expo SDK or compatible React Native modules"
+      ],
+      "reviewed": "2026-10-23",
+      "evidence_status": "Documentation reviewed 23 October 2026. The explicit `default@sdk-58` template was generated with create-expo-app 5.1.5; npm install succeeded, Expo Doctor passed 20/20, and `expo export --platform ios` produced a JavaScript bundle. Generated lint and TypeScript checks failed; no native build, device/simulator behavior, application integration, signing or store release was qualified.",
+      "guide_url": "/stacks/expo-react-native/",
+      "markdown_url": "/stacks/expo-react-native/guide.md",
+      "json_url": "/stacks/expo-react-native/record.json"
+    }
+  ],
+  "rewrite_sources_url": "/rewrite/sources.json",
+  "rewrite_source_count": 5
+}

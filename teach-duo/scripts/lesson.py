@@ -8,12 +8,16 @@ if __name__ == "__main__" and sys.argv[1:] in (["--version"], ["-v"], ["-V"]):
 import argparse
 import json
 import re
+import threading
+import time
 import webbrowser
+from functools import partial
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 TEMPLATE = ROOT / "assets" / "lesson.html"
-TYPES = {"intro", "info", "pick", "mem", "build", "truefalse"}
+TYPES = {"intro", "info", "pick", "mem", "write", "truefalse"}
 EMOJI = re.compile(
     "[\U0001F000-\U0001FAFF\u2190-\u21FF\u2300-\u27BF\u2600-\u26FF\u2B00-\u2BFF\uFE0F]"
 )
@@ -81,7 +85,7 @@ def validate(pack):
         for key in ("label", "url"):
             if not isinstance(source.get(key), str) or not source[key].strip():
                 raise ValueError(f"source.{key} is required")
-    for field, label in (("next", "nextLabel"), ("reference", "referenceLabel")):
+    for field, label in (("reference", "referenceLabel"),):
         href = pack.get(field) or ""
         text = pack.get(label) or ""
         if bool(href) != bool(text):
@@ -102,13 +106,17 @@ def validate(pack):
                 _need(screen, "cta", ident)
             continue
         _need(screen, "why", ident)
-        if kind == "build":
-            tokens = screen.get("tokens")
-            answer = screen.get("answer")
-            if not isinstance(tokens, list) or not tokens or not all(isinstance(t, str) for t in tokens):
-                raise ValueError(f"{ident} needs a token list")
-            if not isinstance(answer, list) or not answer or not all(isinstance(t, str) for t in answer):
-                raise ValueError(f"{ident} needs an answer list")
+        if kind == "write":
+            _need(screen, "answer", ident)
+            points = screen.get("points")
+            if (not isinstance(points, list) or not 1 <= len(points) <= 4
+                    or not all(isinstance(p, str) and p.strip() for p in points)):
+                raise ValueError(f"{ident} needs one to four points to check the answer against")
+            if screen.get("grade", "agent") not in ("agent", "self"):
+                raise ValueError(f"{ident} grade must be agent or self")
+            for key in ("starter", "file"):
+                if not isinstance(screen.get(key, ""), str):
+                    raise ValueError(f"{ident} {key} must be a string")
             continue
         _choices(screen, ident)
         if kind == "mem":
@@ -123,8 +131,6 @@ def render(pack):
     template = TEMPLATE.read_text(encoding="utf-8")
     meta = {
         "title": pack["title"],
-        "next": pack.get("next") or "",
-        "nextLabel": pack.get("nextLabel") or "",
         "reference": pack.get("reference") or "",
         "referenceLabel": pack.get("referenceLabel") or "",
         "source": pack.get("source"),
@@ -183,6 +189,80 @@ def build_file(data_path, output_path, open_page):
     return output, len(pack["screens"])
 
 
+GRADE_TIMEOUT = 300
+
+
+class _Finish(SimpleHTTPRequestHandler):
+    """Serve the workspace. POST /grade waits for the agent's verdict. POST /done carries the result."""
+
+    def _json(self, status, payload):
+        data = json.dumps(payload).encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(data)))
+        self.end_headers()
+        self.wfile.write(data)
+
+    def do_POST(self):
+        body = self.rfile.read(int(self.headers.get("Content-Length") or 0))
+        if self.path == "/grade":
+            self._grade(json.loads(body or b"{}"))
+        elif self.path == "/done":
+            self.server.result = json.loads(body or b"{}")
+            self.send_response(204)
+            self.end_headers()
+            threading.Thread(target=self.server.shutdown).start()
+        else:
+            self.send_error(404)
+
+    def _grade(self, request):
+        """Hand a written answer to the agent and block until it writes a verdict file."""
+        with self.server.lock:
+            self.server.grade_count += 1
+            ident = self.server.grade_count
+        folder = Path(self.server.workspace) / ".grading"
+        folder.mkdir(exist_ok=True)
+        verdict = folder / f"{ident}.verdict.json"
+        verdict.unlink(missing_ok=True)
+        report(status="grade", id=str(ident), question=request.get("question", ""),
+               answer=request.get("answer", ""), model=request.get("model", ""),
+               points=json.dumps(request.get("points", []), ensure_ascii=False),
+               reply=f'python lesson.py verdict "{self.server.workspace}" {ident} --ok|--not-yet --feedback "..."')
+        deadline = time.monotonic() + GRADE_TIMEOUT
+        while time.monotonic() < deadline:
+            if verdict.exists():
+                self._json(200, json.loads(verdict.read_text(encoding="utf-8")))
+                return
+            time.sleep(0.5)
+        self._json(200, {"timeout": True})
+
+    def log_message(self, *args):
+        pass
+
+
+def wait_for_finish(output):
+    """Open the lesson over localhost and block until the learner presses Next."""
+    root = output.parent.parent
+    server = ThreadingHTTPServer(("127.0.0.1", 0), partial(_Finish, directory=str(root)))
+    server.result = {}
+    server.workspace = str(root)
+    server.lock = threading.Lock()
+    server.grade_count = 0
+    url = f"http://127.0.0.1:{server.server_port}/{output.relative_to(root).as_posix()}"
+    report(status="waiting", url=url)
+    webbrowser.open(url)
+    server.serve_forever()
+    server.server_close()
+    return server.result
+
+
+def write_verdict(workspace, ident, ok, feedback):
+    folder = Path(workspace) / ".grading"
+    folder.mkdir(exist_ok=True)
+    (folder / f"{ident}.verdict.json").write_text(
+        json.dumps({"ok": ok, "feedback": feedback}, ensure_ascii=False), encoding="utf-8")
+
+
 def reference_file(fragment_path, output_path, title):
     body = Path(fragment_path).read_text(encoding="utf-8")
     output = _outside_skill(Path(output_path))
@@ -198,18 +278,34 @@ def main():
     build.add_argument("data")
     build.add_argument("output")
     build.add_argument("--open", action="store_true")
+    build.add_argument("--wait", action="store_true")
     reference = commands.add_parser("reference")
     reference.add_argument("fragment")
     reference.add_argument("output")
     reference.add_argument("--title", required=True)
+    verdict = commands.add_parser("verdict")
+    verdict.add_argument("workspace")
+    verdict.add_argument("id")
+    verdict.add_argument("--feedback", default="")
+    mark = verdict.add_mutually_exclusive_group(required=True)
+    mark.add_argument("--ok", action="store_true")
+    mark.add_argument("--not-yet", action="store_true")
     args = parser.parse_args()
     if not args.command:
         report(status="usage", hint="python scripts/lesson.py build <data.json> <output.html>")
         return 2
     try:
         if args.command == "build":
-            output, count = build_file(args.data, args.output, args.open)
+            output, count = build_file(args.data, args.output, args.open and not args.wait)
             report(status="wrote", path=str(output), screens=str(count))
+            if args.wait:
+                result = wait_for_finish(output)
+                report(status="done", lesson=result.get("title", ""), xp=str(result.get("xp", 0)),
+                       misses=json.dumps(result.get("misses", []), ensure_ascii=False),
+                       answers=json.dumps(result.get("answers", []), ensure_ascii=False))
+        elif args.command == "verdict":
+            write_verdict(args.workspace, args.id, args.ok, args.feedback)
+            report(status="sent", id=args.id, ok=str(args.ok).lower())
         else:
             output = reference_file(args.fragment, args.output, args.title)
             report(status="wrote", path=str(output), kind="reference")
