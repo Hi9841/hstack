@@ -23,7 +23,13 @@ Reserve capacities where growth is predictable, reuse scratch buffers only when 
 
 ## Prefetch cautiously
 
-Modern hardware prefetchers are effective on predictable streams. Manual prefetch can add overhead and pollute caches. Prefetch distance depends on latency, bandwidth, computation per iteration and access pattern; measure with representative working sets.
+Modern hardware prefetchers are effective on predictable streams. Manual prefetch can add overhead and pollute caches. Prefetch distance depends on latency, bandwidth, computation per iteration and access pattern; measure with representative working sets. When the stream is irregular, try software prefetch (`_mm_prefetch`) a few iterations ahead, and test 2 or 3 distances.
+
+## Large buffers
+
+- Use non-temporal (streaming) stores for large outputs that are not read again soon, so that they do not evict the working set.
+- Try huge pages for large weight buffers to reduce TLB misses.
+- Pad per-thread output blocks to 64 bytes so that two threads do not write the same cache line.
 
 ## Cache troubleshooting worksheet
 

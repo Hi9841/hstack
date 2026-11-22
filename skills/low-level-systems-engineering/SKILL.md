@@ -1,6 +1,6 @@
 ---
 name: low-level-systems-engineering
-description: Evidence-first optimization of native systems software. Use for performance, memory, concurrency, allocator, networking, CPU-kernel, SIMD, compiler, or inference work in Rust, C, C++, Zig, x86-64, or AArch64 when correctness, portability, or resource budgets matter.
+description: Evidence-first optimization of native systems software. Use for performance, memory, concurrency, allocator, networking, CPU-kernel (matmul, GEMM, conv, attention), SIMD, compiler, or inference work in Rust, C, C++, Zig, x86-64, or AArch64 when correctness, portability, or resource budgets matter, or when a kernel has hit a performance wall.
 ---
 
 # Low-level systems engineering
@@ -95,7 +95,7 @@ target is unavailable, name the gap and use a defensible alternative.
 - Bounds and bottleneck models: [performance models](references/02-performance-models.md)
 - Pipelines, counters, branches, and code generation: [CPU architecture](references/03-cpu-architecture.md)
 - Layout, locality, cache, TLB, NUMA, and traffic: [memory layout](references/04-memory-layout.md)
-- Kernels, SIMD, tails, and ISA dispatch: [SIMD and kernels](references/05-simd-and-kernels.md)
+- Kernels, SIMD, tails, ISA dispatch, and a kernel at a wall: [SIMD and kernels](references/05-simd-and-kernels.md)
 - Compiler choices, LTO, PGO, and assembly: [compilers and assembly](references/06-compilers-and-assembly.md)
 - Threads, atomics, ordering, and reclamation: [concurrency](references/07-concurrency.md)
 - Files, sockets, syscalls, scheduling, and backpressure: [I/O and systems](references/08-io-and-systems.md)
@@ -110,13 +110,13 @@ target is unavailable, name the gap and use a defensible alternative.
 For an optimization task, report these items in order:
 
 1. target, constraints, and predeclared gates;
-2. baseline and bottleneck evidence;
+2. baseline and bottleneck evidence; for a kernel, its position as a percent of the compute peak and of the bandwidth peak;
 3. hypothesis, mechanism, and risk;
 4. changed code or proposal;
 5. correctness and portability results;
-6. before and after data with uncertainty;
+6. before and after data with uncertainty, with a table of the variants you tried;
 7. limitations;
-8. keep, revert, or inconclusive decision.
+8. keep, revert, or inconclusive decision, and the next most promising hypothesis.
 
 If no code changed, say **proposal**. If no measurement ran, say **unmeasured**.
 Never invent performance numbers, test results, or tool output.

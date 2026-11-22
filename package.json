@@ -1,7 +1,7 @@
 {
   "name": "hstack",
   "version": "1.0.0",
-  "description": "Hi's agent skills and global AGENTS.md, with a one-command installer",
+  "description": "Hi's agent skills, global AGENTS.md, and CLAUDE.md, with a one-command installer",
   "private": true,
   "license": "UNLICENSED",
   "repository": "github:Hi9841/hstack",
@@ -12,7 +12,8 @@
     "bin",
     "skills",
     "agents",
-    "AGENTS.md"
+    "AGENTS.md",
+    "CLAUDE.md"
   ],
   "engines": {
     "node": ">=20"

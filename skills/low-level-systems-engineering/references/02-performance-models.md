@@ -16,6 +16,16 @@
 
 Arithmetic intensity `I = operations / bytes transferred` at a specified memory level. Performance upper bound `P <= min(P_compute_peak, I × B_effective)`. Choose consistent operation units: floating-point FMA often counts as 2 FLOPs; integer MAC as specified by the metric. For quantized bit operations, quote a meaningful work unit. DRAM bandwidth is not automatically the correct ceiling: some work is constrained by L1/L2 bandwidth, loads/stores, dependency latency, instruction decoding, or execution ports.
 
+**Get the machine peaks.** Peak compute = cores × frequency × SIMD lanes × FMA units × 2. Measure sustainable bandwidth with a STREAM-style test, not the spec sheet, and measure each cache level (L1, L2, L3, DRAM) when you can. Intel Advisor has a Roofline view; otherwise use [roofline.py](../scripts/roofline.py).
+
+**Read the position.**
+
+- Near the bandwidth roof: arithmetic changes cannot help. Move fewer bytes: quantize weights, pack data, block for cache, fuse operations to remove round trips.
+- Near the compute roof: the kernel is almost done, or it needs a better algorithm or wider instructions (VNNI, AMX).
+- Far below both roofs: the code itself is inefficient. Most wins are here.
+
+A CPU Roofline is less exact than a GPU Roofline, because the compiler, the out-of-order core and the prefetchers hide much behavior. Use it as a bound and confirm the position with counters.
+
 **Example:** 2e9 useful FLOPs and 1e9 B of DRAM traffic → I=2 FLOP/B. With measured 80 GB/s sustainable bandwidth and 1 TFLOP/s sustainable compute, DRAM Roofline bound is min(1000, 160) GFLOP/s = 160 GFLOP/s. This is a modeling example, not measured Trit data.
 
 ## Little's Law and capacity

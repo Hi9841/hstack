@@ -1,6 +1,6 @@
 # hstack
 
-Hi's agent skills and global `AGENTS.md`. Each skill is a plain [Agent Skill](https://agentskills.io) folder: `skills/<name>/SKILL.md`.
+Hi's agent skills, global `AGENTS.md`, and `CLAUDE.md`. Each skill is a plain [Agent Skill](https://agentskills.io) folder: `skills/<name>/SKILL.md`.
 
 ## Install on a new machine
 
@@ -14,7 +14,8 @@ pnpm dlx github:Hi9841/hstack
 The installer does these steps:
 
 1. It copies `AGENTS.md` to your home folder (`%USERPROFILE%\AGENTS.md`). If an older, different `AGENTS.md` is there, it keeps a copy as `AGENTS.md.bak`. It changes the `C:/Users/hi/` links to your home folder.
-2. It copies all skills and `agents/` to `%USERPROFILE%\Desktop\skills`. It overwrites files with the same name. It does not delete other files.
+2. It copies `CLAUDE.md` to `%USERPROFILE%\.claude\CLAUDE.md`. If an older, different `CLAUDE.md` is there, it keeps a copy as `CLAUDE.md.bak`.
+3. It copies all skills and `agents/` to `%USERPROFILE%\Desktop\skills`. It overwrites files with the same name. It does not delete other files.
 
 Options: `--list` shows the skills. `--dry-run` shows what the installer will copy, but copies nothing.
 
@@ -33,6 +34,7 @@ npx skills add Hi9841/hstack
 | `skills/` | One folder for each skill |
 | `agents/` | Agent persona files |
 | `AGENTS.md` | Global working preferences for all repos |
+| `CLAUDE.md` | Claude Code import pointer (`@../AGENTS.md`) |
 | `bin/hstack.mjs` | The installer (no dependencies) |
 | `install.cmd` | Double-click wrapper for the installer |
 
@@ -68,10 +70,13 @@ npx skills add Hi9841/hstack
 - [`maintain-verification-skill`](skills/maintain-verification-skill/SKILL.md)
 - [`mobile-native`](skills/mobile-native/SKILL.md)
 - [`native-feel-cross-platform-desktop`](skills/native-feel-cross-platform-desktop/SKILL.md)
+- [`no-comments`](skills/no-comments/SKILL.md)
+- [`opci`](skills/opci/SKILL.md)
 - [`oploop`](skills/oploop/SKILL.md)
 - [`optimize-anything`](skills/optimize-anything/SKILL.md)
 - [`planning-with-files`](skills/planning-with-files/SKILL.md)
 - [`pr`](skills/pr/SKILL.md)
+- [`principle-boundary-discipline`](skills/principle-boundary-discipline/SKILL.md)
 - [`principle-fix-root-causes`](skills/principle-fix-root-causes/SKILL.md)
 - [`principle-foundational-thinking`](skills/principle-foundational-thinking/SKILL.md)
 - [`principle-laziness-protocol`](skills/principle-laziness-protocol/SKILL.md)
@@ -79,6 +84,8 @@ npx skills add Hi9841/hstack
 - [`principle-subtract-before-you-add`](skills/principle-subtract-before-you-add/SKILL.md)
 - [`principle-type-system-discipline`](skills/principle-type-system-discipline/SKILL.md)
 - [`prototype`](skills/prototype/SKILL.md)
+- [`prune-tests`](skills/prune-tests/SKILL.md)
+- [`review`](skills/review/SKILL.md)
 - [`rossark-motion-skill`](skills/rossark-motion-skill/SKILL.md)
 - [`security-audit`](skills/security-audit/SKILL.md)
 - [`simplified-technical-english`](skills/simplified-technical-english/SKILL.md)

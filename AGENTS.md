@@ -19,4 +19,5 @@ Global working preferences across all repositories. Project facts stay in projec
 - Search: FFF and tgrep.
 - JS/TS lint: Use Oxlint with the vendored anti-slop plugin (`tools/oxlint/anti-slop/`). If a repo does not have it, install it with [$install-anti-slop](file:///C:/Users/hi/Desktop/skills/install-anti-slop/SKILL.md). Run Oxlint before you report done.
 - Lint feedback loop: When you find a code-quality defect that a lint rule can catch, do not only fix it. Add a rule to the repo's Oxlint config, or write a new anti-slop rule in `tools/oxlint/anti-slop/rules/` if no rule exists. Then fix all violations. Tell the owner which rule you added.
+- Mobile and Mac testing: Use Revyl CLI exclusively for mobile app testing, simulators, and Mac testing.
 - Skills: Master skills live at [Desktop/skills](file:///C:/Users/hi/Desktop/skills) (mirrored in `.agents/skills`). Every agent should invoke the relevant skill for specialized tasks.

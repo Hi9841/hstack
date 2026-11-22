@@ -22,6 +22,13 @@ Common mistakes:
 
 Test 1/2/4/... threads, short and long jobs, with SMT on/off if appropriate, under moderate competing load. Record wall time, total CPU time, context switches, actual CPU use, LLC misses and tail latency. Investigate NUMA locality only on machines with relevant topology. Evaluate bounded spin, park/unpark and inline small jobs; never assume a universal threshold.
 
+## Parallel kernels
+
+- Give each thread a contiguous block of the output, so that threads do not share written cache lines.
+- Measure scaling at 1, 2, 4 and N threads. Compare physical cores with SMT threads.
+- Check NUMA placement of the weights and the outputs on multi-socket machines.
+- For small operations, thread-pool dispatch can cost more than the work. Measure the single-thread path; it is sometimes the fastest.
+
 ## Safer alternatives
 
 Try immutable sharing, single-writer ownership, thread-local buffers and bounded channels before lock-free structures. Lock-free means a progress property, *not* automatically no contention or better latency. For lock-free queues, prove capacity/empty behavior, ordering, reclamation and fairness requirements.
