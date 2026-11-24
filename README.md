@@ -4,7 +4,7 @@ Hi's agent skills, global `AGENTS.md`, and `CLAUDE.md`. Each skill is a plain [A
 
 ## Install on a new machine
 
-Use one of these commands. Each command needs Node.js 20 or later and GitHub access to this private repo.
+Use one of these commands. Each command needs Node.js 20 or later.
 
 ```bash
 npx github:Hi9841/hstack
