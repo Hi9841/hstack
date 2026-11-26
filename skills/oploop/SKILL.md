@@ -1,135 +1,126 @@
 ---
 name: oploop
 description: >-
-  OpLoop (optimization loop): the hands-on runner for a performance work session.
-  It sets up a pristine baseline next to a work checkout, records journeys and a
-  correctness floor, then runs one-hypothesis iterations (profile, hypothesize, test,
-  change, gate, interleaved A/B measure, keep or revert, commit, log) until returns
-  diminish. Use when the user says OpLoop or "optimization loop", asks to optimize,
-  speed up, slim down, or reduce latency or memory of a codebase over many changes,
-  wants to compare a fork against upstream, or wants a stream of small measured wins
-  that can go upstream as a PR. Strategy comes from optimize-anything; number vetting
-  comes from benchmark-checklist.
+  Run or resume a measured optimization session with a live baseline, a correctness
+  floor, and one-hypothesis keep-or-revert iterations through plateau and clean-build
+  qualification. Use when the user says OpLoop or "optimization loop", asks for
+  repeated keep-or-revert performance iterations on a codebase or server, wants a
+  measured fork comparison against upstream, or wants a reviewable series of small
+  verified performance commits for an upstream PR. Strategy comes from
+  optimize-anything. Number check rules come from benchmark-checklist.
 ---
 
 # OpLoop
 
-OpLoop runs the optimization loop inside a work session. It does not repeat the method.
+Read the [strategy, proxy, and budget guide](../optimize-anything/SKILL.md) once at setup.
 
-- **Strategy** (journeys, proxies, ratchets, guardrails, steering):
-  [optimize-anything](../optimize-anything/SKILL.md). Read it once at setup.
-- **Number vetting** (limiter, tuning, errors, repeatability, relevance):
-  [benchmark-checklist](../benchmark-checklist/SKILL.md). Use it on the baseline and on
-  each claimed win.
-- **Mechanics** (this file): the folder layout, the ledger, the iteration, and the
-  keep or revert rules.
+Use [benchmark-checklist](../benchmark-checklist/SKILL.md) on the baseline and on each claimed win.
 
-The central rule: a change stays only if a test proves it is correct and a measurement
-proves it is faster. All other changes go back out. This rule keeps a long stream of
-changes safe, because each kept change has proof and each reverted change has a reason.
+Report a broken baseline, an impossible target, or a correctness defect immediately.
 
-## Setup (once per target)
+## Start or resume
 
-1. **Make the workspace.** Use this layout:
+1. **Check for a prior session.** If `oploop/LEDGER.md` exists, resume from it. Read the workspace, floor, journeys, and rejected hypotheses before you run anything. Never overwrite a prior ledger. Never retest a rejected hypothesis without a new mechanism or a changed condition.
+
+2. **Create the workspace (new session only).** Use this directory layout:
 
    ```
    <project>/
-     baseline/   pristine upstream checkout. Never edit it.
-     work/       the checkout you change, on branch `oploop`
+     baseline/   pinned upstream checkout. Never edit it.
+     prev/       previous kept commit (control A) with isolated build outputs
+     work/       candidate checkout on branch `oploop` (candidate B)
      oploop/     JOURNEYS.md, LEDGER.md, results/, bench scripts
    ```
 
-   The baseline lets you run a live A/B against upstream at any time. A number from
-   memory or from an old run is not a baseline.
+   Copy `references/ledger-template.md` to `oploop/LEDGER.md` first, before you record any results.
 
-2. **Choose 3 to 5 journeys.** A journey is a thing a user waits for, with a start and
-   an end (for example: "CLI start to first prompt ready", "send message to first
-   token rendered", "idle memory after 60 s"). Write them in `oploop/JOURNEYS.md` with
-   the exact command or harness that measures each one. Measure the journeys that the
-   user feels. Do not measure only the parts that are easy to measure.
+3. **Define scope, limits, metric, and runner.** Start with the requested user-visible journey. Add a regression journey only if the candidate can affect it. Record exact commands in `oploop/JOURNEYS.md`. Record hard limits (memory cap, maximum input size, concurrency), the quality contract (lossless or labelled lossy trades), and the minimum useful margin in `LEDGER.md`. Pick the runner from the metric. Use `scripts/bench.py` for wall time or sampled peak memory. For throughput or tail latency, use a workload driver. Record completed work, errors, elapsed time, and the requested statistic. Define the output validator and acceptance rule before the first comparison.
 
-3. **Record the correctness floor.** Find the project's own test, typecheck, and lint
-   commands (read CONTRIBUTING, CI config, package scripts). Run them in `baseline/`.
-   Record the pass and fail counts in `LEDGER.md`. Failures that exist before you
-   start are part of the floor. Note them and do not fix them inside the loop.
+4. **Estimate a bound.** Compute a practical bound from measured host limits or measured stage time (see [references/measurement-and-ceilings.md](references/measurement-and-ceilings.md)). Record the estimate and its assumptions in `LEDGER.md`. Report an impossible target only when a proven physical limit excludes it. Include the arithmetic.
 
-4. **Record the performance baseline.** Run `scripts/bench.py` for each journey,
-   baseline against itself (A against A). This shows the noise level. If the noise is
-   larger than the gains you expect, fix the harness first (see the determinism
-   checklist in optimize-anything's proxy ladder).
+5. **Fix the measurement environment.** Run on AC power with a fixed performance profile and an idle host. Run only one benchmark job at a time (use `--lock`). Record every host config that you change so you can restore it at session end.
 
-5. **Start the ledger.** Copy `references/ledger-template.md` to `oploop/LEDGER.md`.
+6. **Record the correctness floor.** Run the project's test, typecheck, and lint commands in `baseline/`. Record pass counts, fail counts, and exact failed test identities in `LEDGER.md`. Do not fix prior failures inside the loop.
+
+7. **Record the A/A noise baseline.** Run `baseline/` against itself for each journey and record median, range, and sample count. If noise exceeds the minimum useful margin, fix the benchmark script first (see the determinism checklist in `optimize-anything`).
+
+Setup is done when `oploop/JOURNEYS.md` and `oploop/LEDGER.md` hold the scope, limits, and bound. They must also hold the correctness floor (with failed test identities) and the A/A noise baseline.
 
 ## The iteration
 
-One iteration tests one hypothesis. Keep the iterations small. Ten measured 5% wins are
-better than one large change that nobody can review.
+One iteration tests one hypothesis. Before you measure any edit, sync `prev/` to the last kept commit with isolated build outputs and record both revisions. Reserve `baseline/` for the initial baseline and final cumulative A/B.
 
-1. **Profile.** Find where the time or memory goes in the journey you chose. Use the
-   runtime's profiler (`--cpu-prof`, `perf`, `py-spy`, heap snapshots, or import-time
-   traces). Name the hot spot with `file:line` and its share of the journey.
-2. **Write the hypothesis in the ledger before you change code.** Use this format:
-   "`<hot spot>` costs about N ms (M% of the journey) because `<cause>`. `<Change>`
-   should save about K ms." A hypothesis that you write after the result is a story,
-   not a test.
-3. **Test first.** Make sure a test covers the behavior that you will change. If no
-   test covers it, write the test, and make sure it passes on the unchanged code.
-4. **Change.** Make the smallest diff that tests the hypothesis. Follow the style of
-   the code around it.
-5. **Gate.** Run the tests, typecheck, and lint. The result must equal or be better
-   than the floor. A gate failure is a revert, not a debug session in the loop.
-6. **Measure.** Run `scripts/bench.py` with the previous kept commit as A and the
-   candidate as B. Also run the other journeys, so that you see regressions elsewhere.
-7. **Decide.**
-   - **Keep** if B is better beyond the noise (the script reports `significant`), no
-     other journey regressed beyond noise, and the gain is worth the extra code.
-   - **Revert** in all other cases. Use `git restore` or `git reset` for the candidate
-     only. A revert is a correct result. Log it with the reason.
-8. **Commit** each kept win as one commit. Put the number in the message, for example
-   `perf(session): cache provider list (startup p50 412 -> 371 ms)`. Lower the ratchet
-   with `optimize-anything/scripts/ratchet.py` if the project has one.
-9. **Log** the result in `LEDGER.md` (kept or reverted, numbers, commit hash).
-10. **Profile again.** The hot spot moves after each win. Do not continue on the old
-    profile.
+1. **Profile.** Measure where time or memory goes in the active journey (for V8 or JSC profiles, summarize with `python scripts/cpuprofile.py PROFILE.cpuprofile`). Name the hot spot with `file:line`, its share of the journey, and its gap to the bound.
 
-## When to stop or ask
+2. **Rank and record the hypothesis before edits.** Rank levers by estimated journey savings and implementation cost, backed by profile evidence. Record the hypothesis in `LEDGER.md`: "`<hot spot>` costs about N ms (M% of the journey) because `<cause>`. `<Change>` will save about K ms."
 
-- **Diminishing returns.** Three iterations in a row that give no significant gain on a
-  journey: close that journey and move to the next one.
-- **Complexity cost.** Reject a win when the code it adds costs more to maintain than
-  the time it saves. Example: a 900-line build plugin for 2 ms per message.
-- **Taste.** If a change alters what the user sees or feels (output order, animation,
-  defaults, timing of UI), stop and ask the user with before and after evidence.
-- **Contracts.** Ask before you change a public API, a config format, a file format, a
-  wire protocol, or a plugin interface.
+3. **Verify test coverage.** Confirm that a test covers the behavior you will change. If none exists, add one and confirm that it passes on unchanged code.
 
-## Upstream PR mode
+4. **Edit only the candidate.** Apply the smallest diff in `work/` that tests the hypothesis.
 
-Use this mode when the work will go to the upstream project as a pull request.
+5. **Run the correctness gate.** Execute tests, typecheck, and lint. Reject any new failed test identity even when total fail counts stay equal. If an infrastructure fault breaks the check, log an invalid trial. Repair the host before you decide the candidate.
 
-- Keep each commit independent and reviewable, so that a maintainer can take some wins
-  and refuse others.
-- Follow the project's own contribution rules (AGENTS.md, CONTRIBUTING.md, lint rules).
-  Use the project's package manager and runtime versions.
-- Group the commits into PR-sized series by subsystem. Put one primary number in each
-  PR body, and link the full ledger for details.
-- Do not open, push, or comment on an upstream PR without explicit approval from the
-  user. A PR is published content.
+6. **Measure and verify outputs.** Compare `prev/` (side A) against `work/` (side B) with warmup and output checks:
 
-## Scripts and references
+   ```
+   uv run "<skill-dir>/scripts/bench.py" --name J1 --a "<cmd>" --a-cwd ./prev --b "<cmd>" --b-cwd ./work --runs 10 --warmup 2 --min-improvement 2 --check-eq --require-ac --lock ./oploop/bench.lock --out ./oploop/results/ledger.jsonl
+   ```
 
-- `scripts/bench.py`: interleaved A/B benchmark. It records wall time, peak memory of
-  the full process tree, and exit codes, and it reports median, range, and a rank-sum
-  significance test. Run `uv run scripts/bench.py --help`. Memory is sampled every
-  10 ms, so for runs shorter than about 100 ms the peak memory is a low estimate. Use
-  `--hold` or `--ready` to measure memory of a program that stays open.
-- `references/ledger-template.md`: the ledger format.
+   Run this example from the directory that contains `prev/` and `work/`. Substitute the absolute skill path and journey commands. Use `--help` to select options. When restarts prevent per-run interleaves, use [repeated bracketed controls](references/measurement-and-ceilings.md#noise-control-bracketed-runs-and-process-safety). Run all protected regression journeys before you keep a change.
 
-## Report
+7. **Check anomalies before you trust a number.** On an unexpected win or strange number, suspect measurement error first. Repeat the run. Read [references/measurement-and-ceilings.md](references/measurement-and-ceilings.md) when a lever class gives 0% gain or outputs diverge.
 
-At the end of a session, give:
+8. **Decide keep, revert, or invalid.**
 
-1. A table per journey: baseline, now, change, run count, and noise range.
-2. The list of kept commits with their numbers, and the count of reverted hypotheses.
-3. The correctness floor before and after.
-4. The next three hypotheses you would test.
+   - **Keep** only when every condition below passes:
+     - Correctness gate introduces zero new failed test identities.
+     - Output check passes (raw stdout match, `--expect`, or workload validator with completed work count).
+     - The runner reports `eligible_keep=True` or meets the predefined acceptance rule for a custom driver.
+     - Every protected regression journey stays within its regression allowance.
+     - Added code complexity pays for the measured gain.
+
+   - **Invalid trial** when power drops, a probe fails, or host interference breaks the run. Record the fault without a plateau count increase. Correct the fault before you measure again.
+
+   - **Revert** a valid candidate that fails a keep condition. Restore only the changes from this iteration in `work/`. Record the reason in `LEDGER.md`.
+
+9. **Commit and tighten the ratchet.** Commit each kept win as one commit with the measured delta in the message (for example, `perf(session): cache provider list (startup p50 412 to 371 ms)`). Tighten the budget with `optimize-anything/scripts/ratchet.py` if the project uses one. Update `prev/` to the new commit.
+
+10. **Log and re-profile.** Append the full result to `LEDGER.md`. Profile again before the next iteration because the hot spot moves after each win.
+
+## Plateau, stability gates, and escalations
+
+- **Plateau checkpoint.** After three valid rejected hypotheses in a row on one journey (invalid trials do not count, and a kept win resets the count), write a `Plateau status` block in `LEDGER.md`. Include best versus baseline and bound, the measured limiter with evidence, and remaining profile-backed levers ranked by savings and cost. Close the journey and move on, or shift to deeper levers if the user asked to continue.
+
+- **Full-scale stability gate.** Before you mark a branch "best" or ready to ship, run a full-scale stability test (maximum input size, concurrent soak, or exact retrieval under load). Confirm that memory stays under the cap.
+
+- **Taste and contracts.** Stop and ask the user with before-and-after evidence before you change visible UI, defaults, or output order. Ask before you alter public APIs, config or file formats, wire protocols, or plugin interfaces.
+
+## Qualify and ship (upstream PR mode)
+
+Read [references/measurement-and-ceilings.md](references/measurement-and-ceilings.md) for the full release checklist before you deliver a build, recipe, or upstream PR.
+
+- **Independent commits.** Keep each commit self-contained and reviewable, grouped by subsystem. Obey repository rules (`AGENTS.md`, `CONTRIBUTING.md`, package manager, runtime versions).
+
+- **Honest labels.** Never mix numbers from different benchmark scripts, prompt panels, or cold and warm caches. Always label each number's source.
+
+- Get explicit user approval before you open, push to, or comment on an upstream PR.
+
+## Report and teardown
+
+On every completion (normal finish, plateau handback, or user stop), stop all owned background servers or loops. Confirm that no owned processes remain, and restore every host or power config that you changed. Record anything intentionally left active.
+
+Report these items at session end:
+
+1. A table per journey: baseline, now, bound, change, valid blocks, 95% CI or range, and exact measurement method (runner, cache state, statistic).
+
+2. Kept commits with numbers, count of valid reverts, count of invalid trials, and main negative findings.
+
+3. What limits further gains, with profile evidence and distance to the bound.
+
+4. Correctness floor (with failed test identities) and stability gates before and after.
+
+5. System state restored and any state intentionally left active (servers, uncommitted files, pinned branches, cleanup items).
+
+6. What you did not verify.
+
+7. Remaining profile-backed hypotheses, if any, ranked by estimated savings and cost.

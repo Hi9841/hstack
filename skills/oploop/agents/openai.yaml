@@ -1,4 +1,4 @@
 interface:
   display_name: "OpLoop"
-  short_description: "Run measured keep-or-revert optimization iterations"
-  default_prompt: "Use $oploop to set up a baseline and work checkout, then run one-hypothesis optimization iterations that keep only tested, measured wins."
+  short_description: "Run or resume measured keep-or-revert optimization loops"
+  default_prompt: "Use $oploop to run or resume a measured optimization session (reusing an existing ledger when present) with one-hypothesis iterations that keep only tested, output-verified, measured wins."
