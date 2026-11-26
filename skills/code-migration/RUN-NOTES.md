@@ -149,16 +149,25 @@ here; figures above come from session receipts.
 
 ## Designed, not yet dogfooded
 
-`prompts/00b-judge-setup.md` - the pre-Step-1 judge build (categorize tests,
-rewrite for portability under adversarial review, validate against the original
-*and* against deliberately broken code) - has not been exercised by a run. All
-three runs built their judge inside Step 6 instead, which is the late-judge
-failure 00b exists to prevent: Run 1's parity referee shipped two comparator
-bugs and reported 12/12 false divergences before it could be trusted. The
-prompt is reconstructed from the blog's stated method plus that Run 1 lesson;
-the "validate against broken code" step in particular is new to the kit and
-unrun. Treat its output as a draft to debug until a future run dogfoods it -
-the same honesty bar the survey-build path held before Run 3 exercised it.
+- `prompts/00b-judge-setup.md` (Path A): the pre-Step-1 portable harness build
+  (categorize tests, rewrite for portability under adversarial review, validate
+  against the original *and* against deliberately broken code) has not been
+  exercised by a kit run. Runs 1 to 3 built their judge inside Step 6 instead,
+  which is the late-judge failure 00b exists to prevent: Run 1's parity referee
+  shipped two comparator bugs and reported 12/12 false divergences before it
+  could be trusted.
+- `prompts/00b-judge-setup.md` (Path B) and `prompts/05b-parity-loops.md`: the
+  live-service shadow oracle (side-effect isolation, single-call non-determinism
+  replay, stage checkpoints, privacy-preserving structural fingerprints, and
+  sub-second local inner-loop checkers) and three nested verification loops
+  (inner, outer, memory, plus moving-target drift controls). Synthesized from
+  Anthropic's Messages API Python-to-Rust migration
+  (`https://www.anthropic.com/research/migrating-api-to-rust`) and not yet
+  dogfooded as standalone kit runs.
+
+Treat outputs from both unrun paths as drafts to validate mechanically until a
+future run dogfoods them, holding the same honesty bar the survey-build path
+held before Run 3 exercised it.
 
 ## Script verification (sandbox, 2026-06-10)
 

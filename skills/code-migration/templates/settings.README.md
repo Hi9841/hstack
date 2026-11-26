@@ -43,10 +43,14 @@ the price decides its position.
 ## The test rules
 
 Same logic as the compiler, applied to Step 6: fixers work read-only from
-failure evidence; only the build daemon re-runs tests. Long test commands run
-by parallel agents also exhaust sockets, disk, and process limits - heavy
-suites may need OS-level resource isolation (e.g., cgroups) on top of these
-denies. If your suite is heavy, consider the same.
+failure evidence; only the build daemon re-runs heavy suites. Long test
+commands run by parallel agents also exhaust sockets, disk, and process limits
+and heavy suites may need OS-level resource isolation (e.g., cgroups) on top of
+these denies. Exception: a sub-second, side-effect-free local parity checker
+for the Step 6 inner loop (`prompts/00b-judge-setup.md` Path B and
+`prompts/05b-parity-loops.md`) belongs inside the loop, just like a cheap
+typechecker in Step 3. Keep full suites, live upstream calls, and deployments
+behind the outer loop.
 
 ## What's deliberately NOT here
 

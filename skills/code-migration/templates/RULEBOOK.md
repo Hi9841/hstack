@@ -16,7 +16,10 @@ Read this whole document before writing any code.
 - This is a **structure-preserving** migration: same architecture, same data
   structures, same file boundaries unless a rule below says otherwise. You are
   translating, not improving. <!-- If redesigning, replace this section with
-  your ARCHITECTURE.md and delete the bakeoff from your Step 2. -->
+  your ARCHITECTURE.md and delete the bakeoff from your Step 2. If migrating a
+  live production service with active feature work, record the shadow-oracle
+  checkpoints and moving-target drift policy here (see prompts/00b Path B and
+  prompts/05b-parity-loops.md). -->
 - Drafts do not need to compile. **Do not run the compiler** - it grades
   everything in Step 4.
   <!-- Cheap typechecker (tsc, go vet)? Replace this bullet with the cheap-referee variant - see README Step 4 and examples/run1-toml/RULEBOOK.md §0. -->
@@ -69,10 +72,21 @@ source returned. Every guard row in the inventory records which kind it is -
 Run 2 collapsed the two and got wrong error positions; the rule sweep that
 followed fixed three more sites no test covered.
 
+**The no-guessing rule:** never infer or approximate source behavior. Read the
+exact source code for every edge case (escaping, defaults, ordering, error
+messages) and port what the source actually does. When a human review catches a
+guessed behavior, queue a retroactive sweep of already-ported code for the same
+mistake class.
+
 **The UNKNOWN rule:** when neither this table nor the inventory decides a
 case, translate to the most conservative representation the target offers,
 mark it `TODO(port):` with the open question, and keep moving. UNKNOWN is an
 answer; a stalled batch is not.
+
+**The memory check (Step 6):** before proposing any parity fix, read
+`migration/memory.md`. If a mismatch belongs to a known deferred integration or
+a previously rejected shortcut, link it to that memory entry and stop instead
+of writing a throwaway workaround.
 
 ## 3. The sanctioned escape hatch
 

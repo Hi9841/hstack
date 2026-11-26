@@ -41,19 +41,35 @@ process when a prompt exists for the step.
    build daemon per prompts/05. Routing around a live deny is forbidden no
    matter which layer enforces it - Run 3's agent was blocked at exactly
    this point and correctly escalated.
-6. **Recurring failures move upstream.** Fix one instance, fine. See the same
-   failure twice more, stop fixing instances: write up which rule produced it,
-   queue the rulebook amendment, and propose regenerating the slice that rule
-   touched.
+6. **Recurring failures move upstream (the memory loop).** Fix one instance,
+   fine. When you see the same failure twice more, stop individual fixes:
+   identify the rule that produced it, queue the rulebook amendment, sweep
+   already-ported code for the same mistake class, and propose regenerating the
+   affected slice. Record rejected workarounds and known deferred integrations
+   in `migration/memory.md` so later agents link to them instead of inventing
+   new shortcuts. Periodically distill PR review comments into rule proposals
+   and promote recurring findings into permanent tests or lints.
 7. **The old code is the spec.** It stays runnable until behavior matching is
-   done. When a test fails on the new code, run it on the old code before
-   classifying: old-fails-too = inherited, not yours. Never skip, delete, or
-   weaken a test to make a queue shrink; slow-but-passing goes in a ledger,
-   not a commit.
+   done. When a test fails on the new code, run it on the old code before you
+   classify it: old-fails-too means inherited, not yours. Never skip, delete,
+   or weaken a test to shrink a queue; slow-but-passing goes in a ledger, not a
+   commit. Never trust a ported test suite edited alongside the code without an
+   independent assertion-weakening audit, and never treat high test pass rates
+   alone as production parity on live services with combinatorial features.
 8. **Unknown is an answer.** When neither the rulebook nor the inventory
    decides a question, translate to the most conservative representation the
    target offers, leave a greppable TODO marker, and keep moving. A searchable
    artifact beats a stalled batch.
+9. **Verifiers prove parity, not shippability.** Automated parity checkers
+   reward the cheapest matching output (hardcoded strings, local file copies,
+   bypassed services) and cannot separate bugs from deliberate changes. Every
+   fix crosses from the fast local inner loop to deployment only through human
+   PR review at the seam.
+10. **Moving targets require drift controls.** When feature work continues on
+    the source codebase during migration, parity is a moving target. Run a
+    daily scan of merged source changes to flag required target updates, and
+    enforce a merge check that requires every source PR to include a matching
+    target change or an explicit exemption.
 
 ## Where things live
 
@@ -65,6 +81,8 @@ process when a prompt exists for the step.
 | Work manifest | `migration/manifest.tsv` | Step 1, prompt 01's closing action (`scripts/make_manifest.py`) → Step 3 input |
 | Stress-test report | `migration/stress-test/` | Step 2 |
 | Translated output | path per the rulebook's naming rules | Step 3 |
+| Fingerprint ledger | `migration/fingerprints.tsv` | Step 6, prompt 05b (live shadow grouping) |
+| Migration memory | `migration/memory.md` (copy from `templates/`) | Step 6, prompt 05b (known bugs, rejected shortcuts, distilled rules) |
 | Cost log | `migration/cost-log.tsv` | every prompt, one line per gate |
 | Deviation log | `migration/RULEBOOK.md`, Deviation log section | written at gates |
 

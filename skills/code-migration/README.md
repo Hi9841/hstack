@@ -4,18 +4,20 @@ A starter kit for running large-scale language migrations with Claude Code: the
 prompts, templates, and scripts behind the process described in
 **How Anthropic runs large-scale code migrations with Claude Code**.
 
-This kit defaults to **structure-preserving migrations** - same architecture,
-same data structures, new language. That's the case where the process below is
-mechanical enough to template. If you're redesigning as you migrate, read
+This kit defaults to **structure-preserving migrations** (same architecture,
+same data structures, new language). That is the case where the process below is
+mechanical enough to template. If you are redesigning as you migrate, read
 [If you're redesigning](#if-youre-redesigning) first: parts of this kit change,
-and one part becomes invalid.
+and one part becomes invalid. If you migrate a live production service with
+combinatorial features or active development, also read
+[If you migrate a live service](#if-you-migrate-a-live-service).
 
-> **Provenance:** these prompts are reconstructions - generalized and reviewed
-> against real production migrations, including Bun's 1M+ line Zig→Rust port,
-> not transcripts. The real artifacts were messier and more specific: the Bun
-> port's "prompt" was a 576-line rulebook
+> **Provenance:** these prompts are reconstructions, generalized and reviewed
+> against real production migrations, including Bun's 1M+ line Zig-to-Rust port
 > ([PORTING.md](https://github.com/oven-sh/bun/commit/46d3bc29f270fa881dd5730ef1549e88407701a5))
-> and a one-sentence kickoff.
+> and Anthropic's live Messages API Python-to-Rust migration
+> ([Migrating our Messages API to Rust](https://www.anthropic.com/research/migrating-api-to-rust)),
+> not transcripts. The real artifacts were messier and more specific.
 
 > **Status:** Reference code. This repo is a companion to the blog post and is
 > not actively maintained. Issues and PRs are not monitored.
@@ -31,29 +33,34 @@ and one part becomes invalid.
    the root `SKILL.md` is the skill. Install the kit folder as `code-migration`.
 4. Open Claude Code in the target repo and paste `prompts/00-feasibility.md`
    with its placeholders filled.
-5. Make sure you have a judge before Step 1. If your existing test suite hits
-   the public surface (or already lives in a third language), it's your judge -
-   carry it into Step 6. If it imports internals that die with the old language,
-   run `prompts/00b-judge-setup.md` to build a portable parity harness and
-   validate it (against the original *and* against deliberately broken code)
-   before any translation. No judge, no exit condition.
+5. Make sure you have a judge before Step 1. If an independent public-surface
+   test suite covers real usage, carry it into Step 6. If tests import
+   internals that die with the old language, run `prompts/00b-judge-setup.md`
+   Path A to build and validate a portable parity harness (against the original
+   *and* deliberately broken code). If you migrate a live service whose feature
+   combinations outstrip any finite test suite, run `prompts/00b-judge-setup.md`
+   Path B to build and validate a shadow oracle and sub-second local checkers.
+   No judge, no exit condition.
 6. Before any translation fan-out (prompt 03 onward): copy
    `templates/settings.json` to the target repo's `.claude/settings.json`
-   (see `templates/settings.README.md`) - installed by you before prompt 03
+   (see `templates/settings.README.md`), installed by you before prompt 03
    (Step 2's pilot needs the denies live), active through Step 4 (prompt 05),
-   test denies re-activated for Step 6's fix loops. Prompts 03 and 04 verify
-   it exists and stop without it - in one early test run this step was silently
-   skipped and nothing caught it.
-7. Then work `prompts/01`–`06` in order, one gate at a time.
+   with heavy test denies re-activated for Step 6's fix loops. Prompts 03 and
+   04 verify it exists and stop without it. In one early test run this step was
+   silently skipped and nothing caught it.
+7. Then work `prompts/01` through `06` in order (including
+   `prompts/05b-parity-loops.md` in Step 6 for live services or verification
+   loops), one gate at a time.
 
 ## Should you migrate at all?
 
 Start with `prompts/00-feasibility.md`. Paste it into Claude Code in your repo.
-It produces a read-only report: the case for leaving, three committed calls
-(structure-preserving or redesign, what verification costs, whether your tests
-survive), a sketch of the six steps for your repo, and a verdict. "Don't
-migrate" is a valid outcome. Nothing else in this kit matters until that
-report says go.
+It produces a read-only report: the case for leaving, four committed calls
+(structure-preserving, redesign, or partial boundary split; what verification
+costs; which correctness oracle you need and whether tests survive; whether the
+source is frozen or a moving target), a sketch of the six steps for your repo,
+and a verdict. "Don't migrate" is a valid outcome. Nothing else in this kit
+matters until that report says go.
 
 ## The six steps
 
@@ -68,7 +75,7 @@ fixer agents; recurring failures indict a rule, and the rule gets amended.
 | 3. Translate everything | Implementer + two adversarial reviewers + fixer per unit, fanned out over a mechanical queue; the compiler waits | `prompts/04-translation-kickoff.md`, `scripts/queue_runner.mjs` |
 | 4. Compile | One survey build grades everything; error list becomes a machine queue sliced by module; fixers work without compiler access | `prompts/05-survey-build.md`, `templates/settings.json` (the bans) |
 | 5. Run it | Hello world, then smoke tests - the cheap end-to-end proof before the expensive one | - |
-| 6. Match behavior | Inherited test suite burndown, or build a parity referee against the old code | your existing test suite is the artifact; `prompts/06-post-parity.md` after the gate |
+| 6. Match behavior | Inherited test suite burndown, portable parity referee, or live shadow-traffic verification with inner, outer, and memory loops | your existing test suite, `prompts/05b-parity-loops.md` (live services / loops), and `prompts/06-post-parity.md` after the gate |
 
 ### Step 1 - Create the map and the rules
 
@@ -150,29 +157,77 @@ proofs before expensive ones.
 
 ### Step 6 - Match behavior
 
-This is where the judge you set up before Step 1 does its job. If your old tests
-hit the public surface (CLI, API, exported interface) they were your judge from
-the start - run them against the new code, triage every failure by also running
-it against the *old* code (regression / inherited / environment), and burn the
-queue down. If your tests import source-language internals, the portable parity
-harness you built with `prompts/00b-judge-setup.md` is the judge - run it against
-both old and new and diff the results. Either way the old code is the executable
-spec, the judge was validated against deliberately broken code before you trusted
-it, and you've kept it running the whole migration. **Keep it running until the
-end.**
+This is where the judge you set up before Step 1 does its job. Choose the path
+that matches your correctness oracle:
+
+1. **Independent public-surface suite or portable harness:** run the suite or
+   `00b` Path A harness against both implementations, triage every failure
+   against the old code (regression, inherited, or environment), and burn the
+   queue down.
+2. **Live production service (shadow oracle):** tests alone do not prove parity
+   when feature combinations explode or when agents port code and tests
+   together. In Anthropic's Messages API migration, the Rust port passed ~98%
+   of integration tests while matching only ~25% of live production inputs, and
+   an audit found more than 100 weakened test assertions. Run
+   `prompts/05b-parity-loops.md` to drive convergence with three nested loops:
+   - **Inner loop (seconds, sandbox):** agents receive a blind structural
+     fingerprint, craft a synthetic repro, compare old and new locally in under
+     a second, fix the target code, add a regression test, and open a PR.
+   - **Seam gate (human PR review):** verifiers prove outputs match, not that a
+     fix is shippable. Human reviewers reject throwaway shortcuts and separate
+     bugs from intentional changes before any fix deploys.
+   - **Outer loop (hours to days, shadowed live traffic):** deploy approved
+     fixes, compare fingerprint rates across builds sliced by non-content
+     feature tags, and close tasks only after repeated clean windows.
+   - **Memory loop (systemic rules and drift control):** turn human corrections
+     into `migration/memory.md` notes, rulebook amendments, immediate
+     retroactive sweeps across ported code, permanent tests or lints, and
+     moving-target drift checks.
 
 The done-gate is explicit: every test in the parity referee passes, AND the
 original suite has been re-run on the original code with zero inherited
-failures - both counts documented in the report. For redesign migrations with no inherited suite, the gate is the
-built parity referee's scenario list, signed off by the human. After the
-gate, `prompts/06-post-parity.md` burns down the deferred `BUG(port)` /
-`TODO(port)` / `PERF(port)` markers - each fix its own flagged change, proved
+failures (for live shadow migrations, add the signed-off matched-traffic
+threshold and zero unlinked critical fingerprints). Document all counts in the
+report. For redesign migrations with no inherited suite, the gate is the built
+parity referee's scenario list, signed off by the human. After the gate,
+`prompts/06-post-parity.md` burns down the deferred `BUG(port)` / `TODO(port)`
+/ `PERF(port)` markers, with each fix shipped as its own flagged change proved
 by a parity re-run.
 
 One lesson from early testing: debug the referee before believing its verdicts.
-In one run, all reported divergences were false - traced to two comparator bugs
-(whitespace handling; JSON.stringify converting NaN/-Infinity to null), none to
-the port. A referee that fails everything is usually broken, not right.
+In one run, all reported divergences were false, traced to two comparator bugs
+(whitespace handling and JSON.stringify converting NaN/-Infinity to null), none
+to the port. A referee that fails everything is usually broken, not right.
+
+## If you migrate a live service
+
+When code generation stops being the bottleneck, **verification signal design**
+takes its place. Five rules change when the source is a live production service
+that cannot go offline or freeze feature development:
+
+- **Check boundary-crossing cost before partial rewrites.** Porting one hot
+  component across an FFI boundary can add repeated serialization crossings per
+  request or token that erase most of the gain. When boundary cost dominates,
+  build a trustworthy verifier and migrate the full request path instead.
+- **Turn production into the oracle.** Classify correctness into three tiers:
+  a formal rule, an independent test suite, or the existing live system. When
+  feature flags create millions of combinations, shadow live traffic against
+  the old and new implementations.
+- **Design a clean, privacy-safe verification signal.** Run side effects
+  (billing, quotas, writes) once only. Call non-deterministic dependencies
+  (models, clocks, external APIs) once and replay the exact response to the
+  shadow path so naive variance filters do not hide real bugs. Compare outputs
+  at every pipeline stage (checkpoints) and emit only structural fingerprints
+  (`step`, `piece`, lengths, `first_diff_byte`, `hash`) plus non-content
+  feature tags, never customer payloads.
+- **Guard moving-target drift.** Keep feature development running on the old
+  service while agents keep the new service in step: scan merged source commits
+  daily for target impact, and enforce a merge check requiring a matching
+  target change or an explicit exemption.
+- **Move humans outward.** Start by calibrating the verification signal, then
+  place engineers at the inner/outer PR seam, and finally move them to the
+  outer edge where they author rules, lints, and permanent checks that scale
+  across every agent run.
 
 ## If you're redesigning
 
@@ -197,11 +252,11 @@ when every file must cross and the old language ends up deleted.
 ## What's in the box
 
 ```
-prompts/         eight paste-ready prompts (00-feasibility, 00b-judge-setup → 06-post-parity)
-templates/       RULEBOOK.md, inventory.tsv, settings.json (+ why each rule exists)
+prompts/         nine paste-ready prompts (00-feasibility, 00b-judge-setup, 01-05, 05b-parity-loops, 06-post-parity)
+templates/       RULEBOOK.md, inventory.tsv, memory.md, settings.json (+ why each rule exists)
 scripts/         dependency mappers (Python, JS/TS, C headers) + queue runner + manifest builder + build daemon
 fixtures/        test trees + expected outputs for every script
-skill/           a Claude Code skill that walks the six steps
+SKILL.md         the agent skill that walks the six steps and live verification loops
 examples/        a complete example run - filled-in rulebook, inventory, diff report, parity scripts
 CLAUDE.md        the operating manual Claude Code reads when opened here
 RUN-NOTES.md     receipts from this kit's own test runs

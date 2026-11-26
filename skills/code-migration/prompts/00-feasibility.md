@@ -25,24 +25,47 @@ fully? Sample, and say what you skipped.
 Start with the case for leaving: pain instances in this code, not the
 language's reputation.
 
-Then make three calls for this repo, each ending in one committed line naming
-the files that forced it - a call without file paths is no call:
+Then make four calls for this repo, each ending in one committed line naming
+the files that forced it. A call without file paths is no call:
 
-1. **Structure-preserving or redesign?** Does this architecture translate
-   one-to-one into idiomatic [target language], or does the move demand
-   restructuring?
+1. **Structure-preserving, redesign, or partial split?** Does this architecture
+   translate one-to-one into idiomatic [target language], or does the move
+   demand restructuring? Also test the incremental partial-rewrite alternative
+   (porting only one hot component behind FFI or an internal service boundary):
+   count how many times per request or hot-loop item data would cross the
+   language boundary. If repeated boundary crossings and serialization erase
+   the performance gain, reject the partial split and commit to a full-path
+   migration once a trustworthy verifier exists.
 2. **What does verification cost?** Time the current build and typecheck as
    the baseline; state the scaling assumption behind your estimate for the
    target.
-3. **Do the tests survive?** Count the tests that hit the public surface -
-   they come with you - versus those that import internals, which die with the
-   old language. Three examples of each. This is a gate, not an observation: the
-   migration has no exit condition without a judge that runs against both the old
-   and new code through the public surface. If too little survives to be that
-   judge, the verdict below must name "build the judge first" as a pre-Step-1
-   task - `prompts/00b-judge-setup.md`, run between this gate and Step 1 - and
-   sketch the parity scenarios you'd check against the old code, the seed for
-   that prompt.
+3. **What is the correctness oracle, and do the tests survive?** Count the
+   tests that hit the public surface versus those that import internals, which
+   die with the old language. Give three examples of each. Then classify the
+   oracle tier this repo actually needs:
+   - **Formal rule:** an explicit spec or proof checker defines correctness.
+   - **Independent public-surface suite:** existing external tests already
+     cover real usage without editing tests alongside the port.
+   - **Portable parity harness (`00b` Path A):** existing tests import
+     internals, so build and validate a portable harness against the old code
+     and mutated code before Step 1.
+   - **Live-service shadow oracle (`00b` Path B + `05b`):** this is a live
+     service whose feature flags, non-deterministic dependencies, or real
+     traffic edge cases make any finite test suite incomplete (or porting
+     coupled tests risks silent assertion weakening). Name the side effects
+     that must run once only, the non-deterministic boundaries that require
+     single-call replay, and any privacy constraints that forbid logging raw
+     payloads.
+   This is a gate, not an observation. The migration has no exit condition
+   without a judge. If too little survives, the verdict must name "build the
+   judge first" (`prompts/00b-judge-setup.md`, Path A or Path B) as a
+   pre-Step-1 task and seed its parity scenarios or pipeline checkpoints.
+4. **Is the source frozen or a moving target?** Check recent commit velocity in
+   the paths under migration (`git log`). If production feature development
+   continues during the migration, commit to moving-target drift controls for
+   Step 6 (`prompts/05b-parity-loops.md`): a daily scan of merged source
+   changes plus a merge check requiring a matching target change or an explicit
+   exemption.
 
 Then instantiate the six steps here: what each concretely means in this repo,
 and which of this kit's prompts runs it - blanks filled in with this repo's
