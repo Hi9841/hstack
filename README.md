@@ -61,6 +61,7 @@ npx skills add Hi9841/hstack
 - [`explore-unknowns`](skills/explore-unknowns/SKILL.md)
 - [`fluid-functionalism`](skills/fluid-functionalism/SKILL.md)
 - [`gestures`](skills/gestures/SKILL.md)
+- [`gridlines`](skills/gridlines/SKILL.md)
 - [`grill-with-docs-ui`](skills/grill-with-docs-ui/SKILL.md)
 - [`grilling`](skills/grilling/SKILL.md)
 - [`ian-xhs-carousel`](skills/ian-xhs-carousel/SKILL.md)
